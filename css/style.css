@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* ========================================
    文化祭 Webサイト - スタイルシート
    -----------------------------------------
@@ -35,10 +36,67 @@
 *::before,
 *::after {
   box-sizing: border-box;
+=======
+/*
+  =========================================================
+  文化祭Webサイト - ベースCSS
+
+  方針
+  - できるだけ「見た目」より「骨格（構造）」を優先
+  - 後から編集しやすいように、役割ごとにブロック分け
+  - セクションを増減しやすいように、共通クラスを中心に設計
+
+  注意
+  - リセットCSSは入れていません（要件どおり）
+  - 必要になったら、将来ここに追加していけるようにしています
+  =========================================================
+*/
+
+/* =========================================================
+   1) 基本設定（変数 / ベース）
+   ========================================================= */
+
+:root {
+  /*
+    色は最低限。
+    - 後からテーマ変更しやすいように CSS 変数に寄せています。
+  */
+  --color-text: #1a1a1a;
+  --color-muted: #666;
+  --color-bg: #ffffff;
+  --color-surface: #f6f7f8;
+  --color-border: #e6e6e6;
+
+  /*
+    タイポグラフィ
+    - 学校サイトは OS 既定フォントが読みやすいことが多いので system font を使用。
+  */
+  --font-sans: system-ui, -apple-system, "Hiragino Sans", "Noto Sans JP", "Segoe UI", Arial,
+    sans-serif;
+  --line-height: 1.7;
+
+  /*
+    レイアウト
+    - コンテナ幅・余白・角丸など、よく触る値は変数化
+  */
+  --container-max: 1100px;
+  --gutter: 16px;
+  --section-pad: 48px;
+  --radius: 10px;
+}
+
+/*
+  グローバルに使う最低限のベース
+  - リセットはしないが、全体の読みやすさのための調整は入れる
+*/
+html {
+  color-scheme: light;
+>>>>>>> 96eadc4 (受け取り)
 }
 
 body {
   margin: 0;
+<<<<<<< HEAD
   font-family: sans-serif;
   font-size: 16px;
   line-height: 1.6;
@@ -46,12 +104,22 @@ body {
   background-color: var(--color-background);
 }
 
+=======
+  font-family: var(--font-sans);
+  line-height: var(--line-height);
+  color: var(--color-text);
+  background: var(--color-bg);
+}
+
+/* 画像は「はみ出し防止」だけ入れておく（見た目の装飾ではない） */
+>>>>>>> 96eadc4 (受け取り)
 img {
   max-width: 100%;
   height: auto;
   display: block;
 }
 
+<<<<<<< HEAD
 a {
   color: inherit;
 }
@@ -82,10 +150,48 @@ a {
 
 /* セクション本文 */
 .section p {
+=======
+/* =========================================================
+   2) レイアウト共通（コンテナ / セクション）
+   ========================================================= */
+
+/*
+  container
+  - 中央寄せ + 左右余白を統一
+  - 後から grid/flex のベースにも使える
+*/
+.container {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/*
+  section
+  - セクション追加/削除時はこのクラスを付けるだけで余白が揃う
+*/
+.section {
+  padding-block: var(--section-pad);
+  border-top: 1px solid var(--color-border);
+}
+
+/*
+  見出しと本文の最小スタイル
+  - ここは後からデザインに合わせて自由に変更する想定
+*/
+.section-title {
+  margin: 0 0 8px;
+  font-size: 1.25rem;
+  line-height: 1.3;
+}
+
+.section-lead {
+>>>>>>> 96eadc4 (受け取り)
   margin: 0;
   color: var(--color-muted);
 }
 
+<<<<<<< HEAD
 
 /* ----------------------------------------
    Header / ナビ（タブ）
@@ -282,13 +388,72 @@ a {
 /* タブレット以上 */
 @media (min-width: 768px) {
   .section h2 {
+=======
+/* =========================================================
+   3) ページ構造（Header / Main / Footer）
+   ========================================================= */
+
+.site-header {
+  padding-block: 28px;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.site-title {
+  margin: 0 0 6px;
+  font-size: 1.5rem;
+  line-height: 1.2;
+}
+
+.site-subtitle {
+  margin: 0;
+  color: var(--color-muted);
+}
+
+/*
+  main は今は装飾なし。
+  - 将来、背景色やセクション間の区切り方針が決まったらここに足す
+*/
+.site-main {
+  /* reserved */
+}
+
+.site-footer {
+  padding-block: 28px;
+  border-top: 1px solid var(--color-border);
+}
+
+/* =========================================================
+   4) レスポンシブの考え方（最低限）
+
+   方針
+   - まずは 1 ブレークポイントで十分
+   - 後から増やす場合も、ここに追記していくと管理しやすい
+   ========================================================= */
+
+@media (min-width: 768px) {
+  :root {
+    /* 画面が広いときは余白を少し増やす */
+    --gutter: 24px;
+    --section-pad: 64px;
+  }
+
+  .section-title {
+    font-size: 1.4rem;
+  }
+
+  .site-title {
+>>>>>>> 96eadc4 (受け取り)
     font-size: 1.75rem;
   }
 }
 
+<<<<<<< HEAD
 /* デスクトップ以上 */
 @media (min-width: 1024px) {
   :root {
     --content-width: 1100px;
   }
 }
+=======
+>>>>>>> 96eadc4 (受け取り)
