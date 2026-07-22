@@ -109,6 +109,17 @@ a {
   font-size: 1.25rem;
 }
 
+/* サイト名リンク（下線なし） */
+.site-title a {
+  text-decoration: none;
+}
+
+/* 今見ているページのナビ（目印） */
+.nav-list a[aria-current="page"] {
+  border-bottom-color: var(--color-text);
+  font-weight: 600;
+}
+
 /* ナビ一覧（タブ） */
 .nav-list {
   display: flex;

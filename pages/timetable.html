@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>タイムスケジュール | 文化祭</title>
+  <!--
+    【パスについて】
+    このファイルは pages/ フォルダの中にあるので、
+    CSS や JS、トップページへのリンクは「ひとつ上」を指す ../ を付けます。
+  -->
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+  <!-- ========================================
+       Header（各ページ共通のナビ）
+       ======================================== -->
+  <header class="site-header" id="header">
+    <div class="container header-inner">
+      <h1 class="site-title"><a href="../index.html">文化祭</a></h1>
+
+      <!--
+        【ナビの書き方】
+        ・pages/ 内のページ同士は「ファイル名だけ」でOK（例: events.html）
+        ・トップへ戻るときは ../index.html
+      -->
+      <nav class="site-nav" aria-label="メインメニュー">
+        <ul class="nav-list">
+          <li><a href="../index.html">トップ</a></li>
+          <li><a href="events.html">企画一覧</a></li>
+          <li><a href="timetable.html" aria-current="page">タイムスケジュール</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ========================================
+         タイムスケジュールページ
+         このページの内容を編集すれば時間表が更新されます
+         ======================================== -->
+    <section class="section timetable" id="timetable" aria-labelledby="timetable-heading">
+      <div class="container">
+        <h2 id="timetable-heading">タイムスケジュール</h2>
+        <p>当日の主なスケジュールです。時間は変更になる場合があります。</p>
+
+        <!--
+          ========================================
+          【タイムスケジュールの書き方（ここを編集）】
+          ========================================
+          1. 下の表の「1行分」（<tr>...</tr>）をコピーする
+          2. </tbody> の手前に貼り付ける
+          3. <td> の中の文字だけ書き換える
+
+          列の意味（左から）:
+          ・時間 …… 例: 10:00〜10:30
+          ・内容 …… 例: オープニング / ○○部ライブ
+          ・場所 …… 例: 体育館ステージ
+
+          日付が2日ある場合の例:
+          ・見出し（h3）を「1日目」「2日目」にして
+          ・表を2つ並べると分かりやすいです（下にコメント例あり）
+
+          ヒント:
+          ・サンプル行は消してOKです
+          ・時間は 10:00 のように書いても、午前10時 でもOKです
+          ========================================
+        -->
+
+        <!-- 日付見出し（1日だけの場合はそのままでOK。2日あるなら下のコメント例を参考に） -->
+        <h3 class="timetable-day">開催日（例: 10月10日）</h3>
+
+        <div class="table-wrap">
+          <table class="timetable-table">
+            <thead>
+              <tr>
+                <th scope="col">時間</th>
+                <th scope="col">内容</th>
+                <th scope="col">場所</th>
+              </tr>
+            </thead>
+            <tbody>
+
+              <!-- ▼ 1行分（この塊をコピーして増やしてください） -->
+              <tr>
+                <td>10:00〜10:30</td>
+                <td>オープニング</td>
+                <td>体育館</td>
+              </tr>
+              <!-- ▲ 1行ここまで -->
+
+              <!-- ▼ サンプル行（不要ならこの <tr>...</tr> ごと消してください） -->
+              <tr>
+                <td>11:00〜11:40</td>
+                <td>例）合唱部コンサート</td>
+                <td>体育館</td>
+              </tr>
+              <tr>
+                <td>13:00〜15:00</td>
+                <td>例）模擬店営業</td>
+                <td>中庭</td>
+              </tr>
+              <!-- ▲ サンプル行ここまで -->
+
+            </tbody>
+          </table>
+        </div>
+
+        <!--
+          【2日目を追加する場合の例】
+          下のコメントを外して使うか、上の表ごとコピーして貼り付けてください。
+
+          <h3 class="timetable-day">2日目（例: 10月11日）</h3>
+          <div class="table-wrap">
+            <table class="timetable-table">
+              <thead>
+                <tr>
+                  <th scope="col">時間</th>
+                  <th scope="col">内容</th>
+                  <th scope="col">場所</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>10:00〜10:20</td>
+                  <td>開場・受付</td>
+                  <td>正門前</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        -->
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer" id="footer">
+    <div class="container">
+      <p>&copy; 文化祭実行委員会</p>
+    </div>
+  </footer>
+
+  <script src="../js/script.js"></script>
+</body>
+</html>
