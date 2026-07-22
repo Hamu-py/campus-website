@@ -4,6 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>文化祭 Webサイト</title>
+  <!-- フォント（Google Fonts） -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet">
   <!-- スタイルシート -->
   <link rel="stylesheet" href="css/style.css">
 </head>
@@ -26,9 +31,24 @@
       -->
       <nav class="site-nav" aria-label="メインメニュー">
         <ul class="nav-list">
-          <li><a href="index.html">トップ</a></li>
-          <li><a href="pages/events.html">企画一覧</a></li>
-          <li><a href="pages/timetable.html">タイムスケジュール</a></li>
+          <li>
+            <a href="index.html">
+              <span class="material-symbols-outlined" aria-hidden="true">home</span>
+              トップ
+            </a>
+          </li>
+          <li>
+            <a href="pages/events.html">
+              <span class="material-symbols-outlined" aria-hidden="true">event</span>
+              企画一覧
+            </a>
+          </li>
+          <li>
+            <a href="pages/timetable.html">
+              <span class="material-symbols-outlined" aria-hidden="true">schedule</span>
+              タイムスケジュール
+            </a>
+          </li>
           <!-- メニューを増やす例（コメントを外して使ってください）
           <li><a href="#news">お知らせ</a></li>
           <li><a href="#about">概要</a></li>
@@ -48,8 +68,9 @@
          ======================================== -->
     <section class="section hero" id="hero" aria-labelledby="hero-heading">
       <div class="container">
-        <h2 id="hero-heading">Hero</h2>
-        <p>ようこそ、文化祭へ。ここはメインビジュアルとキャッチコピーを置くセクションです。</p>
+        <h2 id="hero-heading">Topic
+        </h2>
+        <p>何を書こうか考え中...</p>
       </div>
     </section>
 
@@ -61,107 +82,129 @@
          ======================================== -->
     <section class="section events" id="events" aria-labelledby="events-heading">
       <div class="container">
-        <h2 id="events-heading">イベント</h2>
+        <h2 id="events-heading">企画一覧</h2>
 
         <!--
           【イベント欄の書き方】
           1. 下の「企画カード」1つ分（<li>...</li>）をコピーする
           2. </ul> の手前に貼り付ける
           3. 企画名・カテゴリ・場所・紹介文を書き換える
+
+          ※ トップでは横スクロールのカルーセル表示（正方形・前面は拡大）
         -->
+        <div class="event-carousel" data-event-carousel>
         <ul class="event-list">
 
           <li>
             <article class="event-card">
-              <h3 class="event-name">開会式</h3>
-              <p class="event-meta">
-                <span class="event-place">大教室</span>
-              </p>
-              <p class="event-desc">企画の紹介文をここに書きます。どんな内容か、ひとことで説明しましょう。</p>
+              <img class="event-card-image" src="images/kaikaisiki.jpg" alt="" aria-hidden="true">
+              <div class="event-card-body">
+                <h3 class="event-name">開会式</h3>
+                <p class="event-meta">
+                  <span class="event-place">大教室</span>
+                </p>
+              </div>
             </article>
           </li>
 
           <li>
             <article class="event-card">
-              <h3 class="event-name">閉会式</h3>
-              <p class="event-meta">
-                <span class="event-place">大教室</span>
-              </p>
-              <p class="event-desc">企画の紹介文をここに書きます。どんな内容か、ひとことで説明しましょう。</p>
+              <img class="event-card-image" src="images/heikaisiki.jpg" alt="" aria-hidden="true">
+              <div class="event-card-body">
+                <h3 class="event-name">閉会式</h3>
+                <p class="event-meta">
+                  <span class="event-place">大教室</span>
+                </p>
+              </div>
             </article>
           </li>
 
           <li>
             <article class="event-card">
-              <h3 class="event-name">撮影スポット</h3>
-              <p class="event-meta">
-                <span class="event-place">未定</span>
-              </p>
-              <p class="event-desc">企画の紹介文をここに書きます。どんな内容か、ひとことで説明しましょう。</p>
+              <img class="event-card-image" src="images/satueisupotto.jpg" alt="" aria-hidden="true">
+              <div class="event-card-body">
+                <h3 class="event-name">撮影スポット</h3>
+                <p class="event-meta">
+                  <span class="event-place">未定</span>
+                </p>
+              </div>
             </article>
           </li>
 
           <li>
             <article class="event-card">
-              <h3 class="event-name">Kahoot!</h3>
-              <p class="event-meta">
-                <span class="event-place">大教室</span>
-              </p>
-              <p class="event-desc">企画の紹介文をここに書きます。どんな内容か、ひとことで説明しましょう。</p>
+              <img class="event-card-image" src="images/kahoot.jpg" alt="" aria-hidden="true">
+              <div class="event-card-body">
+                <h3 class="event-name">Kahoot!</h3>
+                <p class="event-meta">
+                  <span class="event-place">大教室</span>
+                </p>
+              </div>
             </article>
           </li>
 
           <li>
             <article class="event-card">
-              <h3 class="event-name">BINGO</h3>
-              <p class="event-meta">
-                <span class="event-place">大教室</span>
-              </p>
-              <p class="event-desc">企画の紹介文をここに書きます。どんな内容か、ひとことで説明しましょう。</p>
+              <img class="event-card-image" src="images/BINGO.jpg" alt="" aria-hidden="true">
+              <div class="event-card-body">
+                <h3 class="event-name">BINGO</h3>
+                <p class="event-meta">
+                  <span class="event-place">大教室</span>
+                </p>
+              </div>
             </article>
           </li>
 
           <li>
             <article class="event-card">
-              <h3 class="event-name">ゲーム大会</h3>
-              <p class="event-meta">
-                <span class="event-place">大教室</span>
-              </p>
-              <p class="event-desc">企画の紹介文をここに書きます。どんな内容か、ひとことで説明しましょう。</p>
+              <img class="event-card-image" src="images/game.jpg" alt="" aria-hidden="true">
+              <div class="event-card-body">
+                <h3 class="event-name">ゲーム大会</h3>
+                <p class="event-meta">
+                  <span class="event-place">大教室</span>
+                </p>
+              </div>
             </article>
           </li>
 
           <li>
             <article class="event-card">
-              <h3 class="event-name">VR</h3>
-              <p class="event-meta">
-                <span class="event-place">大教室</span>
-              </p>
-              <p class="event-desc">企画の紹介文をここに書きます。どんな内容か、ひとことで説明しましょう。</p>
+              <img class="event-card-image" src="images/VR.jpg" alt="" aria-hidden="true">
+              <div class="event-card-body">
+                <h3 class="event-name">VR</h3>
+                <p class="event-meta">
+                  <span class="event-place">大教室</span>
+                </p>
+              </div>
             </article>
           </li>
 
           <li>
             <article class="event-card">
-              <h3 class="event-name">飲食（週3）</h3>
-              <p class="event-meta">
-                <span class="event-place">中教室</span>
-              </p>
-              <p class="event-desc">企画の紹介文をここに書きます。どんな内容か、ひとことで説明しましょう。</p>
+              <img class="event-card-image" src="images/food_3.jpg" alt="" aria-hidden="true">
+              <div class="event-card-body">
+                <h3 class="event-name">飲食（週3）</h3>
+                <p class="event-meta">
+                  <span class="event-place">中教室</span>
+                </p>
+              </div>
             </article>
           </li>
 
           <li>
             <article class="event-card">
-              <h3 class="event-name">飲食（週1）</h3>
-              <p class="event-meta">
-                <span class="event-place">中教室</span>
-              </p>
-              <p class="event-desc">企画の紹介文をここに書きます。どんな内容か、ひとことで説明しましょう。</p>
+              <img class="event-card-image" src="images/food_1.jpg" alt="" aria-hidden="true">
+              <div class="event-card-body">
+                <h3 class="event-name">飲食（週1）</h3>
+                <p class="event-meta">
+                  <span class="event-place">中教室</span>
+                </p>
+              </div>
             </article>
           </li>
 
         </ul>
+        </div>
       </div>
     </section>
 

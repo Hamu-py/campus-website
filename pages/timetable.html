@@ -3,12 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>タイムスケジュール | 文化祭</title>
+  <title>タイムスケジュール | 日暮里キャンパスフェスティバル</title>
   <!--
     【パスについて】
     このファイルは pages/ フォルダの中にあるので、
     CSS や JS、トップページへのリンクは「ひとつ上」を指す ../ を付けます。
   -->
+  <!-- フォント（Google Fonts） -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
@@ -18,7 +23,7 @@
        ======================================== -->
   <header class="site-header" id="header">
     <div class="container header-inner">
-      <h1 class="site-title"><a href="../index.html">文化祭</a></h1>
+      <h1 class="site-title"><a href="../index.html">日暮里キャンパスフェスティバル</a></h1>
 
       <!--
         【ナビの書き方】
@@ -27,9 +32,24 @@
       -->
       <nav class="site-nav" aria-label="メインメニュー">
         <ul class="nav-list">
-          <li><a href="../index.html">トップ</a></li>
-          <li><a href="events.html">企画一覧</a></li>
-          <li><a href="timetable.html" aria-current="page">タイムスケジュール</a></li>
+          <li>
+            <a href="../index.html">
+              <span class="material-symbols-outlined" aria-hidden="true">home</span>
+              トップ
+            </a>
+          </li>
+          <li>
+            <a href="events.html">
+              <span class="material-symbols-outlined" aria-hidden="true">event</span>
+              企画一覧
+            </a>
+          </li>
+          <li>
+            <a href="timetable.html" aria-current="page">
+              <span class="material-symbols-outlined" aria-hidden="true">schedule</span>
+              タイムスケジュール
+            </a>
+          </li>
         </ul>
       </nav>
     </div>
