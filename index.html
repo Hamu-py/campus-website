@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>文化祭 Webサイト</title>
+  <!-- スタイルシート -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ========================================
+       Header
+       サイト名・メインナビ（タブ）
+       ======================================== -->
+  <header class="site-header" id="header">
+    <div class="container header-inner">
+      <h1 class="site-title">文化祭</h1>
+
+      <!--
+        【ナビの書き方】
+        ・下の <li> をコピーするとタブを増やせます
+        ・href="#id名" は、飛び先のセクションの id と合わせてください
+        ・例: href="#events" → id="events" のセクションへ移動
+      -->
+      <nav class="site-nav" aria-label="メインメニュー">
+        <ul class="nav-list">
+          <li><a href="#events">企画一覧</a></li>
+          <li><a href="#timetable">タイムスケジュール</a></li>
+          <!-- タブを増やす例（コメントを外して使ってください）
+          <li><a href="#news">お知らせ</a></li>
+          <li><a href="#about">概要</a></li>
+          <li><a href="#access">アクセス</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          -->
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ========================================
+         Hero
+         トップのメインビジュアル・キャッチコピー用
+         ======================================== -->
+    <section class="section hero" id="hero" aria-labelledby="hero-heading">
+      <div class="container">
+        <h2 id="hero-heading">Hero</h2>
+        <p>ようこそ、文化祭へ。ここはメインビジュアルとキャッチコピーを置くセクションです。</p>
+      </div>
+    </section>
+
+    <!-- ========================================
+         News
+         お知らせ・更新情報一覧用
+         ======================================== -->
+    <section class="section news" id="news" aria-labelledby="news-heading">
+      <div class="container">
+        <h2 id="news-heading">News</h2>
+        <p>最新のお知らせを掲載する予定です。開催情報や変更点などをここにまとめます。</p>
+      </div>
+    </section>
+
+    <!-- ========================================
+         About
+         文化祭の概要・テーマ紹介用
+         ======================================== -->
+    <section class="section about" id="about" aria-labelledby="about-heading">
+      <div class="container">
+        <h2 id="about-heading">About</h2>
+        <p>文化祭のテーマや概要を紹介するセクションです。開催趣旨などをここに書きます。</p>
+      </div>
+    </section>
+
+    <!-- ========================================
+         企画一覧（events）
+         模擬店・展示・ステージなどの企画を並べる場所
+         ======================================== -->
+    <section class="section events" id="events" aria-labelledby="events-heading">
+      <div class="container">
+        <h2 id="events-heading">企画一覧</h2>
+        <p>文化祭で行われる企画の一覧です。気になる企画を探してみてください。</p>
+
+        <!--
+          ========================================
+          【企画一覧の書き方（ここを編集）】
+          ========================================
+          1. 下の「企画カード」1つ分（<article>...</article>）をコピーする
+          2. コピーしたブロックを </ul> の手前に貼り付ける
+          3. 中の文字だけ書き換える
+
+          書き換え項目の意味:
+          ・企画名 …… 例: 3年A組カフェ
+          ・カテゴリ …… 例: 模擬店 / 展示 / ステージ / 体験
+          ・場所 …… 例: 体育館 / 1年A組教室 / 中庭
+          ・紹介文 …… 1〜2行で企画の説明
+
+          ヒント:
+          ・不要な企画カードは、その <article> ごと削除してOK
+          ・サンプルのまま残しても、あとから差し替えできます
+          ========================================
+        -->
+        <ul class="event-list">
+
+          <!-- ▼ 企画カード（この塊をコピーして増やしてください） -->
+          <li>
+            <article class="event-card">
+              <h3 class="event-name">企画名をここに書く</h3>
+              <p class="event-meta">
+                <span class="event-category">カテゴリ</span>
+                <span class="event-place">場所</span>
+              </p>
+              <p class="event-desc">企画の紹介文をここに書きます。どんな内容か、ひとことで説明しましょう。</p>
+            </article>
+          </li>
+          <!-- ▲ 企画カードここまで -->
+
+          <!-- ▼ サンプル2（不要ならこの <li>...</li> ごと消してください） -->
+          <li>
+            <article class="event-card">
+              <h3 class="event-name">例）合唱部コンサート</h3>
+              <p class="event-meta">
+                <span class="event-category">ステージ</span>
+                <span class="event-place">体育館</span>
+              </p>
+              <p class="event-desc">人気曲を中心に披露します。開演時刻はタイムスケジュールをご確認ください。</p>
+            </article>
+          </li>
+          <!-- ▲ サンプル2ここまで -->
+
+        </ul>
+      </div>
+    </section>
+
+    <!-- ========================================
+         タイムスケジュール（timetable）
+         当日の開始・終了・出演などの時間表
+         ======================================== -->
+    <section class="section timetable" id="timetable" aria-labelledby="timetable-heading">
+      <div class="container">
+        <h2 id="timetable-heading">タイムスケジュール</h2>
+        <p>当日の主なスケジュールです。時間は変更になる場合があります。</p>
+
+        <!--
+          ========================================
+          【タイムスケジュールの書き方（ここを編集）】
+          ========================================
+          1. 下の表の「1行分」（<tr>...</tr>）をコピーする
+          2. </tbody> の手前に貼り付ける
+          3. <td> の中の文字だけ書き換える
+
+          列の意味（左から）:
+          ・時間 …… 例: 10:00〜10:30
+          ・内容 …… 例: オープニング / ○○部ライブ
+          ・場所 …… 例: 体育館ステージ
+
+          日付が2日ある場合の例:
+          ・見出し（h3）を「1日目」「2日目」にして
+          ・表を2つ並べると分かりやすいです（下にコメント例あり）
+
+          ヒント:
+          ・サンプル行は消してOKです
+          ・時間は 10:00 のように書いても、午前10時 でもOKです
+          ========================================
+        -->
+
+        <!-- 日付見出し（1日だけの場合はそのままでOK。2日あるなら下のコメント例を参考に） -->
+        <h3 class="timetable-day">開催日（例: 10月10日）</h3>
+
+        <div class="table-wrap">
+          <table class="timetable-table">
+            <thead>
+              <tr>
+                <th scope="col">時間</th>
+                <th scope="col">内容</th>
+                <th scope="col">場所</th>
+              </tr>
+            </thead>
+            <tbody>
+
+              <!-- ▼ 1行分（この塊をコピーして増やしてください） -->
+              <tr>
+                <td>10:00〜10:30</td>
+                <td>オープニング</td>
+                <td>体育館</td>
+              </tr>
+              <!-- ▲ 1行ここまで -->
+
+              <!-- ▼ サンプル行（不要ならこの <tr>...</tr> ごと消してください） -->
+              <tr>
+                <td>11:00〜11:40</td>
+                <td>例）合唱部コンサート</td>
+                <td>体育館</td>
+              </tr>
+              <tr>
+                <td>13:00〜15:00</td>
+                <td>例）模擬店営業</td>
+                <td>中庭</td>
+              </tr>
+              <!-- ▲ サンプル行ここまで -->
+
+            </tbody>
+          </table>
+        </div>
+
+        <!--
+          【2日目を追加する場合の例】
+          下のコメントを外して使うか、上の表ごとコピーして貼り付けてください。
+
+          <h3 class="timetable-day">2日目（例: 10月11日）</h3>
+          <div class="table-wrap">
+            <table class="timetable-table">
+              <thead>
+                <tr>
+                  <th scope="col">時間</th>
+                  <th scope="col">内容</th>
+                  <th scope="col">場所</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>10:00〜10:20</td>
+                  <td>開場・受付</td>
+                  <td>正門前</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        -->
+      </div>
+    </section>
+
+    <!-- ========================================
+         Access
+         会場アクセス・地図用
+         ======================================== -->
+    <section class="section access" id="access" aria-labelledby="access-heading">
+      <div class="container">
+        <h2 id="access-heading">Access</h2>
+        <p>会場への行き方や地図を掲載する予定です。最寄り駅や注意事項もここにまとめます。</p>
+      </div>
+    </section>
+
+    <!-- ========================================
+         FAQ
+         よくある質問用
+         ======================================== -->
+    <section class="section faq" id="faq" aria-labelledby="faq-heading">
+      <div class="container">
+        <h2 id="faq-heading">FAQ</h2>
+        <p>来場者からのよくある質問と回答をまとめる予定です。開閉式のアコーディオンなども検討します。</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================
+       Footer
+       コピーライト・リンクなど共通フッター
+       ======================================== -->
+  <footer class="site-footer" id="footer">
+    <div class="container">
+      <p>&copy; 文化祭実行委員会</p>
+      <!-- フッターリンクは今後追加予定 -->
+    </div>
+  </footer>
+
+  <!-- JavaScript（処理は今後追加） -->
+  <script src="js/script.js"></script>
+</body>
+</html>

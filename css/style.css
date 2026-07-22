@@ -1,0 +1,283 @@
+/* ========================================
+   文化祭 Webサイト - スタイルシート
+   -----------------------------------------
+   ・デザインは最小限（土台用）
+   ・後から編集しやすいようセクション単位で整理
+   ・レスポンシブを想定した可変レイアウト
+   ======================================== */
+
+
+/* ----------------------------------------
+   カスタムプロパティ（色・余白など）
+   後からテーマ変更しやすいようここに集約
+   ---------------------------------------- */
+:root {
+  /* 色 */
+  --color-text: #222222;
+  --color-background: #ffffff;
+  --color-muted: #666666;
+  --color-border: #e0e0e0;
+
+  /* 余白・レイアウト */
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 2rem;
+  --spacing-lg: 4rem;
+  --content-width: 960px;
+}
+
+
+/* ----------------------------------------
+   ベーススタイル
+   ページ全体の基本設定
+   ---------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--color-text);
+  background-color: var(--color-background);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  color: inherit;
+}
+
+
+/* ----------------------------------------
+   レイアウト共通
+   コンテナ・セクションの土台
+   ---------------------------------------- */
+
+/* コンテンツ幅を揃えるためのラッパー */
+.container {
+  width: min(100% - 2rem, var(--content-width));
+  margin-inline: auto;
+}
+
+/* 各セクション共通の余白 */
+.section {
+  padding-block: var(--spacing-lg);
+}
+
+/* セクション見出し */
+.section h2 {
+  margin-top: 0;
+  margin-bottom: var(--spacing-sm);
+  font-size: 1.5rem;
+}
+
+/* セクション本文 */
+.section p {
+  margin: 0;
+  color: var(--color-muted);
+}
+
+
+/* ----------------------------------------
+   Header / ナビ（タブ）
+   ---------------------------------------- */
+.site-header {
+  padding-block: var(--spacing-sm);
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* タイトルとナビを横並びにしやすくする土台 */
+.header-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+}
+
+.site-title {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+/* ナビ一覧（タブ） */
+.nav-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nav-list a {
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+}
+
+/* ホバー時の目印（デザインは今後調整可） */
+.nav-list a:hover {
+  border-bottom-color: var(--color-text);
+}
+
+
+/* ----------------------------------------
+   Hero
+   ---------------------------------------- */
+.hero {
+  /* メインビジュアル用の余白・背景は今後追加 */
+}
+
+
+/* ----------------------------------------
+   News
+   ---------------------------------------- */
+.news {
+  /* お知らせリストのスタイルは今後追加 */
+}
+
+
+/* ----------------------------------------
+   About
+   ---------------------------------------- */
+.about {
+  /* 概要・テーマ紹介のスタイルは今後追加 */
+}
+
+
+/* ----------------------------------------
+   企画一覧（events）
+   HTML の .event-list 内を編集すれば内容が変わります
+   ---------------------------------------- */
+.events {
+  /* 一覧全体の背景などは今後追加 */
+}
+
+.event-list {
+  margin: var(--spacing-md) 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: var(--spacing-sm);
+}
+
+/* 企画カード1件分 */
+.event-card {
+  padding: var(--spacing-sm);
+  border: 1px solid var(--color-border);
+}
+
+.event-name {
+  margin: 0 0 var(--spacing-xs);
+  font-size: 1.125rem;
+}
+
+.event-meta {
+  margin: 0 0 var(--spacing-xs);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  font-size: 0.875rem;
+}
+
+.event-desc {
+  margin: 0;
+}
+
+
+/* ----------------------------------------
+   タイムスケジュール（timetable）
+   HTML の表（.timetable-table）内を編集すれば内容が変わります
+   ---------------------------------------- */
+.timetable {
+  /* スケジュール全体の装飾は今後追加 */
+}
+
+.timetable-day {
+  margin: var(--spacing-md) 0 var(--spacing-sm);
+  font-size: 1.125rem;
+}
+
+/* 横スクロールできるようにする（スマホ対策） */
+.table-wrap {
+  overflow-x: auto;
+}
+
+.timetable-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 480px; /* 狭い画面でも列がつぶれにくくする */
+}
+
+.timetable-table th,
+.timetable-table td {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border: 1px solid var(--color-border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.timetable-table th {
+  background-color: #f7f7f7;
+  font-weight: 600;
+}
+
+
+/* ----------------------------------------
+   Access
+   ---------------------------------------- */
+.access {
+  /* 地図・アクセス情報のスタイルは今後追加 */
+}
+
+
+/* ----------------------------------------
+   FAQ
+   ---------------------------------------- */
+.faq {
+  /* アコーディオン等のスタイルは今後追加 */
+}
+
+
+/* ----------------------------------------
+   Footer
+   ---------------------------------------- */
+.site-footer {
+  padding-block: var(--spacing-md);
+  border-top: 1px solid var(--color-border);
+  font-size: 0.875rem;
+  color: var(--color-muted);
+}
+
+.site-footer p {
+  margin: 0;
+}
+
+
+/* ----------------------------------------
+   レスポンシブ
+   画面幅に応じた調整（必要になったら追記）
+   ---------------------------------------- */
+
+/* タブレット以上 */
+@media (min-width: 768px) {
+  .section h2 {
+    font-size: 1.75rem;
+  }
+}
+
+/* デスクトップ以上 */
+@media (min-width: 1024px) {
+  :root {
+    --content-width: 1100px;
+  }
+}
