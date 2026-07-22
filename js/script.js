@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /**
  * 文化祭 Webサイト - JavaScript
  * --------------------------------
@@ -56,33 +55,3 @@ document.addEventListener('DOMContentLoaded', () => {
  * FAQ アコーディオン（今後実装）
  */
 // function setupFaqAccordion() {}
-=======
-"use strict";
-
-/*
-  =========================================================
-  文化祭Webサイト - ベース JavaScript
-
-  方針
-  - いまは「読み込むだけ」（要件どおり、処理は空）
-  - 今後の機能追加を想定して、入口だけ用意しておく
-
-  将来追加しやすい機能例
-  - News: JSON からお知らせを描画（ローカル/API）
-  - FAQ: アコーディオン開閉
-  - ナビ: セクションへのスムーススクロール
-  - Booths: 検索/フィルタ/ソート
-  - アクセシビリティ: キーボード操作や aria 属性の更新
-  =========================================================
-*/
-
-document.addEventListener("DOMContentLoaded", () => {
-  // TODO: 初期化処理の入口
-  //
-  // 例:
-  // initNews();
-  // initFaqAccordion();
-  // initSmoothScroll();
-});
-
->>>>>>> 96eadc4 (受け取り)
