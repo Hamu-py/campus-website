@@ -171,10 +171,12 @@ a {
 */
 .header-inner {
   display: flex;
+  flex-direction: column; /* 縦並び：上にタイトル、下にナビ */
   flex-wrap: wrap;
-  align-items: center;              /* 縦方向の中央揃え */
-  justify-content: space-between;   /* 左右に振り分け */
-  gap: var(--spacing-sm);           /* 折り返したときの隙間 */
+  align-items: center;    /* 横方向の中央寄せ */
+  justify-content: center;
+  gap: var(--spacing-sm);
+  text-align: center;     /* 念のため文字も中央に */
 }
 
 .site-title {
@@ -191,6 +193,7 @@ a {
 .nav-list a[aria-current="page"] {
   border-bottom-color: var(--color-text);
   font-weight: 600;
+  
 }
 
 /*
@@ -202,6 +205,7 @@ a {
 .nav-list {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center; /* トップ・企画一覧などを中央に */
   gap: var(--spacing-sm);
   margin: 0;
   padding: 0;
