@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
 /**
  * イベント・カルーセル（トップページ）
  * --------------------------------
- * ・10秒に1回、カードを1つ分だけ進める（手動スクロールなし）
+ * ・7秒に1回、カードを1つ分だけ進める（手動スクロールなし）
  * ・複製セットでループし、端での跳ね返りを防ぐ
  * ・見える3枚のうち中央を is-active（1.3倍）にする
  */
@@ -36,7 +36,7 @@ function setupEventCarousel() {
     list.appendChild(clone);
   });
 
-  const INTERVAL_MS = 10000;
+  const INTERVAL_MS = 7000;
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   let index = 0;

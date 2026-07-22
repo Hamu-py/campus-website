@@ -76,7 +76,27 @@ body {
   font-size: 16px;         /* 基本の文字サイズ */
   line-height: 1.6;        /* 行間。大きくすると読みやすい */
   color: var(--color-text);
-  background-color: var(--color-background);
+  background-color: #ffffff;
+  /* 白背景に薄いグレーのドット（ずらした格子） */
+  background-image:
+    radial-gradient(#d4d4d4 1.4px, transparent 1.5px),
+    radial-gradient(#d4d4d4 1.4px, transparent 1.5px);
+  background-size: 22px 22px;
+  background-position: 0 0, 11px 11px;
+  min-height: 100vh;
+}
+
+/* 画面枠: 外側は直角のまま、内側だけ丸く */
+body::after {
+  content: "";
+  position: fixed;
+  /* 枠の内側（くり抜き部分） */
+  inset: 6mm;
+  border-radius: 6mm; /* 内枠の丸み */
+  /* 外側へ広げて枠色を塗る（外側は画面端まで直角） */
+  box-shadow: 0 0 0 100vmax #800000;
+  pointer-events: none;
+  z-index: 10000;
 }
 
 img {
@@ -163,8 +183,11 @@ a:hover {
    ・flex-wrap: wrap …… 画面が狭いとき折り返す
    ---------------------------------------- */
 .site-header {
-  padding-block: var(--spacing-sm);
+  /* 枠に隠れないよう上へ余白、背景も下へ伸ばす */
+  padding-top: calc(var(--spacing-sm) + 10mm); /* さらに2mm下げ */
+  padding-bottom: calc(var(--spacing-sm) + 6mm);
   border-bottom: 1px solid var(--color-border);
+  background-color: #ffe4e1; /* ヘッダー（サイト名〜ナビ）の背景 */
 }
 
 /*
@@ -253,10 +276,7 @@ a:hover {
      background-position: center;
    ---------------------------------------- */
 .hero {
-  /* メインビジュアル用の余白・背景は今後追加 */
-  /* 例）文字を中央にしたいとき:
-  text-align: center;
-  */
+  text-align: center; /* Topic など見出し・本文を中央揃え */
 }
 
 
@@ -315,7 +335,7 @@ a:hover {
 /* ----------------------------------------
    イベント・カルーセル（トップ用）
    ・正方形カードを横並び（同時表示は最大3つ）
-   ・10秒に1回だけ自動で1つ進む（手動スクロールなし）
+   ・7秒に1回だけ自動で1つ進む（手動スクロールなし）
    ・中央付近のカードを 1.3 倍表示
    ---------------------------------------- */
 .event-carousel {
@@ -513,7 +533,37 @@ a:hover {
    Access
    ---------------------------------------- */
 .access {
-  /* 地図・アクセス情報のスタイルは今後追加 */
+  text-align: center;
+  background-color: #ffe4e1; /* 日暮里キャンパス（Access）の背景 */
+}
+
+.access .access-name {
+  margin: 0 0 0.25rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.access-address,
+.access-transit {
+  margin: 0;
+  color: var(--color-muted);
+}
+
+.access-transit {
+  margin-top: 0.25rem;
+}
+
+.access-map {
+  margin-top: var(--spacing-md);
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
+}
+
+.access-map iframe {
+  display: block;
+  width: 100%;
+  max-width: 100%;
 }
 
 
