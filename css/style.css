@@ -1,29 +1,55 @@
 /* ========================================
    文化祭 Webサイト - スタイルシート
    -----------------------------------------
-   ・デザインは最小限（土台用）
-   ・後から編集しやすいようセクション単位で整理
-   ・レスポンシブを想定した可変レイアウト
+   【このファイルの読み方（超初心者向け）】
+
+   ・HTML = 中身（見出し・文章・リスト）
+   ・CSS  = 見た目と配置（色・大きさ・余白・並び方）
+
+   よく触る場所はこの3つだけ覚えればOKです。
+   1. :root …… 色や余白の「共通設定」（ここを変えると全体が変わりやすい）
+   2. text-align / margin / padding …… 文字や箱の位置・余白
+   3. display: flex / grid …… メニューやカードの並べ方
+
+   【配置でよく使う言葉】
+   ・text-align: left / center / right
+     → 文字を左・中央・右に寄せる
+   ・margin …… 箱の外側の空き
+   ・padding …… 箱の内側の空き
+   ・margin-inline: auto …… 左右の空きを自動にして中央寄せ
+   ・gap …… flex / grid の「要素と要素の間」の空き
+
+   【値の単位の目安】
+   ・px …… 固定サイズ（例: 16px）
+   ・rem …… 基本文字サイズ基準（例: 1rem ≒ 16px）。画面全体の調整に向く
+   ・% …… 親要素に対する割合
    ======================================== */
 
 
 /* ----------------------------------------
    カスタムプロパティ（色・余白など）
-   後からテーマ変更しやすいようここに集約
+   -----------------------------------------
+   【ここがテーマの司令塔】
+   下の --名前: 値; を変えると、サイト全体の雰囲気をまとめて変えられます。
+
+   例:
+   ・文字色を濃くしたい → --color-text を変更
+   ・余白を広くしたい   → --spacing-md や --spacing-lg を大きく
+   ・コンテンツ幅を広げたい → --content-width を 1100px などに変更
    ---------------------------------------- */
 :root {
-  /* 色 */
-  --color-text: #222222;
-  --color-background: #ffffff;
-  --color-muted: #666666;
-  --color-border: #e0e0e0;
+  /* 色（#のあとは RGB を16進数で指定） */
+  --color-text: #222222;       /* 本文・見出しの基本色 */
+  --color-background: #ffffff; /* ページ全体の背景色 */
+  --color-muted: #666666;      /* 補足文など、少し薄く見せたい色 */
+  --color-border: #e0e0e0;     /* 線・枠線の色 */
 
-  /* 余白・レイアウト */
-  --spacing-xs: 0.5rem;
-  --spacing-sm: 1rem;
-  --spacing-md: 2rem;
-  --spacing-lg: 4rem;
-  --content-width: 960px;
+  /* 余白・レイアウト（小さい → 大きい） */
+  --spacing-xs: 0.5rem;  /* ごく狭い隙間 */
+  --spacing-sm: 1rem;    /* 小さめの余白 */
+  --spacing-md: 2rem;    /* 普通の余白 */
+  --spacing-lg: 4rem;    /* セクション同士など大きめの余白 */
+  --content-width: 960px; /* 本文エリアの最大幅 */
 }
 
 
@@ -31,6 +57,12 @@
    ベーススタイル
    ページ全体の基本設定
    ---------------------------------------- */
+
+/*
+  box-sizing: border-box
+  → width / height の計算に padding と border を含める設定。
+    初心者のうちは「このままでOK」で大丈夫です。
+*/
 *,
 *::before,
 *::after {
@@ -38,70 +70,111 @@
 }
 
 body {
-  margin: 0;
-  font-family: sans-serif;
-  font-size: 16px;
-  line-height: 1.6;
+  margin: 0; /* ブラウザ標準の外側余白を消す */
+  font-family: M PLUS Rounded 1c; /* フォント。例: "Hiragino Sans", sans-serif */
+  font-size: 16px;         /* 基本の文字サイズ */
+  line-height: 1.6;        /* 行間。大きくすると読みやすい */
   color: var(--color-text);
   background-color: var(--color-background);
 }
 
 img {
-  max-width: 100%;
+  max-width: 100%; /* 画像が画面からはみ出さないようにする */
   height: auto;
   display: block;
 }
 
 a {
-  color: inherit;
+  color: inherit; /* リンク色を周囲の文字色に合わせる */
 }
 
 
 /* ----------------------------------------
    レイアウト共通
    コンテナ・セクションの土台
+   -----------------------------------------
+   【文字や箱を中央に置きたいとき】
+   ・文字だけ中央 → text-align: center;
+   ・箱そのものを中央 → margin-inline: auto;（.container がこの方式）
    ---------------------------------------- */
 
-/* コンテンツ幅を揃えるためのラッパー */
+/*
+  .container
+  → 中身を左右中央にまとめ、読みやすい幅にする共通ラッパー。
+    HTML側では <div class="container"> ... </div> で使います。
+*/
 .container {
+  /* 画面幅が狭いときは左右に余白、広いときは最大幅までに制限 */
   width: min(100% - 2rem, var(--content-width));
-  margin-inline: auto;
+  margin-inline: auto; /* 左右自動余白 = 水平方向の中央寄せ */
 }
 
-/* 各セクション共通の余白 */
+/*
+  .section
+  → Hero / Events / Access など、ページのまとまりごとの上下余白。
+    余白を広げたい → padding-block を大きくする
+    余白を狭めたい → var(--spacing-md) などに変える
+*/
 .section {
-  padding-block: var(--spacing-lg);
+  padding-block: var(--spacing-lg); /* 上下の内側余白 */
 }
 
 /* セクション見出し */
 .section h2 {
   margin-top: 0;
-  margin-bottom: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm); /* 見出しと本文の間 */
   font-size: 1.5rem;
+  /* 中央寄せしたい場合の例（必要なら下のコメントを外す）:
+  text-align: center;
+  */
 }
 
 /* セクション本文 */
 .section p {
   margin: 0;
   color: var(--color-muted);
+  /* 中央寄せしたい場合の例:
+  text-align: center;
+  */
 }
 
 
 /* ----------------------------------------
    Header / ナビ（タブ）
+   -----------------------------------------
+   【Flexbox（フレックスボックス）超入門】
+   display: flex にすると、中の要素を横並びなどで自在に配置できます。
+
+   よく使う指定:
+   ・justify-content …… 横方向の並べ方
+     - flex-start     : 左寄せ
+     - center         : 中央
+     - space-between  : 両端に分けて配置（今のヘッダー）
+     - flex-end       : 右寄せ
+   ・align-items …… 縦方向の揃え
+     - stretch（初期） / center / flex-start / flex-end
+   ・gap …… 要素同士の間隔
+   ・flex-wrap: wrap …… 画面が狭いとき折り返す
    ---------------------------------------- */
 .site-header {
   padding-block: var(--spacing-sm);
   border-bottom: 1px solid var(--color-border);
 }
 
-/* タイトルとナビを横並びにしやすくする土台 */
+/*
+  .header-inner
+  → サイト名（左）とナビ（右）を横並びにするための箱。
+    「ロゴを中央、ナビを下」にしたいときは、例えば:
+    flex-direction: column;
+    align-items: center;
+    のように変えてみると理解しやすいです。
+*/
 .header-inner {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--spacing-sm);
+  align-items: center;              /* 縦方向の中央揃え */
+  justify-content: space-between;   /* 左右に振り分け */
+  gap: var(--spacing-sm);           /* 折り返したときの隙間 */
 }
 
 .site-title {
@@ -120,22 +193,27 @@ a {
   font-weight: 600;
 }
 
-/* ナビ一覧（タブ） */
+/*
+  .nav-list
+  → メニュー項目を横一列に並べる。
+    間隔を広げたい → gap を大きく
+    中央にまとめたい → justify-content: center; を追加
+*/
 .nav-list {
   display: flex;
   flex-wrap: wrap;
   gap: var(--spacing-sm);
   margin: 0;
   padding: 0;
-  list-style: none;
+  list-style: none; /* 箇条書きの点を消す */
 }
 
 .nav-list a {
   text-decoration: none;
-  border-bottom: 2px solid transparent;
+  border-bottom: 2px solid transparent; /* ホバー用の下線スペースを確保 */
 }
 
-/* ホバー時の目印（デザインは今後調整可） */
+/* マウスを乗せたときの目印 */
 .nav-list a:hover {
   border-bottom-color: var(--color-text);
 }
@@ -143,9 +221,21 @@ a {
 
 /* ----------------------------------------
    Hero
+   -----------------------------------------
+   【よくあるカスタム例】
+   ・背景色を付ける     → background-color: #f5f5f5;
+   ・文字を中央寄せ     → text-align: center;
+   ・上下の余白を変える → padding-block: 6rem;
+   ・背景画像を入れる例:
+     background-image: url("../images/hero.jpg");
+     background-size: cover;
+     background-position: center;
    ---------------------------------------- */
 .hero {
   /* メインビジュアル用の余白・背景は今後追加 */
+  /* 例）文字を中央にしたいとき:
+  text-align: center;
+  */
 }
 
 
@@ -166,25 +256,51 @@ a {
 
 
 /* ----------------------------------------
-   企画一覧（events）
-   HTML の .event-list 内を編集すれば内容が変わります
+   企画一覧 / イベント欄（events）
+   -----------------------------------------
+   HTML の .event-list 内の <li> をコピーすれば件数を増やせます。
+
+   【Grid（グリッド）超入門】
+   display: grid は「カードをマス目状に並べる」のが得意です。
+
+   よく使う指定:
+   ・gap …… カード同士の間隔
+   ・grid-template-columns …… 列の作り方
+     例1) 1列のまま:     今の設定（指定なし = 1列）
+     例2) 2列にする:     grid-template-columns: 1fr 1fr;
+     例3) 自動で列増減:
+       grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+       （画面が広いと複数列、狭いと1列）
+
+   ※ 1fr は「残りスペースを等分する」単位です。
    ---------------------------------------- */
 .events {
-  /* 一覧全体の背景などは今後追加 */
+  text-align: center;
 }
 
 .event-list {
-  margin: var(--spacing-md) 0 0;
+  margin: var(--spacing-md) 0 0; /* 上に余白 / 左右下は 0 */
   padding: 0;
   list-style: none;
   display: grid;
-  gap: var(--spacing-sm);
+  gap: var(--spacing-sm); /* カードとカードの間 */
+
+  /* ▼ 複数列にしたいときの例（どれか1つを有効化）
+  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  */
 }
 
 /* 企画カード1件分 */
 .event-card {
-  padding: var(--spacing-sm);
-  border: 1px solid var(--color-border);
+  padding: var(--spacing-sm);              /* 内側の余白 */
+  border: 1px solid var(--color-border);   /* 枠線 */
+  /* 角を丸くしたいとき:
+  border-radius: 8px;
+  */
+  /* 背景色を付けたいとき:
+  background-color: #ffffff;
+  */
 }
 
 .event-name {
@@ -192,6 +308,11 @@ a {
   font-size: 1.125rem;
 }
 
+/*
+  カテゴリと場所を横並びにする（Flex）
+  ・縦並びにしたい → flex-direction: column;
+  ・右寄せしたい   → justify-content: flex-end;
+*/
 .event-meta {
   margin: 0 0 var(--spacing-xs);
   display: flex;
@@ -207,7 +328,12 @@ a {
 
 /* ----------------------------------------
    タイムスケジュール（timetable）
-   HTML の表（.timetable-table）内を編集すれば内容が変わります
+   -----------------------------------------
+   HTML の表（.timetable-table）内を編集すれば内容が変わります。
+
+   【表の文字配置】
+   ・text-align: left / center / right …… セル内の左右位置
+   ・vertical-align: top / middle / bottom …… セル内の上下位置
    ---------------------------------------- */
 .timetable {
   /* スケジュール全体の装飾は今後追加 */
@@ -218,14 +344,14 @@ a {
   font-size: 1.125rem;
 }
 
-/* 横スクロールできるようにする（スマホ対策） */
+/* 画面が狭くても表を横スクロールできるようにする */
 .table-wrap {
   overflow-x: auto;
 }
 
 .timetable-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: collapse; /* セルの枠線を重ねてきれいに見せる */
   min-width: 480px; /* 狭い画面でも列がつぶれにくくする */
 }
 
@@ -233,8 +359,8 @@ a {
 .timetable-table td {
   padding: var(--spacing-xs) var(--spacing-sm);
   border: 1px solid var(--color-border);
-  text-align: left;
-  vertical-align: top;
+  text-align: left;      /* 左右: 左寄せ（center / right に変更可） */
+  vertical-align: top;   /* 上下: 上寄せ（middle などに変更可） */
 }
 
 .timetable-table th {
@@ -261,6 +387,9 @@ a {
 
 /* ----------------------------------------
    Footer
+   -----------------------------------------
+   文字を中央にしたい例:
+   .site-footer { text-align: center; }
    ---------------------------------------- */
 .site-footer {
   padding-block: var(--spacing-md);
@@ -276,7 +405,19 @@ a {
 
 /* ----------------------------------------
    レスポンシブ
-   画面幅に応じた調整（必要になったら追記）
+   -----------------------------------------
+   【@media の考え方】
+   「画面幅が◯px以上のときだけ、中のCSSを追加で適用する」仕組みです。
+
+   例:
+   ・スマホ向けを基本にして書く
+   ・タブレット以上で見出しを大きくする  → 下の 768px
+   ・PCでコンテンツ幅を広げる            → 下の 1024px
+
+   自分で追加するときの型:
+   @media (min-width: 768px) {
+     .hero { text-align: center; }
+   }
    ---------------------------------------- */
 
 /* タブレット以上 */
@@ -284,11 +425,18 @@ a {
   .section h2 {
     font-size: 1.75rem;
   }
+
+  /*
+    イベントカードを2列にしたいときの例（必要ならコメント解除）:
+    .event-list {
+      grid-template-columns: 1fr 1fr;
+    }
+  */
 }
 
 /* デスクトップ以上 */
 @media (min-width: 1024px) {
   :root {
-    --content-width: 1100px;
+    --content-width: 1100px; /* PCでは本文エリアを少し広く */
   }
 }
