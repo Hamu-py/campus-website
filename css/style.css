@@ -187,7 +187,13 @@ a:hover {
   padding-top: calc(var(--spacing-sm) + 10mm); /* さらに2mm下げ */
   padding-bottom: calc(var(--spacing-sm) + 6mm);
   border-bottom: 1px solid var(--color-border);
-  background-color: #ffe4e1; /* ヘッダー（サイト名〜ナビ）の背景 */
+  /* 白のドット背景（ページ全体と同じ） */
+  background-color: #ffffff;
+  background-image:
+    radial-gradient(#d4d4d4 1.4px, transparent 1.5px),
+    radial-gradient(#d4d4d4 1.4px, transparent 1.5px);
+  background-size: 22px 22px;
+  background-position: 0 0, 11px 11px;
 }
 
 /*
@@ -441,17 +447,41 @@ a:hover {
   color: var(--color-muted);
 }
 
+/* 画像（左）+ 説明（右） */
+.event-detail-main {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+}
+
 .event-detail-image {
-  width: min(100%, 520px);
+  flex: 0 0 auto;
+  width: min(100%, 360px);
   aspect-ratio: 1 / 1;
   object-fit: cover;
   border-radius: 16px;
-  margin-bottom: var(--spacing-md);
+  margin: 0;
+}
+
+.event-detail-body {
+  flex: 1 1 240px;
+  min-width: 0;
 }
 
 .event-detail-body p {
   margin: 0 0 var(--spacing-sm);
   color: var(--color-text);
+}
+
+@media (max-width: 767px) {
+  .event-detail-main {
+    flex-direction: column;
+  }
+
+  .event-detail-image {
+    width: min(100%, 520px);
+  }
 }
 
 /* 企画カード1件分 */
