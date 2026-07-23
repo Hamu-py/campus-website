@@ -345,7 +345,7 @@ a:hover {
   padding-block: 3rem;
   isolation: isolate;
   container-type: inline-size;
-  touch-action: none; /* 指でのスワイプ（手動スクロール）を無効化 */
+  touch-action: pan-y; /* 横スワイプは抑止しつつ、タップでリンク可能に */
   user-select: none;
 }
 
@@ -368,7 +368,6 @@ a:hover {
   box-sizing: border-box;
   flex: 0 0 calc((100cqi - (var(--carousel-gap) * 2)) / 3);
   width: calc((100cqi - (var(--carousel-gap) * 2)) / 3);
-  pointer-events: none; /* ドラッグ操作を受けない */
 }
 
 .event-carousel .event-card {
@@ -407,6 +406,52 @@ a:hover {
     --carousel-gap: 1.5rem;
     padding-block: 2rem;
   }
+}
+
+/* 企画カードへのリンク（一覧・カルーセル共通） */
+.event-card-link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.event-card-link:hover .event-card {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
+}
+
+.event-card-link:hover {
+  color: inherit; /* リンク全体の水色化を防ぐ */
+}
+
+/* 企画詳細ページ */
+.event-detail {
+  text-align: left;
+}
+
+.event-detail-back {
+  margin: 0 0 var(--spacing-sm);
+}
+
+.event-detail-back a {
+  text-decoration: underline;
+}
+
+.event-detail-place {
+  margin: 0 0 var(--spacing-md);
+  color: var(--color-muted);
+}
+
+.event-detail-image {
+  width: min(100%, 520px);
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 16px;
+  margin-bottom: var(--spacing-md);
+}
+
+.event-detail-body p {
+  margin: 0 0 var(--spacing-sm);
+  color: var(--color-text);
 }
 
 /* 企画カード1件分 */
