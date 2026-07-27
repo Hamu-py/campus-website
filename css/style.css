@@ -77,26 +77,7 @@ body {
   line-height: 1.6;        /* 行間。大きくすると読みやすい */
   color: var(--color-text);
   background-color: #ffffff;
-  /* 白背景に薄いグレーのドット（ずらした格子） */
-  background-image:
-    radial-gradient(#d4d4d4 1.4px, transparent 1.5px),
-    radial-gradient(#d4d4d4 1.4px, transparent 1.5px);
-  background-size: 22px 22px;
-  background-position: 0 0, 11px 11px;
   min-height: 100vh;
-}
-
-/* 画面枠: 外側は直角のまま、内側だけ丸く */
-body::after {
-  content: "";
-  position: fixed;
-  /* 枠の内側（くり抜き部分） */
-  inset: 6mm;
-  border-radius: 6mm; /* 内枠の丸み */
-  /* 外側へ広げて枠色を塗る（外側は画面端まで直角） */
-  box-shadow: 0 0 0 100vmax #800000;
-  pointer-events: none;
-  z-index: 10000;
 }
 
 img {
@@ -184,42 +165,46 @@ a:hover {
    ---------------------------------------- */
 .site-header {
   /* 枠に隠れないよう上へ余白、背景も下へ伸ばす */
-  padding-top: calc(var(--spacing-sm) + 10mm); /* さらに2mm下げ */
+  padding-top: 4mm;
+  padding-left: 4mm;
+  padding-right: 4mm;
   padding-bottom: calc(var(--spacing-sm) + 6mm);
   border-bottom: 1px solid var(--color-border);
-  /* 白のドット背景（ページ全体と同じ） */
   background-color: #ffffff;
-  background-image:
-    radial-gradient(#d4d4d4 1.4px, transparent 1.5px),
-    radial-gradient(#d4d4d4 1.4px, transparent 1.5px);
-  background-size: 22px 22px;
-  background-position: 0 0, 11px 11px;
+  font-family: "Kaisei Tokumin", "M PLUS Rounded 1c", serif;
 }
 
 /*
   .header-inner
-  → サイト名（左）とナビ（右）を横並びにするための箱。
-    「ロゴを中央、ナビを下」にしたいときは、例えば:
-    flex-direction: column;
-    align-items: center;
-    のように変えてみると理解しやすいです。
+  → サイト名はできるだけ左上、ナビは中央
 */
+.site-header > .container.header-inner {
+  /* 通常の container 中央寄せを解除して左端まで使う */
+  width: 100%;
+  max-width: none;
+  margin-inline: 0;
+  padding-inline: 0.25rem;
+}
+
 .header-inner {
   display: flex;
-  flex-direction: column; /* 縦並び：上にタイトル、下にナビ */
+  flex-direction: column; /* 上にタイトル、下にナビ */
   flex-wrap: wrap;
-  align-items: center;    /* 横方向の中央寄せ */
-  justify-content: center;
+  align-items: stretch;
+  justify-content: flex-start;
   gap: var(--spacing-sm);
-  text-align: center;     /* 念のため文字も中央に */
+  text-align: left;
 }
 
 .site-title {
   margin: 0;
   font-size: 1.875rem; /* 元の 1.25rem の約1.5倍 */
+  text-align: left;
+  align-self: flex-start; /* できるだけ左上 */
+  line-height: 1.2;
 }
 
-/* サイト名リンク（下線なし） */
+/* サイト名（リンクなし） */
 .site-title a {
   text-decoration: none;
 }
@@ -237,6 +222,11 @@ a:hover {
     間隔を広げたい → gap を大きく
     中央にまとめたい → justify-content: center; を追加
 */
+.site-nav {
+  align-self: center; /* ナビは中央のまま */
+  width: 100%;
+}
+
 .nav-list {
   display: flex;
   flex-wrap: wrap;
@@ -599,7 +589,7 @@ a:hover {
 }
 
 .timetable-table th {
-  background-color: #f7f7f7;
+  background-color: #ffffff;
   font-weight: 600;
 }
 
@@ -609,7 +599,8 @@ a:hover {
    ---------------------------------------- */
 .access {
   text-align: center;
-  background-color: #ffe4e1; /* 日暮里キャンパス（Access）の背景 */
+  background-color: #ffffff;
+  font-family: "Kaisei Tokumin", "M PLUS Rounded 1c", serif;
 }
 
 .access .access-name {
