@@ -45,6 +45,29 @@
   --color-border: #e0e0e0;     /* 線・枠線の色 */
   --color-link-hover: #4fc3f7; /* リンクにマウスを乗せたときの水色 */
 
+  /* アンビエント・グラデーション（Access 背景）
+     原色はアクセント。実際の背景は白寄せで可読性を優先 */
+  --grad-blue: #2563eb;
+  --grad-cyan: #06b6d4;
+  --grad-violet: #8b5cf6;
+  /* soft 系は原色を白に混ぜた色（約20%相当＝以前の約2倍の濃さ） */
+  --grad-soft-blue: #c9d9fb;   /* blue 寄り */
+  --grad-soft-cyan: #c2eef6;   /* cyan 寄り */
+  --grad-soft-violet: #d9ccfb; /* violet 寄り */
+  --grad-soft-white: #f4f7fb;
+  --ambient-duration: 18s;     /* 1周の目安（15〜20秒） */
+  /* Access / 企画一覧見出し帯で共通の流れるグラデ */
+  --ambient-gradient-image: linear-gradient(
+    125deg,
+    var(--grad-soft-blue) 0%,
+    var(--grad-soft-white) 18%,
+    var(--grad-soft-cyan) 36%,
+    var(--grad-soft-white) 52%,
+    var(--grad-soft-violet) 70%,
+    var(--grad-soft-white) 86%,
+    var(--grad-soft-blue) 100%
+  );
+
   /* 余白・レイアウト（小さい → 大きい） */
   --spacing-xs: 0.5rem;  /* ごく狭い隙間 */
   --spacing-sm: 1rem;    /* 小さめの余白 */
@@ -72,7 +95,7 @@
 
 body {
   margin: 0; /* ブラウザ標準の外側余白を消す */
-  font-family: "M PLUS Rounded 1c", sans-serif; /* Google Fonts で読み込み */
+  font-family: "Noto Sans JP", sans-serif; /* Google Fonts で読み込み */
   font-size: 16px;         /* 基本の文字サイズ */
   line-height: 1.6;        /* 行間。大きくすると読みやすい */
   color: var(--color-text);
@@ -171,7 +194,7 @@ a:hover {
   padding-bottom: calc(var(--spacing-sm) + 6mm);
   border-bottom: 1px solid var(--color-border);
   background-color: #ffffff;
-  font-family: "Kaisei Tokumin", "M PLUS Rounded 1c", serif;
+  font-family: "Noto Sans JP", sans-serif;
 }
 
 /*
@@ -315,6 +338,69 @@ a:hover {
   text-align: center;
 }
 
+/*
+  トップ（カルーセルあり）:
+  ヘッダー下〜写真上の白背景の中心に「企画一覧」を置く
+*/
+.events:has(.event-carousel) {
+  padding-top: 0;
+}
+
+.events .event-carousel {
+  margin-top: 0;
+}
+
+/* ----------------------------------------
+   企画一覧見出し帯
+   ・白四角の左右端に、横に伸ばした斜め三角形
+   ・色は Access と同じアンビエント・グラデーション
+   ---------------------------------------- */
+.events-heading-band {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding-block: var(--spacing-md); /* 文字拡大に合わせて余白を抑制 */
+  text-align: center;
+  background-color: #ffffff;
+}
+
+.events-heading-band h2 {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  font-size: 3rem; /* 白帯の「企画一覧」のみ 2倍 */
+  line-height: 1.2;
+}
+
+/* 左右の斜め三角形（横方向に長め） */
+.events-heading-band::before,
+.events-heading-band::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: min(52vw, 460px); /* 横に伸ばした三角形の幅 */
+  z-index: 0;
+  pointer-events: none;
+  background-color: var(--grad-soft-white);
+  background-image: var(--ambient-gradient-image);
+  background-size: 280% 280%;
+  background-repeat: no-repeat;
+  animation: ambient-gradient-flow var(--ambient-duration) ease infinite;
+}
+
+/* 左: 上辺が長く、右下へ斜めに落ちる三角形 */
+.events-heading-band::before {
+  left: 0;
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+}
+
+/* 右: 左右対称 */
+.events-heading-band::after {
+  right: 0;
+  clip-path: polygon(100% 0, 0 0, 100% 100%);
+}
+
 .event-list {
   margin: var(--spacing-md) 0 0; /* 上に余白 / 左右下は 0 */
   padding: 0;
@@ -333,16 +419,17 @@ a:hover {
    ・正面の後ろを中心にした円型 3D 配置
    ・7秒に1回、円を回転して次の企画を正面へ
    ・正面カードは is-active で拡大
+   ・背景は images/class.jpg
    ---------------------------------------- */
 .event-carousel {
   --carousel-card: 330px; /* 正方形を1.5倍（元220px） */
-  margin-top: var(--spacing-md);
+  position: relative;
   /* 親 .container をはみ出して画面幅いっぱい使う */
   width: 100vw;
   max-width: 100vw;
   margin-left: calc(50% - 50vw);
   margin-right: calc(50% - 50vw);
-  height: min(640px, 95vw);
+  height: min(600px, 95vw);
   perspective: 1800px;
   perspective-origin: 50% 45%;
   overflow: hidden;
@@ -352,6 +439,36 @@ a:hover {
   isolation: isolate;
   touch-action: pan-y;
   user-select: none;
+
+  /* カルーセル領域の背景写真 */
+  background-color: var(--grad-soft-white);
+  background-image: url("../images/class.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/*
+  薄いグレー系グラデーション（写真の上）
+  ・少しだけ落ち着かせつつ、カードの視認性も確保
+*/
+.event-carousel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    160deg,
+    rgba(100, 116, 139, 0.22) 0%,
+    rgba(148, 163, 184, 0.12) 40%,
+    rgba(71, 85, 105, 0.2) 100%
+  );
+}
+
+.event-carousel > * {
+  position: relative;
+  z-index: 1;
 }
 
 .event-carousel .event-list {
@@ -619,11 +736,61 @@ a:hover {
 
 /* ----------------------------------------
    Access
+   ・青・水色・紫のアンビエント・グラデーション背景
    ---------------------------------------- */
 .access {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   text-align: center;
-  background-color: #ffffff;
-  font-family: "Kaisei Tokumin", "M PLUS Rounded 1c", serif;
+  font-family: "Noto Sans JP", sans-serif;
+
+  background-color: var(--grad-soft-white);
+  background-image: var(--ambient-gradient-image);
+  background-size: 280% 280%;
+  background-repeat: no-repeat;
+  animation: ambient-gradient-flow var(--ambient-duration) ease infinite;
+}
+
+/* 文字・地図の視認性用の薄い白ベール */
+.access::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.22),
+    rgba(255, 255, 255, 0.1) 40%,
+    rgba(255, 255, 255, 0.22)
+  );
+}
+
+.access > * {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes ambient-gradient-flow {
+  0% {
+    background-position: 0% 40%;
+  }
+  50% {
+    background-position: 100% 60%;
+  }
+  100% {
+    background-position: 0% 40%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .access,
+  .events-heading-band::before,
+  .events-heading-band::after {
+    animation: none;
+    background-position: 40% 50%;
+  }
 }
 
 .access .access-name {
@@ -703,6 +870,10 @@ a:hover {
 @media (min-width: 768px) {
   .section h2 {
     font-size: 1.75rem;
+  }
+
+  .events-heading-band h2 {
+    font-size: 3.5rem; /* 白帯の「企画一覧」のみ 2倍 */
   }
 
   /*

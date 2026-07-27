@@ -7,7 +7,7 @@
   <!-- フォント（Google Fonts） -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Kaisei+Tokumin&family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet">
   <!-- スタイルシート -->
   <link rel="stylesheet" href="css/style.css">
@@ -68,9 +68,14 @@
          ・全一覧は pages/events.html へ
          ======================================== -->
     <section class="section events" id="events" aria-labelledby="events-heading">
-      <div class="container">
-        <h2 id="events-heading">企画一覧</h2>
+      <!-- 白帯＋左右の斜め三角形グラデーション -->
+      <div class="events-heading-band">
+        <div class="container">
+          <h2 id="events-heading">企画一覧</h2>
+        </div>
+      </div>
 
+      <div class="container">
         <!--
           【イベント欄の書き方】
           1. 下の「企画カード」1つ分（<li>...</li>）をコピーする
