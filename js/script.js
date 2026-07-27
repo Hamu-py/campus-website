@@ -12,11 +12,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 /**
- * イベント・カルーセル（トップページ）
+ * イベント・カルーセル（トップページ）※仮実装
  * --------------------------------
- * ・7秒に1回、カードを1つ分だけ進める（手動スクロールなし）
- * ・複製セットでループし、端での跳ね返りを防ぐ
- * ・見える3枚のうち中央を is-active（1.3倍）にする
+ * ・正面の後ろを中心にした円（円筒）配置の 3D カルーセル
+ * ・正面カードは正面向き・大きめ（is-active）
+ * ・7秒に1回、円を1コマ分回転
  */
 function setupEventCarousel() {
   const root = document.querySelector("[data-event-carousel]");
@@ -25,91 +25,57 @@ function setupEventCarousel() {
   const list = root.querySelector(".event-list");
   if (!list) return;
 
-  const originals = Array.from(list.children);
-  const count = originals.length;
+  const items = Array.from(list.children);
+  const count = items.length;
   if (count === 0) return;
-
-  // ループ用に同じ並びを複製
-  originals.forEach((item) => {
-    const clone = item.cloneNode(true);
-    clone.setAttribute("aria-hidden", "true");
-    list.appendChild(clone);
-  });
 
   const INTERVAL_MS = 7000;
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   let index = 0;
-  let step = 0;
-  let resetting = false;
 
-  function measureStep() {
-    const first = list.children[0];
-    if (!first) {
-      step = 0;
-      return;
-    }
-    const gap = parseFloat(getComputedStyle(list).columnGap || getComputedStyle(list).gap) || 0;
-    step = first.getBoundingClientRect().width + gap;
+  /** 円の半径（カード拡大後も間隔は従来どおり） */
+  function radius() {
+    // 基準幅(220)で計算した半径を、横間隔 1.5 倍にする
+    const refW = 220;
+    const base = Math.max(260, Math.round(refW / (2 * Math.tan(Math.PI / count))));
+    return base * 1.5 * 1.5;
   }
 
-  function setTransform(animate) {
-    if (animate && !reduceMotion) {
-      list.style.transition = "transform 0.45s ease";
-    } else {
-      list.style.transition = "none";
-    }
-    list.style.transform = `translate3d(${-index * step}px, 0, 0)`;
-  }
+  function layout(animate) {
+    const r = radius();
+    const step = 360 / count;
 
-  function updateActive() {
-    const cards = Array.from(list.querySelectorAll(".event-card"));
-    // 同時に見える3枚の中央 = 開始 index のひとつ右
-    const activePos = index + 1;
-    cards.forEach((card, i) => {
-      card.classList.toggle("is-active", i === activePos);
+    list.style.transition = animate && !reduceMotion ? "transform 0.9s ease" : "none";
+    // 円全体を回して、index 番目が正面に来るようにする
+    list.style.transform = `translateZ(${-r}px) rotateY(${-index * step}deg)`;
+
+    items.forEach((li, i) => {
+      const angle = i * step;
+      li.style.transform = `rotateY(${angle}deg) translateZ(${r}px)`;
+
+      // 正面からの距離（短い方）で奥行きの優先度を決める
+      let diff = Math.abs(i - index);
+      diff = Math.min(diff, count - diff);
+      li.style.zIndex = String(count - diff);
+
+      const card = li.querySelector(".event-card");
+      if (card) {
+        card.classList.toggle("is-active", diff === 0);
+      }
     });
   }
 
   function goNext() {
-    if (resetting || step <= 0) return;
-
-    index += 1;
-    setTransform(true);
-    updateActive();
-
-    // オリジナル末尾を超えたら、同じ見た目の先頭位置へ瞬時に戻す
-    if (index >= count) {
-      resetting = true;
-      const onEnd = () => {
-        list.removeEventListener("transitionend", onEnd);
-        index = 0;
-        setTransform(false);
-        updateActive();
-        // 次の transition を有効に戻すため再描画
-        void list.offsetWidth;
-        resetting = false;
-      };
-
-      if (reduceMotion) {
-        onEnd();
-      } else {
-        list.addEventListener("transitionend", onEnd);
-      }
-    }
+    index = (index + 1) % count;
+    layout(true);
   }
 
-  function layout() {
-    measureStep();
-    setTransform(false);
-    updateActive();
-  }
-
-  layout();
-  window.addEventListener("resize", layout);
+  // リサイズ時も半径を再計算
+  window.addEventListener("resize", () => layout(false));
 
   requestAnimationFrame(() => {
-    layout();
+    layout(false);
     if (!reduceMotion) {
       setInterval(goNext, INTERVAL_MS);
     }

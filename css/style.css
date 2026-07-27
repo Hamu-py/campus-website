@@ -329,78 +329,101 @@ a:hover {
 }
 
 /* ----------------------------------------
-   イベント・カルーセル（トップ用）
-   ・正方形カードを横並び（同時表示は最大3つ）
-   ・7秒に1回だけ自動で1つ進む（手動スクロールなし）
-   ・中央付近のカードを 1.3 倍表示
+   イベント・カルーセル（トップ用）※仮実装
+   ・正面の後ろを中心にした円型 3D 配置
+   ・7秒に1回、円を回転して次の企画を正面へ
+   ・正面カードは is-active で拡大
    ---------------------------------------- */
 .event-carousel {
-  --carousel-gap: 8rem; /* カード間の余白（元の約4倍） */
+  --carousel-card: 330px; /* 正方形を1.5倍（元220px） */
   margin-top: var(--spacing-md);
+  /* 親 .container をはみ出して画面幅いっぱい使う */
+  width: 100vw;
+  max-width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  height: min(640px, 95vw);
+  perspective: 1800px;
+  perspective-origin: 50% 45%;
   overflow: hidden;
-  padding-block: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   isolation: isolate;
-  container-type: inline-size;
-  touch-action: pan-y; /* 横スワイプは抑止しつつ、タップでリンク可能に */
+  touch-action: pan-y;
   user-select: none;
 }
 
 .event-carousel .event-list {
-  display: flex;
-  flex-wrap: nowrap;
-  align-items: center;
-  gap: var(--carousel-gap);
+  position: relative;
+  width: var(--carousel-card);
+  height: var(--carousel-card);
   margin: 0;
   padding: 0;
   list-style: none;
-  width: max-content;
-  overflow: visible;
-  backface-visibility: hidden;
-  /* 手動スクロール用の overflow-x は使わない */
+  transform-style: preserve-3d;
+  transform: translateZ(0);
 }
 
-/* 画面内に最大3つ見える幅（カルーセル幅を3等分） */
 .event-carousel .event-list > li {
-  box-sizing: border-box;
-  flex: 0 0 calc((100cqi - (var(--carousel-gap) * 2)) / 3);
-  width: calc((100cqi - (var(--carousel-gap) * 2)) / 3);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--carousel-card);
+  height: var(--carousel-card);
+  margin: 0;
+  transform-style: preserve-3d;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.event-carousel .event-card-link {
+  display: block;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 .event-carousel .event-card {
   box-sizing: border-box;
   position: relative;
   width: 100%;
-  aspect-ratio: 1 / 1; /* 正方形 */
+  height: 100%;
+  aspect-ratio: 1 / 1;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start; /* 文字は上から */
+  justify-content: flex-start;
   align-items: stretch;
   text-align: center;
   overflow: hidden;
   border: none;
+  border-radius: 16px;
   background-color: #ffffff;
-  transition: box-shadow 0.2s ease;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
   transform-origin: center center;
+  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   padding: 0;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);
 }
 
-/* 前面（中央付近）のカードを 1.3 倍 */
+/* 正面カード */
 .event-carousel .event-card.is-active {
-  transform: scale(1.3);
-  z-index: 1;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  transform: scale(1.28);
+  z-index: 2;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.28);
 }
 
 .event-carousel .event-meta {
   justify-content: center;
 }
 
-/* 狭い画面では隙間を少し抑える */
 @media (max-width: 767px) {
   .event-carousel {
-    --carousel-gap: 1.5rem;
-    padding-block: 2rem;
+    --carousel-card: 240px; /* 元160pxの1.5倍 */
+    height: min(480px, 95vw);
+    perspective: 1200px;
   }
 }
 
