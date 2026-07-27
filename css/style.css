@@ -101,6 +101,11 @@ body {
   color: var(--color-text);
   background-color: #ffffff;
   min-height: 100vh;
+  overflow-x: clip; /* 横スクロール防止（3Dカルーセルのはみ出し対策） */
+}
+
+html {
+  overflow-x: clip;
 }
 
 img {
@@ -225,6 +230,7 @@ a:hover {
   text-align: left;
   align-self: flex-start; /* できるだけ左上 */
   line-height: 1.2;
+  font-family: "Stick", "Noto Sans JP", sans-serif;
 }
 
 /* サイト名（リンクなし） */
@@ -350,6 +356,14 @@ a:hover {
   margin-top: 0;
 }
 
+/* カルーセル用コンテナを画面幅いっぱいに（100vw は使わない） */
+.events > .container:has(> .event-carousel) {
+  width: 100%;
+  max-width: none;
+  margin-inline: 0;
+  padding-inline: 0;
+}
+
 /* ----------------------------------------
    企画一覧見出し帯
    ・白四角の左右端に、横に伸ばした斜め三角形
@@ -368,8 +382,9 @@ a:hover {
   position: relative;
   z-index: 1;
   margin: 0;
-  font-size: 3rem; /* 白帯の「企画一覧」のみ 2倍 */
+  font-size: 2.25rem; /* 3rem の 0.75 倍（余白は維持） */
   line-height: 1.2;
+  font-family: "Stick", "Noto Sans JP", sans-serif;
 }
 
 /* 左右の斜め三角形（横方向に長め） */
@@ -407,11 +422,11 @@ a:hover {
   list-style: none;
   display: grid;
   gap: var(--spacing-sm); /* カードとカードの間 */
+}
 
-  /* ▼ 複数列にしたいときの例（どれか1つを有効化）
+/* 企画一覧ページのみ横2列（カルーセル内の .event-list は除外） */
+.events > .container > .event-list {
   grid-template-columns: 1fr 1fr;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  */
 }
 
 /* ----------------------------------------
@@ -424,11 +439,9 @@ a:hover {
 .event-carousel {
   --carousel-card: 330px; /* 正方形を1.5倍（元220px） */
   position: relative;
-  /* 親 .container をはみ出して画面幅いっぱい使う */
-  width: 100vw;
-  max-width: 100vw;
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
+  /* 親を全幅化したうえで 100% にする（100vw だとスクロールバー分はみ出す） */
+  width: 100%;
+  max-width: 100%;
   height: min(600px, 95vw);
   perspective: 1800px;
   perspective-origin: 50% 45%;
@@ -522,14 +535,21 @@ a:hover {
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   padding: 0;
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);
+  /* 背景写真の上でも輪郭が分かるよう、影を強めに */
+  box-shadow:
+    0 4px 8px rgba(0, 0, 0, 0.18),
+    0 14px 36px rgba(0, 0, 0, 0.32),
+    0 0 0 1px rgba(0, 0, 0, 0.08);
 }
 
 /* 正面カード */
 .event-carousel .event-card.is-active {
   transform: scale(1.28);
   z-index: 2;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.28);
+  box-shadow:
+    0 8px 16px rgba(0, 0, 0, 0.22),
+    0 24px 56px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(0, 0, 0, 0.1);
 }
 
 .event-carousel .event-meta {
@@ -873,15 +893,8 @@ a:hover {
   }
 
   .events-heading-band h2 {
-    font-size: 3.5rem; /* 白帯の「企画一覧」のみ 2倍 */
+    font-size: 2.625rem; /* 3.5rem の 0.75 倍（余白は維持） */
   }
-
-  /*
-    イベントカードを2列にしたいときの例（必要ならコメント解除）:
-    .event-list {
-      grid-template-columns: 1fr 1fr;
-    }
-  */
 }
 
 /* デスクトップ以上 */
