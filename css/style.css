@@ -398,14 +398,14 @@ a:hover {
 }
 
 /*
-  長い企画一覧ページでは、背景の合成面をページ全高に引き伸ばさない。
-  ビューポート大に固定して親要素内だけ追従させ、GPUメモリを抑える。
+  企画一覧ページ: 背景をセクション全体に広げ、余白が出ないようにする。
+  （sticky だと下端に下地色のあまりが出やすい）
 */
 .events-stage--list > .parallax-scene {
-  position: sticky;
-  top: var(--header-offset, 5rem);
-  height: calc(100vh - var(--header-offset, 5rem));
-  margin-bottom: calc((100vh - var(--header-offset, 5rem)) * -1);
+  position: absolute;
+  inset: 0;
+  height: auto;
+  margin-bottom: 0;
 }
 
 /* ----------------------------------------
@@ -767,6 +767,12 @@ a:hover {
     background-repeat: no-repeat;
   }
 
+  /* 企画一覧ページ: 余白を減らすため少し拡大してカバー */
+  .events-stage--list {
+    background-size: 128%;
+    background-position: center 42%;
+  }
+
   .parallax-scene {
     display: none !important;
   }
@@ -861,11 +867,6 @@ a:hover {
 
 .event-detail-back a {
   text-decoration: underline;
-}
-
-.event-detail-place {
-  margin: 0 0 var(--spacing-md);
-  color: var(--color-muted);
 }
 
 /* 画像（左）+ 説明（右） */

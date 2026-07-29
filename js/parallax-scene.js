@@ -322,8 +322,13 @@ class ParallaxScene {
 
     const referenceRatio = this.config.refWidth / this.config.refHeight;
     const sceneRatio = sceneWidth / sceneHeight;
-    const worldWidth = sceneRatio > referenceRatio ? sceneWidth : sceneHeight * referenceRatio;
-    const worldHeight = sceneRatio > referenceRatio ? sceneWidth / referenceRatio : sceneHeight;
+    let worldWidth = sceneRatio > referenceRatio ? sceneWidth : sceneHeight * referenceRatio;
+    let worldHeight = sceneRatio > referenceRatio ? sceneWidth / referenceRatio : sceneHeight;
+
+    // 企画一覧ページは余白が出やすいので、カバーを少し拡大して埋める
+    const coverScale = this.root.closest(".events-stage--list") ? 1.22 : 1;
+    worldWidth *= coverScale;
+    worldHeight *= coverScale;
 
     this.worldHeight = worldHeight;
     this.world.style.width = `${worldWidth}px`;
