@@ -60,116 +60,125 @@
 
     <!-- ========================================
          企画一覧ページ
-         このページの内容を編集すれば一覧が更新されます
+         ・背景: class_all（PCはアニメーション / スマホは nippori_1）
+         ・このページの内容を編集すれば一覧が更新されます
          ======================================== -->
     <section class="section events" id="events" aria-labelledby="events-heading">
-      <div class="container">
-        <h2 id="events-heading">企画一覧</h2>
-        <p>文化祭で行われる企画の一覧です。気になる企画を探してみてください。</p>
+      <div class="events-stage events-stage--list">
+        <!-- data-asset-base="../" … pages/ から images/ を参照するため -->
+        <div class="parallax-scene" data-parallax-scene data-asset-base="../"></div>
 
-        <!--
-          ========================================
-          【企画一覧の書き方（ここを編集）】
-          ========================================
-          1. 下の「企画カード」1つ分（<li>...</li>）をコピーする
-          2. コピーしたブロックを </ul> の手前に貼り付ける
-          3. 中の文字だけ書き換える
+        <div class="events-stage-heading">
+          <h2 id="events-heading">企画一覧</h2>
+        </div>
 
-          書き換え項目の意味:
-          ・企画名 …… 例: 3年A組カフェ
-          ・カテゴリ …… 例: 模擬店 / 展示 / ステージ / 体験
-          ・場所 …… 例: 体育館 / 1年A組教室 / 中庭
-          ・紹介文 …… 1〜2行で企画の説明
+        <div class="container">
+          <p>文化祭で行われる企画の一覧です。気になる企画を探してみてください。</p>
 
-          ヒント:
-          ・不要な企画カードは、その <li>...</li> ごと削除してOK
-          ・サンプルのまま残しても、あとから差し替えできます
-          ========================================
-        -->
-        <ul class="event-list">
+          <!--
+            ========================================
+            【企画一覧の書き方（ここを編集）】
+            ========================================
+            1. 下の「企画カード」1つ分（<li>...</li>）をコピーする
+            2. コピーしたブロックを </ul> の手前に貼り付ける
+            3. 中の文字だけ書き換える
 
-          <li>
-            <a class="event-card-link" href="events/kaikaisiki.html"><article class="event-card">
-              <img class="event-card-image" src="../images/kaikaisiki.jpg" alt="" aria-hidden="true">
-              <div class="event-card-body">
-                <h3 class="event-name">開会式</h3>
-              </div>
-            </article></a>
-          </li>
+            書き換え項目の意味:
+            ・企画名 …… 例: 3年A組カフェ
+            ・カテゴリ …… 例: 模擬店 / 展示 / ステージ / 体験
+            ・場所 …… 例: 体育館 / 1年A組教室 / 中庭
+            ・紹介文 …… 1〜2行で企画の説明
 
-          <li>
-            <a class="event-card-link" href="events/heikaisiki.html"><article class="event-card">
-              <img class="event-card-image" src="../images/heikaisiki.jpg" alt="" aria-hidden="true">
-              <div class="event-card-body">
-                <h3 class="event-name">閉会式</h3>
-              </div>
-            </article></a>
-          </li>
+            ヒント:
+            ・不要な企画カードは、その <li>...</li> ごと削除してOK
+            ・サンプルのまま残しても、あとから差し替えできます
+            ========================================
+          -->
+          <ul class="event-list">
 
-          <li>
-            <a class="event-card-link" href="events/satueisupotto.html"><article class="event-card">
-              <img class="event-card-image" src="../images/satueisupotto.jpg" alt="" aria-hidden="true">
-              <div class="event-card-body">
-                <h3 class="event-name">撮影スポット</h3>
-              </div>
-            </article></a>
-          </li>
+            <li>
+              <a class="event-card-link" href="events/kaikaisiki.html"><article class="event-card">
+                <img class="event-card-image" src="../images/kaikaisiki.jpg" alt="" aria-hidden="true">
+                <div class="event-card-body">
+                  <h3 class="event-name">開会式</h3>
+                </div>
+              </article></a>
+            </li>
 
-          <li>
-            <a class="event-card-link" href="events/kahoot.html"><article class="event-card">
-              <img class="event-card-image" src="../images/kahoot.jpg" alt="" aria-hidden="true">
-              <div class="event-card-body">
-                <h3 class="event-name">Kahoot!</h3>
-              </div>
-            </article></a>
-          </li>
+            <li>
+              <a class="event-card-link" href="events/heikaisiki.html"><article class="event-card">
+                <img class="event-card-image" src="../images/heikaisiki.jpg" alt="" aria-hidden="true">
+                <div class="event-card-body">
+                  <h3 class="event-name">閉会式</h3>
+                </div>
+              </article></a>
+            </li>
 
-          <li>
-            <a class="event-card-link" href="events/bingo.html"><article class="event-card">
-              <img class="event-card-image" src="../images/BINGO.jpg" alt="" aria-hidden="true">
-              <div class="event-card-body">
-                <h3 class="event-name">BINGO</h3>
-              </div>
-            </article></a>
-          </li>
+            <li>
+              <a class="event-card-link" href="events/satueisupotto.html"><article class="event-card">
+                <img class="event-card-image" src="../images/satueisupotto.jpg" alt="" aria-hidden="true">
+                <div class="event-card-body">
+                  <h3 class="event-name">撮影スポット</h3>
+                </div>
+              </article></a>
+            </li>
 
-          <li>
-            <a class="event-card-link" href="events/game.html"><article class="event-card">
-              <img class="event-card-image" src="../images/game.jpg" alt="" aria-hidden="true">
-              <div class="event-card-body">
-                <h3 class="event-name">ゲーム大会</h3>
-              </div>
-            </article></a>
-          </li>
+            <li>
+              <a class="event-card-link" href="events/kahoot.html"><article class="event-card">
+                <img class="event-card-image" src="../images/kahoot.jpg" alt="" aria-hidden="true">
+                <div class="event-card-body">
+                  <h3 class="event-name">Kahoot!</h3>
+                </div>
+              </article></a>
+            </li>
 
-          <li>
-            <a class="event-card-link" href="events/vr.html"><article class="event-card">
-              <img class="event-card-image" src="../images/VR.jpg" alt="" aria-hidden="true">
-              <div class="event-card-body">
-                <h3 class="event-name">VR</h3>
-              </div>
-            </article></a>
-          </li>
+            <li>
+              <a class="event-card-link" href="events/bingo.html"><article class="event-card">
+                <img class="event-card-image" src="../images/BINGO.jpg" alt="" aria-hidden="true">
+                <div class="event-card-body">
+                  <h3 class="event-name">BINGO</h3>
+                </div>
+              </article></a>
+            </li>
 
-          <li>
-            <a class="event-card-link" href="events/food_3.html"><article class="event-card">
-              <img class="event-card-image" src="../images/food_3.jpg" alt="" aria-hidden="true">
-              <div class="event-card-body">
-                <h3 class="event-name">飲食（週3）</h3>
-              </div>
-            </article></a>
-          </li>
+            <li>
+              <a class="event-card-link" href="events/game.html"><article class="event-card">
+                <img class="event-card-image" src="../images/game.jpg" alt="" aria-hidden="true">
+                <div class="event-card-body">
+                  <h3 class="event-name">ゲーム大会</h3>
+                </div>
+              </article></a>
+            </li>
 
-          <li>
-            <a class="event-card-link" href="events/food_1.html"><article class="event-card">
-              <img class="event-card-image" src="../images/food_1.jpg" alt="" aria-hidden="true">
-              <div class="event-card-body">
-                <h3 class="event-name">飲食（週1）</h3>
-              </div>
-            </article></a>
-          </li>
+            <li>
+              <a class="event-card-link" href="events/vr.html"><article class="event-card">
+                <img class="event-card-image" src="../images/VR.jpg" alt="" aria-hidden="true">
+                <div class="event-card-body">
+                  <h3 class="event-name">VR</h3>
+                </div>
+              </article></a>
+            </li>
 
-        </ul>
+            <li>
+              <a class="event-card-link" href="events/food_3.html"><article class="event-card">
+                <img class="event-card-image" src="../images/food_3.jpg" alt="" aria-hidden="true">
+                <div class="event-card-body">
+                  <h3 class="event-name">飲食（週3）</h3>
+                </div>
+              </article></a>
+            </li>
+
+            <li>
+              <a class="event-card-link" href="events/food_1.html"><article class="event-card">
+                <img class="event-card-image" src="../images/food_1.jpg" alt="" aria-hidden="true">
+                <div class="event-card-body">
+                  <h3 class="event-name">飲食（週1）</h3>
+                </div>
+              </article></a>
+            </li>
+
+          </ul>
+        </div>
       </div>
     </section>
 
@@ -180,6 +189,7 @@
     </div>
   </footer>
 
+  <script src="../js/parallax-scene.js"></script>
   <script src="../js/script.js"></script>
 </body>
 </html>

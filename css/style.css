@@ -207,15 +207,13 @@ a:hover {
   border-bottom: 1px solid var(--color-border);
   background-color: #ffffff;
   font-family: "Noto Sans JP", sans-serif;
-  transition: background-color 0.25s ease, border-bottom-color 0.25s ease, backdrop-filter 0.25s ease;
+  transition: background-color 0.25s ease, border-bottom-color 0.25s ease;
 }
 
 /* スクロール中: 背景だけ少し透過（文字はそのまま読める） */
 .site-header.is-scrolled {
-  background-color: rgba(255, 255, 255, 0.72);
+  background-color: rgba(255, 255, 255, 0.94);
   border-bottom-color: rgba(224, 224, 224, 0.65);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
 }
 
 /*
@@ -355,22 +353,6 @@ a:hover {
 
 
 /* ----------------------------------------
-   News
-   ---------------------------------------- */
-.news {
-  /* お知らせリストのスタイルは今後追加 */
-}
-
-
-/* ----------------------------------------
-   About
-   ---------------------------------------- */
-.about {
-  /* 概要・テーマ紹介のスタイルは今後追加 */
-}
-
-
-/* ----------------------------------------
    企画一覧 / イベント欄（events）
    -----------------------------------------
    HTML の .event-list 内の <li> をコピーすれば件数を増やせます。
@@ -415,8 +397,21 @@ a:hover {
   background-color: #1a1430; /* 青紫テーマの下地 */
 }
 
+/*
+  長い企画一覧ページでは、背景の合成面をページ全高に引き伸ばさない。
+  ビューポート大に固定して親要素内だけ追従させ、GPUメモリを抑える。
+*/
+.events-stage--list > .parallax-scene {
+  position: sticky;
+  top: var(--header-offset, 5rem);
+  height: calc(100vh - var(--header-offset, 5rem));
+  margin-bottom: calc((100vh - var(--header-offset, 5rem)) * -1);
+}
+
 /* ----------------------------------------
    パララックス舞台（class_all レイヤー）
+   ・配置は初期化時に固定し、実行中は transform / opacity のみ更新
+   ・CSS animation は使わず、1本の JS ループで同期
    ---------------------------------------- */
 .parallax-scene {
   position: absolute;
@@ -424,61 +419,84 @@ a:hover {
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
+  contain: layout paint;
 }
 
 .parallax-scene__world {
   position: absolute;
   transform-origin: center center;
+  contain: layout style;
+}
+
+/* 位置・浮遊用ラッパー（transform のみ動かす） */
+.parallax-scene__slot {
+  position: absolute;
+  line-height: 0;
+  transform: translateZ(0);
+}
+
+.parallax-scene.is-active .parallax-scene__slot.is-animated,
+.parallax-scene.is-active .parallax-scene__slot.is-background {
+  will-change: transform;
+}
+
+.parallax-scene__slot.is-background {
+  left: 0 !important;
+  top: 0 !important;
+  width: 100% !important;
+  height: 100%;
 }
 
 .parallax-scene__layer {
-  position: absolute;
+  position: relative;
+  width: 100%;
   height: auto;
   max-width: none;
   display: block;
   pointer-events: none;
   user-select: none;
-  transform-origin: center center;
-  backface-visibility: hidden;
-  /* 紫縁取り（軽量・1本）※元2pxの2倍 */
-  filter: drop-shadow(0 0 4px rgba(139, 92, 246, 0.85));
+  /* 濃い紫の縁取り + 奥行き。多段 filter を2段に抑えて合成負荷を削減 */
+  filter:
+    drop-shadow(0 0 5px rgba(76, 29, 149, 0.95))
+    drop-shadow(4px 12px 18px rgba(10, 6, 28, 0.42));
 }
 
-.parallax-scene__layer.is-floating {
-  animation: parallax-layer-float var(--float-dur, 6s) ease-in-out var(--float-delay, 0s) infinite;
+/* 奥（後ろの壁）: 薄い影で遠ざける */
+.parallax-scene__layer[data-depth="mid-back"] {
+  filter:
+    drop-shadow(0 0 4px rgba(76, 29, 149, 0.82))
+    drop-shadow(2px 7px 11px rgba(10, 6, 28, 0.26));
+}
+
+/* 壁: 中程度の影 */
+.parallax-scene__layer[data-depth="wall"] {
+  filter:
+    drop-shadow(0 0 5px rgba(76, 29, 149, 0.95))
+    drop-shadow(4px 12px 18px rgba(10, 6, 28, 0.42));
+}
+
+/* 缶など中間手前: 少し強め */
+.parallax-scene__layer[data-depth="mid-front"] {
+  filter:
+    drop-shadow(0 0 6px rgba(76, 29, 149, 1))
+    drop-shadow(5px 14px 20px rgba(8, 4, 24, 0.5));
+}
+
+/* 手前テーブル: いちばん濃い落ち影で手前感を出す */
+.parallax-scene__layer[data-depth="foreground"] {
+  filter:
+    drop-shadow(0 0 7px rgba(76, 29, 149, 1))
+    drop-shadow(6px 18px 24px rgba(8, 4, 22, 0.58));
 }
 
 .parallax-scene__layer.is-background {
-  left: 0 !important;
-  top: 0 !important;
-  width: 100% !important;
+  width: 100%;
   height: 100%;
   object-fit: cover;
   filter: none;
-  animation: parallax-layer-breath var(--breath-dur, 11s) ease-in-out infinite;
 }
 
-@keyframes parallax-layer-float {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0);
-  }
-  50% {
-    transform: translate3d(0, calc(var(--float-amp, 18px) * -1), 0);
-  }
-}
-
-@keyframes parallax-layer-breath {
-  0%,
-  100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.045);
-  }
-}
-
-/* Access 同系の光（1枚だけ・負荷低め） */
+/* Access 同系の光。背景位置は動かさず、transform のみ JS で更新 */
 .parallax-scene__glow {
   position: absolute;
   inset: 0;
@@ -490,25 +508,23 @@ a:hover {
     rgba(6, 182, 212, 0.1) 40%,
     rgba(139, 92, 246, 0.22) 100%
   );
-  background-size: 200% 200%;
-  animation: ambient-gradient-flow 22s ease infinite;
-  mix-blend-mode: soft-light;
-  opacity: 0.75;
+  opacity: 0.42;
+  contain: strict;
+  transform: translate3d(0, 0, 0) scale(1.08);
 }
 
-.parallax-scene.is-paused .parallax-scene__layer,
-.parallax-scene.is-paused .parallax-scene__glow,
-.parallax-scene.is-paused .parallax-scene__particle {
-  animation-play-state: paused;
+.parallax-scene.is-active .parallax-scene__glow {
+  will-change: transform;
 }
 
-/* ぼんやりパーティクル（少量・CSS のみ） */
+/* ぼんやりパーティクル（blur なし・グラデで柔らかく見せる） */
 .parallax-scene__particles {
   position: absolute;
   inset: 0;
   z-index: 21;
   pointer-events: none;
   overflow: hidden;
+  contain: strict;
 }
 
 .parallax-scene__particle {
@@ -521,40 +537,16 @@ a:hover {
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    rgba(186, 230, 253, 0.9) 0%,
-    rgba(196, 181, 253, 0.45) 45%,
-    rgba(139, 92, 246, 0) 72%
+    rgba(186, 230, 253, 0.85) 0%,
+    rgba(196, 181, 253, 0.4) 40%,
+    rgba(139, 92, 246, 0) 70%
   );
-  opacity: var(--p-opacity, 0.28);
-  filter: blur(1.5px);
-  animation: parallax-particle-rise var(--p-dur, 18s) linear var(--p-delay, 0s) infinite;
-  will-change: transform, opacity;
+  opacity: 0;
+  transform: translate3d(0, 0, 0) scale(0.7);
 }
 
-@keyframes parallax-particle-rise {
-  0% {
-    transform: translate3d(0, 0, 0) scale(0.7);
-    opacity: 0;
-  }
-  12% {
-    opacity: var(--p-opacity, 0.28);
-  }
-  70% {
-    opacity: var(--p-opacity, 0.28);
-  }
-  100% {
-    transform: translate3d(var(--p-drift, 10px), -110vh, 0) scale(1.15);
-    opacity: 0;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .parallax-scene__layer.is-floating,
-  .parallax-scene__layer.is-background,
-  .parallax-scene__glow,
-  .parallax-scene__particle {
-    animation: none !important;
-  }
+.parallax-scene.is-active .parallax-scene__particle {
+  will-change: transform;
 }
 
 /* 半透明オーバーレイ（全体・可読性） */
@@ -588,7 +580,12 @@ a:hover {
   line-height: 1.2;
   font-family: "Stick", "Noto Sans JP", sans-serif;
   color: var(--color-text);
-  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.7);
+  /* 文字のまわりを白で縁取り */
+  -webkit-text-stroke: 4px #ffffff;
+  paint-order: stroke fill;
+  text-shadow:
+    0 0 2px #ffffff,
+    0 1px 2px rgba(255, 255, 255, 0.85);
 }
 
 .event-list {
@@ -600,8 +597,18 @@ a:hover {
 }
 
 /* 企画一覧ページのみ横2列（カルーセル内の .event-list は除外） */
-.events > .container > .event-list {
+.events-stage > .container > .event-list {
   grid-template-columns: 1fr 1fr;
+}
+
+.events-stage > .container {
+  padding-bottom: var(--spacing-lg);
+}
+
+.events-stage > .container > p {
+  margin: 0 0 var(--spacing-md);
+  text-align: center;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.85);
 }
 
 /* ----------------------------------------
@@ -646,8 +653,8 @@ a:hover {
   background-color: rgba(255, 255, 255, 0.88);
   background-image: var(--ambient-gradient-image);
   background-size: 280% 280%;
+  background-position: 40% 50%;
   background-repeat: no-repeat;
-  animation: ambient-gradient-flow var(--ambient-duration) ease infinite;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.22);
   transition: transform 0.2s ease, filter 0.2s ease, opacity 0.2s ease;
 }
@@ -675,13 +682,6 @@ a:hover {
 .carousel-nav:focus-visible {
   outline: 3px solid var(--grad-blue);
   outline-offset: 4px;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .carousel-nav {
-    animation: none;
-    background-position: 40% 50%;
-  }
 }
 
 .event-carousel .event-list {
@@ -730,26 +730,20 @@ a:hover {
   border: none;
   border-radius: 16px;
   background-color: #ffffff;
-  transition: transform 0.35s ease, box-shadow 0.35s ease;
+  transition: transform 0.35s ease;
   transform-origin: center center;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   padding: 0;
   /* 背景写真の上でも輪郭が分かるよう、影を強めに */
-  box-shadow:
-    0 4px 8px rgba(0, 0, 0, 0.18),
-    0 14px 36px rgba(0, 0, 0, 0.32),
-    0 0 0 1px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
 }
 
 /* 正面カード */
 .event-carousel .event-card.is-active {
   transform: scale(1.28);
   z-index: 2;
-  box-shadow:
-    0 8px 16px rgba(0, 0, 0, 0.22),
-    0 24px 56px rgba(0, 0, 0, 0.4),
-    0 0 0 1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.4);
 }
 
 /* 正面カードにホバー中だけ少し上へ */
@@ -778,7 +772,7 @@ a:hover {
   }
 
   /* 企画一覧ページ: 2列は窮屈なので1列に */
-  .events > .container > .event-list {
+  .events-stage > .container > .event-list {
     grid-template-columns: 1fr;
     gap: var(--spacing-md);
   }
@@ -997,10 +991,6 @@ a:hover {
    ・text-align: left / center / right …… セル内の左右位置
    ・vertical-align: top / middle / bottom …… セル内の上下位置
    ---------------------------------------- */
-.timetable {
-  /* スケジュール全体の装飾は今後追加 */
-}
-
 .timetable-day {
   margin: var(--spacing-md) 0 var(--spacing-sm);
   font-size: 1.125rem;
@@ -1115,14 +1105,6 @@ a:hover {
   display: block;
   width: 100%;
   max-width: 100%;
-}
-
-
-/* ----------------------------------------
-   FAQ
-   ---------------------------------------- */
-.faq {
-  /* アコーディオン等のスタイルは今後追加 */
 }
 
 

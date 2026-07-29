@@ -193,10 +193,8 @@ function setupEventCarousel() {
   // リサイズ時も半径を再計算（角度はそのまま）
   window.addEventListener("resize", () => layout(false));
 
-  requestAnimationFrame(() => {
-    layout(false);
-    startAuto();
-  });
+  layout(false);
+  startAuto();
 }
 
 

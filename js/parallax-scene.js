@@ -1,23 +1,17 @@
 /**
- * レイヤー舞台（企画一覧セクション背景）※軽量版
+ * 企画一覧のレイヤー背景
  * ------------------------------------------------
- * ・分割 WebP を % 配置
- * ・浮遊は CSS アニメーション（rAF / パーティクルなし）
- * ・画面外では animation を停止
- *
- * レイヤー追加: SCENE_LAYERS に 1 件足すだけ
+ * ・全シーンを1本の requestAnimationFrame で更新
+ * ・アニメーション中に変更するのは transform / opacity のみ
+ * ・画面外、非表示タブ、スマホでは更新しない
+ * ・レイヤー追加は SCENE_LAYERS に設定を足すだけ
  */
 
 const PARALLAX_CONFIG = {
   refWidth: 1280,
   refHeight: 960,
-  floatAmpMin: 14,
-  floatAmpMax: 30,
-  floatPeriodMin: 3.5,
-  floatPeriodMax: 7.5,
-  breathPeriodSec: 11,
-  /** ぼんやりパーティクル（少量・CSS アニメ） */
-  particleCount: 24,
+  breathScale: 0.045,
+  particleCount: 8,
 };
 
 const SCENE_LAYERS = [
@@ -29,6 +23,10 @@ const SCENE_LAYERS = [
     width: 100,
     depth: "background",
     z: 1,
+    moveX: 0,
+    moveY: 0,
+    period: 11000,
+    phase: 0,
   },
   {
     id: "左壁_後",
@@ -38,6 +36,10 @@ const SCENE_LAYERS = [
     width: 21.5831,
     depth: "mid-back",
     z: 2,
+    moveX: -7,
+    moveY: 31,
+    period: 4300,
+    phase: 0.17,
   },
   {
     id: "右壁_後",
@@ -47,6 +49,10 @@ const SCENE_LAYERS = [
     width: 26.2528,
     depth: "mid-back",
     z: 3,
+    moveX: 6,
+    moveY: 25,
+    period: 4900,
+    phase: 0.39,
   },
   {
     id: "缶",
@@ -56,6 +62,10 @@ const SCENE_LAYERS = [
     width: 8.713,
     depth: "mid-front",
     z: 4,
+    moveX: -9,
+    moveY: 38,
+    period: 5600,
+    phase: 0.61,
   },
   {
     id: "左壁",
@@ -65,6 +75,10 @@ const SCENE_LAYERS = [
     width: 39.9203,
     depth: "wall",
     z: 5,
+    moveX: 5,
+    moveY: 28,
+    period: 6200,
+    phase: 0.82,
   },
   {
     id: "右テーブル",
@@ -74,6 +88,10 @@ const SCENE_LAYERS = [
     width: 34.1686,
     depth: "foreground",
     z: 6,
+    moveX: -8,
+    moveY: 45,
+    period: 6800,
+    phase: 0.28,
   },
   {
     id: "右壁",
@@ -83,6 +101,10 @@ const SCENE_LAYERS = [
     width: 21.4692,
     depth: "wall",
     z: 7,
+    moveX: 6,
+    moveY: 34,
+    period: 7100,
+    phase: 0.5,
   },
   {
     id: "中央テーブル",
@@ -92,16 +114,92 @@ const SCENE_LAYERS = [
     width: 31.6059,
     depth: "foreground",
     z: 8,
+    moveX: -7,
+    moveY: 42,
+    period: 7500,
+    phase: 0.72,
   },
 ];
 
+const TAU = Math.PI * 2;
+
+/** 端で緩やかになる、連続した 0〜1 の往復値 */
+function smoothWave(angle) {
+  return (1 - Math.cos(angle)) * 0.5;
+}
+
+class AnimationEngine {
+  constructor() {
+    this.scenes = [];
+    this.frameId = 0;
+    this.pageVisible = !document.hidden;
+    this.tick = this.tick.bind(this);
+    this.onVisibilityChange = this.onVisibilityChange.bind(this);
+    document.addEventListener("visibilitychange", this.onVisibilityChange);
+  }
+
+  add(scene) {
+    this.scenes.push(scene);
+    this.requestFrame();
+  }
+
+  remove(scene) {
+    const index = this.scenes.indexOf(scene);
+    if (index !== -1) this.scenes.splice(index, 1);
+    if (!this.hasWork() && this.frameId) {
+      cancelAnimationFrame(this.frameId);
+      this.frameId = 0;
+    }
+  }
+
+  onVisibilityChange() {
+    this.pageVisible = !document.hidden;
+    for (const scene of this.scenes) {
+      scene.updateCompositing(this.pageVisible);
+    }
+    if (!this.pageVisible && this.frameId) {
+      cancelAnimationFrame(this.frameId);
+      this.frameId = 0;
+      return;
+    }
+    if (this.pageVisible) this.requestFrame();
+  }
+
+  hasWork() {
+    return this.pageVisible && this.scenes.some((scene) => scene.needsFrame());
+  }
+
+  requestFrame() {
+    if (!this.frameId && this.hasWork()) {
+      this.frameId = requestAnimationFrame(this.tick);
+    }
+  }
+
+  tick(time) {
+    this.frameId = 0;
+    if (!this.pageVisible) return;
+
+    for (const scene of this.scenes) {
+      if (scene.layoutDirty) scene.layout();
+      if (scene.isAnimating()) scene.render(time);
+    }
+    if (this.hasWork()) this.requestFrame();
+  }
+}
+
 class ParallaxScene {
-  constructor(root, layers = SCENE_LAYERS, config = PARALLAX_CONFIG) {
+  constructor(root, engine, layers = SCENE_LAYERS, config = PARALLAX_CONFIG) {
     this.root = root;
-    this.layers = layers;
+    this.engine = engine;
+    this.layerSettings = layers;
     this.config = config;
+    this.assetBase = root.dataset.assetBase || "";
     this.reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    this.world = null;
+    this.isIntersecting = false;
+    this.layoutDirty = true;
+    this.worldHeight = 0;
+    this.layers = [];
+    this.particles = [];
   }
 
   init() {
@@ -110,202 +208,209 @@ class ParallaxScene {
 
     this.world = document.createElement("div");
     this.world.className = "parallax-scene__world";
-    this.root.appendChild(this.world);
 
-    const glow = document.createElement("div");
-    glow.className = "parallax-scene__glow";
-    this.root.appendChild(glow);
+    this.glow = document.createElement("div");
+    this.glow.className = "parallax-scene__glow";
 
+    this.root.append(this.world, this.glow);
     this.buildLayers();
     this.buildParticles();
-    this.bindEvents();
-    this.layoutWorld();
+    this.bindObservers();
+    this.layout();
+    this.engine.add(this);
   }
 
   buildLayers() {
-    const { floatAmpMin, floatAmpMax, floatPeriodMin, floatPeriodMax, breathPeriodSec } =
-      this.config;
-    const ordered = [...this.layers].sort((a, b) => (a.z ?? 0) - (b.z ?? 0));
-    const n = ordered.length;
+    const fragment = document.createDocumentFragment();
 
-    ordered.forEach((def, i) => {
-      const el = document.createElement("img");
-      el.className = "parallax-scene__layer";
-      el.src = `${def.src}?v=lite1`;
-      el.alt = "";
-      el.draggable = false;
-      el.decoding = "async";
-      el.loading = i === 0 ? "eager" : "lazy";
-      el.style.left = `${def.left}%`;
-      el.style.top = `${def.top}%`;
-      el.style.width = `${def.width}%`;
-      el.style.zIndex = String(def.z ?? i + 1);
+    for (const setting of this.layerSettings) {
+      const slot = document.createElement("div");
+      slot.className = "parallax-scene__slot";
+      slot.style.cssText =
+        `left:${setting.left}%;top:${setting.top}%;width:${setting.width}%;z-index:${setting.z}`;
 
-      if (def.depth === "background") {
-        el.classList.add("is-background");
-        if (!this.reduceMotion) {
-          el.style.setProperty("--breath-dur", `${breathPeriodSec}s`);
-        }
-      } else if (!this.reduceMotion) {
-        const t = n <= 1 ? 0 : i / (n - 1);
-        const isMobile = window.matchMedia("(max-width: 767px)").matches;
-        const ampScale = isMobile ? 0.45 : 1;
-        const amp =
-          (floatAmpMin + (floatAmpMax - floatAmpMin) * (0.35 + (0.65 * ((i * 37) % 10)) / 10)) *
-          ampScale;
-        const period =
-          floatPeriodMin + (floatPeriodMax - floatPeriodMin) * (0.2 + 0.8 * t);
-        const delay = -((i * 1.3) % period);
-        el.style.setProperty("--float-amp", `${amp.toFixed(1)}px`);
-        el.style.setProperty("--float-dur", `${period.toFixed(1)}s`);
-        el.style.setProperty("--float-delay", `${delay.toFixed(1)}s`);
-        el.classList.add("is-floating");
+      const image = document.createElement("img");
+      image.className = "parallax-scene__layer";
+      image.src = `${this.assetBase}${setting.src}`;
+      image.alt = "";
+      image.draggable = false;
+      image.decoding = "async";
+      image.loading = setting.depth === "background" ? "eager" : "lazy";
+      image.dataset.depth = setting.depth;
+
+      if (setting.depth === "background") {
+        slot.classList.add("is-background");
+        image.classList.add("is-background");
+      } else {
+        slot.classList.add("is-animated");
       }
 
-      this.world.appendChild(el);
-    });
+      slot.appendChild(image);
+      fragment.appendChild(slot);
+      this.layers.push({ element: slot, setting });
+    }
+
+    this.world.appendChild(fragment);
   }
 
   buildParticles() {
-    if (this.reduceMotion) return;
-    const isMobile = window.matchMedia("(max-width: 767px)").matches;
-    const count = isMobile
-      ? Math.max(6, Math.round((this.config.particleCount ?? 24) / 2))
-      : this.config.particleCount ?? 24;
-    const layer = document.createElement("div");
-    layer.className = "parallax-scene__particles";
-    this.root.appendChild(layer);
+    if (this.reduceMotion || this.config.particleCount <= 0) return;
 
-    for (let i = 0; i < count; i += 1) {
-      const p = document.createElement("span");
-      p.className = "parallax-scene__particle";
-      const size = 6 + (i % 4) * 3; // 6〜15px
-      const left = 8 + ((i * 37) % 84);
-      const dur = 14 + (i % 5) * 3; // 14〜26s
-      const delay = -((i * 2.7) % dur);
-      const drift = (i % 2 === 0 ? 1 : -1) * (8 + (i % 3) * 4);
-      p.style.setProperty("--p-size", `${size}px`);
-      p.style.setProperty("--p-left", `${left}%`);
-      p.style.setProperty("--p-dur", `${dur}s`);
-      p.style.setProperty("--p-delay", `${delay}s`);
-      p.style.setProperty("--p-drift", `${drift}px`);
-      p.style.setProperty("--p-opacity", String(0.22 + (i % 4) * 0.06));
-      layer.appendChild(p);
+    const container = document.createElement("div");
+    container.className = "parallax-scene__particles";
+    const fragment = document.createDocumentFragment();
+
+    for (let i = 0; i < this.config.particleCount; i += 1) {
+      const element = document.createElement("span");
+      const size = 7 + (i % 3) * 4;
+      const setting = {
+        duration: 15000 + (i % 4) * 3000,
+        delay: (i * 2700) % 17000,
+        drift: (i % 2 === 0 ? 1 : -1) * (8 + (i % 3) * 4),
+        opacity: 0.22 + (i % 3) * 0.06,
+      };
+
+      element.className = "parallax-scene__particle";
+      element.style.cssText =
+        `left:${8 + ((i * 37) % 84)}%;width:${size}px;height:${size}px;` +
+        `margin-left:${size / -2}px`;
+      fragment.appendChild(element);
+      this.particles.push({ element, setting });
     }
+
+    container.appendChild(fragment);
+    this.root.appendChild(container);
   }
 
-  bindEvents() {
-    this.ro = new ResizeObserver(() => this.layoutWorld());
-    this.ro.observe(this.root);
+  bindObservers() {
+    this.resizeObserver = new ResizeObserver(() => {
+      this.layoutDirty = true;
+      this.engine.requestFrame();
+    });
+    this.resizeObserver.observe(this.root);
 
-    // 画面外では CSS アニメを止めて負荷を下げる
-    this.io = new IntersectionObserver(
+    this.intersectionObserver = new IntersectionObserver(
       ([entry]) => {
-        this.root.classList.toggle("is-paused", !entry.isIntersecting);
+        this.isIntersecting = entry.isIntersecting;
+        this.updateCompositing(this.engine.pageVisible);
+        if (this.isIntersecting) this.engine.requestFrame();
       },
-      { rootMargin: "80px", threshold: 0 }
+      { rootMargin: "40px", threshold: 0 }
     );
-    this.io.observe(this.root);
+    this.intersectionObserver.observe(this.root);
   }
 
-  layoutWorld() {
-    const { refWidth, refHeight } = this.config;
-    const rect = this.root.getBoundingClientRect();
-    const sw = rect.width;
-    const sh = rect.height;
-    if (sw <= 0 || sh <= 0) return;
+  needsFrame() {
+    return this.layoutDirty || this.isAnimating();
+  }
 
-    const ra = refWidth / refHeight;
-    const isMobile = sw < 768;
-    let w;
-    let h;
-    let left;
-    let top;
+  isAnimating() {
+    return this.isIntersecting && !this.reduceMotion;
+  }
 
-    if (isMobile) {
-      /*
-        スマホ縦画面で cover（高さ合わせ）すると左右の壁が切れて崩れる。
-        横幅基準で全体を見せる。余白が大きいときだけ控えめに拡大し、
-        上下は中央〜やや上寄りでトリミング。
-      */
-      const fitW = sw;
-      const fitH = fitW / ra;
-      let scale = 1.04;
-      const letterboxRatio = Math.max(0, (sh - fitH) / sh);
-      if (letterboxRatio > 0.14) {
-        // 大きな上下余白だけ埋める（左右の壁はできるだけ残す）
-        scale = Math.min(1.22, (sh * 0.9) / fitH);
+  updateCompositing(pageVisible) {
+    this.root.classList.toggle(
+      "is-active",
+      pageVisible && this.isIntersecting && !this.reduceMotion
+    );
+  }
+
+  layout() {
+    this.layoutDirty = false;
+    const { width: sceneWidth, height: sceneHeight } = this.root.getBoundingClientRect();
+    if (sceneWidth <= 0 || sceneHeight <= 0) return;
+
+    const referenceRatio = this.config.refWidth / this.config.refHeight;
+    const sceneRatio = sceneWidth / sceneHeight;
+    const worldWidth = sceneRatio > referenceRatio ? sceneWidth : sceneHeight * referenceRatio;
+    const worldHeight = sceneRatio > referenceRatio ? sceneWidth / referenceRatio : sceneHeight;
+
+    this.worldHeight = worldHeight;
+    this.world.style.width = `${worldWidth}px`;
+    this.world.style.height = `${worldHeight}px`;
+    this.world.style.left = `${(sceneWidth - worldWidth) / 2}px`;
+    this.world.style.top = `${(sceneHeight - worldHeight) / 2}px`;
+  }
+
+  render(time) {
+    for (const layer of this.layers) {
+      const { element, setting } = layer;
+      const angle = (time / setting.period + setting.phase) * TAU;
+
+      if (setting.depth === "background") {
+        const scale = 1 + smoothWave(angle) * this.config.breathScale;
+        element.style.transform = `translate3d(0,0,0) scale(${scale.toFixed(4)})`;
+        continue;
       }
-      w = fitW * scale;
-      h = w / ra;
-      left = (sw - w) / 2;
-      if (h >= sh) {
-        // 上 32% / 下 68%（テーブル側を優先して見せる）
-        top = (sh - h) * 0.32;
-      } else {
-        top = (sh - h) / 2;
-      }
-    } else {
-      const sa = sw / sh;
-      if (sa > ra) {
-        w = sw;
-        h = sw / ra;
-      } else {
-        h = sh;
-        w = sh * ra;
-      }
-      left = (sw - w) / 2;
-      top = (sh - h) / 2;
+
+      const x = Math.sin(angle) * setting.moveX;
+      const y = -smoothWave(angle) * setting.moveY;
+      element.style.transform = `translate3d(${x.toFixed(2)}px,${y.toFixed(2)}px,0)`;
     }
 
-    this.world.style.width = `${w}px`;
-    this.world.style.height = `${h}px`;
-    this.world.style.left = `${left}px`;
-    this.world.style.top = `${top}px`;
+    const particleTravel = this.worldHeight + 120;
+    for (const particle of this.particles) {
+      const { element, setting } = particle;
+      const progress = ((time + setting.delay) % setting.duration) / setting.duration;
+      const eased = progress * progress * (3 - 2 * progress);
+      const x = setting.drift * Math.sin(progress * Math.PI);
+      const y = -particleTravel * eased;
+      const scale = 0.7 + progress * 0.45;
+      const fadeIn = Math.min(1, progress / 0.12);
+      const fadeOut = Math.min(1, (1 - progress) / 0.3);
+
+      element.style.transform =
+        `translate3d(${x.toFixed(2)}px,${y.toFixed(2)}px,0) scale(${scale.toFixed(3)})`;
+      element.style.opacity = (setting.opacity * fadeIn * fadeOut).toFixed(3);
+    }
+
+    const glowAngle = (time / 22000) * TAU;
+    const glowX = Math.sin(glowAngle) * 3;
+    const glowY = Math.cos(glowAngle) * 2;
+    this.glow.style.transform =
+      `translate3d(${glowX.toFixed(2)}%,${glowY.toFixed(2)}%,0) scale(1.08)`;
   }
 
   destroy() {
-    if (this.ro) this.ro.disconnect();
-    if (this.io) this.io.disconnect();
+    this.resizeObserver.disconnect();
+    this.intersectionObserver.disconnect();
+    this.engine.remove(this);
   }
 }
 
-function setupParallaxScene() {
-  const root = document.querySelector("[data-parallax-scene]");
-  if (!root) return;
+function setupParallaxScenes() {
+  const roots = Array.from(document.querySelectorAll("[data-parallax-scene]"));
+  if (roots.length === 0) return;
 
-  const mq = window.matchMedia("(max-width: 767px)");
-  let scene = null;
+  const engine = new AnimationEngine();
+  const mobileQuery = window.matchMedia("(max-width: 767px)");
+  const scenes = new Map();
 
-  function sync() {
-    // スマホでは動くレイヤー背景を使わず、CSS の静止画（nippori_1）に任せる
-    if (mq.matches) {
-      if (scene) {
-        scene.destroy();
-        scene = null;
+  function syncScenes() {
+    for (const root of roots) {
+      if (mobileQuery.matches) {
+        const scene = scenes.get(root);
+        if (scene) {
+          scene.destroy();
+          scenes.delete(root);
+        }
+        root.replaceChildren();
+        root.hidden = true;
+      } else if (!scenes.has(root)) {
+        root.hidden = false;
+        const scene = new ParallaxScene(root, engine);
+        scenes.set(root, scene);
+        scene.init();
       }
-      root.replaceChildren();
-      root.setAttribute("hidden", "");
-      return;
-    }
-
-    root.removeAttribute("hidden");
-    if (!scene) {
-      scene = new ParallaxScene(root);
-      scene.init();
     }
   }
 
-  sync();
-  if (typeof mq.addEventListener === "function") {
-    mq.addEventListener("change", sync);
-  } else {
-    mq.addListener(sync);
-  }
+  syncScenes();
+  mobileQuery.addEventListener("change", syncScenes);
 }
 
 if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", setupParallaxScene);
+  document.addEventListener("DOMContentLoaded", setupParallaxScenes, { once: true });
 } else {
-  setupParallaxScene();
+  setupParallaxScenes();
 }
