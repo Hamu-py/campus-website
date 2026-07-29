@@ -84,7 +84,10 @@ function setupEventCarousel() {
     // 基準幅(220)で計算した半径を、横間隔 1.5 倍にする
     const refW = 220;
     const base = Math.max(260, Math.round(refW / (2 * Math.tan(Math.PI / count))));
-    return base * 1.5 * 1.5;
+    const desktop = base * 1.5 * 1.5;
+    // スマホでは円を小さくして、カードが画面内に収まりやすくする
+    const isMobile = window.matchMedia("(max-width: 767px)").matches;
+    return isMobile ? Math.round(desktop * 0.52) : desktop;
   }
 
   function layout(animate) {

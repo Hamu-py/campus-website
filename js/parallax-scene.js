@@ -148,7 +148,11 @@ class ParallaxScene {
         }
       } else if (!this.reduceMotion) {
         const t = n <= 1 ? 0 : i / (n - 1);
-        const amp = floatAmpMin + (floatAmpMax - floatAmpMin) * (0.35 + (0.65 * ((i * 37) % 10)) / 10);
+        const isMobile = window.matchMedia("(max-width: 767px)").matches;
+        const ampScale = isMobile ? 0.45 : 1;
+        const amp =
+          (floatAmpMin + (floatAmpMax - floatAmpMin) * (0.35 + (0.65 * ((i * 37) % 10)) / 10)) *
+          ampScale;
         const period =
           floatPeriodMin + (floatPeriodMax - floatPeriodMin) * (0.2 + 0.8 * t);
         const delay = -((i * 1.3) % period);
@@ -164,7 +168,10 @@ class ParallaxScene {
 
   buildParticles() {
     if (this.reduceMotion) return;
-    const count = this.config.particleCount ?? 24;
+    const isMobile = window.matchMedia("(max-width: 767px)").matches;
+    const count = isMobile
+      ? Math.max(6, Math.round((this.config.particleCount ?? 24) / 2))
+      : this.config.particleCount ?? 24;
     const layer = document.createElement("div");
     layer.className = "parallax-scene__particles";
     this.root.appendChild(layer);
@@ -209,20 +216,52 @@ class ParallaxScene {
     if (sw <= 0 || sh <= 0) return;
 
     const ra = refWidth / refHeight;
-    const sa = sw / sh;
+    const isMobile = sw < 768;
     let w;
     let h;
-    if (sa > ra) {
-      w = sw;
-      h = sw / ra;
+    let left;
+    let top;
+
+    if (isMobile) {
+      /*
+        スマホ縦画面で cover（高さ合わせ）すると左右の壁が切れて崩れる。
+        横幅基準で全体を見せる。余白が大きいときだけ控えめに拡大し、
+        上下は中央〜やや上寄りでトリミング。
+      */
+      const fitW = sw;
+      const fitH = fitW / ra;
+      let scale = 1.04;
+      const letterboxRatio = Math.max(0, (sh - fitH) / sh);
+      if (letterboxRatio > 0.14) {
+        // 大きな上下余白だけ埋める（左右の壁はできるだけ残す）
+        scale = Math.min(1.22, (sh * 0.9) / fitH);
+      }
+      w = fitW * scale;
+      h = w / ra;
+      left = (sw - w) / 2;
+      if (h >= sh) {
+        // 上 32% / 下 68%（テーブル側を優先して見せる）
+        top = (sh - h) * 0.32;
+      } else {
+        top = (sh - h) / 2;
+      }
     } else {
-      h = sh;
-      w = sh * ra;
+      const sa = sw / sh;
+      if (sa > ra) {
+        w = sw;
+        h = sw / ra;
+      } else {
+        h = sh;
+        w = sh * ra;
+      }
+      left = (sw - w) / 2;
+      top = (sh - h) / 2;
     }
+
     this.world.style.width = `${w}px`;
     this.world.style.height = `${h}px`;
-    this.world.style.left = `${(sw - w) / 2}px`;
-    this.world.style.top = `${(sh - h) / 2}px`;
+    this.world.style.left = `${left}px`;
+    this.world.style.top = `${top}px`;
   }
 
   destroy() {

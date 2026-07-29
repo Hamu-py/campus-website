@@ -762,10 +762,72 @@ a:hover {
 }
 
 @media (max-width: 767px) {
+  /* 企画一覧ページ: 2列は窮屈なので1列に */
+  .events > .container > .event-list {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+
+  .events-stage-heading {
+    padding-block: 0.75rem;
+  }
+
+  .events-stage-heading h2 {
+    font-size: 1.5rem;
+  }
+
   .event-carousel {
-    --carousel-card: 240px; /* 元160pxの1.5倍 */
-    height: min(480px, 95vw);
-    perspective: 1200px;
+    --carousel-card: 168px;
+    height: min(360px, 92vw);
+    perspective: 900px;
+    perspective-origin: 50% 42%;
+  }
+
+  .event-carousel .event-card {
+    min-height: 0;
+  }
+
+  .event-carousel .event-card.is-active {
+    transform: scale(1.1);
+  }
+
+  .event-carousel .event-card-link:hover .event-card.is-active {
+    transform: scale(1.1) translateY(-6px);
+  }
+
+  .carousel-nav {
+    width: 28px;
+    height: 48px;
+  }
+
+  .carousel-nav--prev {
+    left: 0.35rem;
+  }
+
+  .carousel-nav--next {
+    right: 0.35rem;
+  }
+
+  /* スマホでは縁取りを少し抑え、にじみを防ぐ */
+  .parallax-scene__layer {
+    filter: drop-shadow(0 0 2px rgba(139, 92, 246, 0.75));
+  }
+
+  .site-title {
+    font-size: clamp(1.05rem, 4.6vw, 1.25rem);
+    line-height: 1.25;
+  }
+
+  .nav-list {
+    gap: 0.55rem;
+  }
+
+  .nav-list a {
+    font-size: 0.8125rem;
+  }
+
+  .nav-list .material-symbols-outlined {
+    font-size: 1.1em;
   }
 }
 
