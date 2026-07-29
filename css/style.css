@@ -38,42 +38,48 @@
    ・コンテンツ幅を広げたい → --content-width を 1100px などに変更
    ---------------------------------------- */
 :root {
-  /* 色（#のあとは RGB を16進数で指定） */
-  --color-text: #222222;       /* 本文・見出しの基本色 */
-  --color-background: #ffffff; /* ページ全体の背景色 */
-  --color-muted: #666666;      /* 補足文など、少し薄く見せたい色 */
-  --color-border: #e0e0e0;     /* 線・枠線の色 */
-  --color-link-hover: #4fc3f7; /* リンクにマウスを乗せたときの水色 */
+  /* 暗色ガラスUI（Quiet Magic Classroom）※下地は黒すぎず、少し明るめ */
+  --color-text: #f4f1fa;           /* 本文・見出し */
+  --color-background: #1c1830;     /* ページ下地 */
+  --color-muted: #c4bdd4;          /* 補足文 */
+  --color-border: rgba(255, 255, 255, 0.16); /* 細い光縁 */
+  --color-link-hover: #5eead4;     /* ホバー・アクセント */
 
-  /* アンビエント・グラデーション（Access 背景）
-     原色はアクセント。実際の背景は白寄せで可読性を優先 */
+  --color-surface: rgba(255, 255, 255, 0.09); /* ガラス面 */
+  --color-surface-strong: rgba(255, 255, 255, 0.14);
+  --color-panel: #242038;          /* セクションパネル */
+  --color-ink: 32, 28, 48;         /* オーバーレイ・ヘッダー用 RGB */
+
   --grad-blue: #2563eb;
   --grad-cyan: #06b6d4;
   --grad-violet: #8b5cf6;
-  /* soft 系は原色を白に混ぜた色（約20%相当＝以前の約2倍の濃さ） */
-  --grad-soft-blue: #c9d9fb;   /* blue 寄り */
-  --grad-soft-cyan: #c2eef6;   /* cyan 寄り */
-  --grad-soft-violet: #d9ccfb; /* violet 寄り */
-  --grad-soft-white: #f4f7fb;
-  --ambient-duration: 18s;     /* 1周の目安（15〜20秒） */
-  /* Access / 企画一覧見出し帯で共通の流れるグラデ */
+  --ambient-duration: 18s;
+  /* 暗色基調の動的グラデーション（夜空用・企画一覧） */
   --ambient-gradient-image: linear-gradient(
     125deg,
-    var(--grad-soft-blue) 0%,
-    var(--grad-soft-white) 18%,
-    var(--grad-soft-cyan) 36%,
-    var(--grad-soft-white) 52%,
-    var(--grad-soft-violet) 70%,
-    var(--grad-soft-white) 86%,
-    var(--grad-soft-blue) 100%
+    #14122a 0%,
+    #1a2a4a 12%,
+    #243a68 24%,
+    #1a1838 38%,
+    #2a2458 52%,
+    #3a2870 66%,
+    #1e3558 80%,
+    #16122e 100%
+  );
+  /* 小さいUI用のアクセント面 */
+  --accent-gradient-image: linear-gradient(
+    125deg,
+    rgba(37, 99, 235, 0.55) 0%,
+    rgba(6, 182, 212, 0.4) 45%,
+    rgba(139, 92, 246, 0.55) 100%
   );
 
   /* 余白・レイアウト（小さい → 大きい） */
-  --spacing-xs: 0.5rem;  /* ごく狭い隙間 */
-  --spacing-sm: 1rem;    /* 小さめの余白 */
-  --spacing-md: 2rem;    /* 普通の余白 */
-  --spacing-lg: 4rem;    /* セクション同士など大きめの余白 */
-  --content-width: 960px; /* 本文エリアの最大幅 */
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 2rem;
+  --spacing-lg: 4rem;
+  --content-width: 960px;
 }
 
 
@@ -94,15 +100,14 @@
 }
 
 body {
-  margin: 0; /* ブラウザ標準の外側余白を消す */
-  font-family: "Noto Sans JP", sans-serif; /* Google Fonts で読み込み */
-  font-size: 16px;         /* 基本の文字サイズ */
-  line-height: 1.6;        /* 行間。大きくすると読みやすい */
+  margin: 0;
+  font-family: "Noto Sans JP", sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
   color: var(--color-text);
-  background-color: #ffffff;
+  background-color: var(--color-background);
   min-height: 100vh;
-  overflow-x: clip; /* 横スクロール防止（3Dカルーセルのはみ出し対策） */
-  /* 固定ヘッダー分の上余白（JS で実測値を入れる） */
+  overflow-x: clip;
   padding-top: var(--header-offset, 5rem);
 }
 
@@ -194,7 +199,6 @@ a:hover {
    ・flex-wrap: wrap …… 画面が狭いとき折り返す
    ---------------------------------------- */
 .site-header {
-  /* 縦スクロールしても常に上部に表示 */
   position: fixed;
   top: 0;
   left: 0;
@@ -204,16 +208,19 @@ a:hover {
   align-items: center;
   padding-block: 1.3rem;
   padding-inline: 1rem;
-  border-bottom: 1px solid var(--color-border);
-  background-color: #ffffff;
+  border-bottom: 1px solid transparent;
+  background-color: rgba(var(--color-ink), 0.52);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   font-family: "Noto Sans JP", sans-serif;
+  color: var(--color-text);
   transition: background-color 0.25s ease, border-bottom-color 0.25s ease;
 }
 
-/* スクロール中: 背景だけ少し透過（文字はそのまま読める） */
+/* スクロール中: ガラスを少し濃くして可読性を確保 */
 .site-header.is-scrolled {
-  background-color: rgba(255, 255, 255, 0.94);
-  border-bottom-color: rgba(224, 224, 224, 0.65);
+  background-color: rgba(var(--color-ink), 0.78);
+  border-bottom-color: var(--color-border);
 }
 
 /*
@@ -249,14 +256,13 @@ a:hover {
   display: flex;
   align-items: center;
   font-family: "Stick", "Noto Sans JP", sans-serif;
+  text-decoration: none;
+  color: inherit;
 }
 
-/* サイト名（リンクなし） */
-.site-title a {
-  text-decoration: none;
-  line-height: 1;
-  display: inline-flex;
-  align-items: center;
+/* サイト名リンク */
+.site-title:hover {
+  color: inherit;
 }
 
 /* 今見ているページのナビ（目印） */
@@ -289,11 +295,11 @@ a:hover {
 .nav-list a {
   display: inline-flex;
   align-items: center;
-  gap: 0.25rem; /* アイコンと文字の間 */
+  gap: 0.25rem;
   text-decoration: none;
-  border-bottom: 2px solid transparent; /* ホバー用の下線スペースを確保 */
+  border-bottom: 2px solid transparent;
   line-height: 1;
-  color: #696969; /* dimgray（アイコン・文字） */
+  color: rgba(244, 241, 250, 0.82);
 }
 
 /* Material Symbols（ナビ横のアイコン） */
@@ -336,19 +342,126 @@ a:hover {
 
 
 /* ----------------------------------------
-   Hero
-   -----------------------------------------
-   【よくあるカスタム例】
-   ・背景色を付ける     → background-color: #f5f5f5;
-   ・文字を中央寄せ     → text-align: center;
-   ・上下の余白を変える → padding-block: 6rem;
-   ・背景画像を入れる例:
-     background-image: url("../images/hero.jpg");
-     background-size: cover;
-     background-position: center;
+   トップ / 企画一覧（キーアート上）
+   ・ヘッダーを背景に重ねる（初期は透明、スクロールでガラス）
+   ---------------------------------------- */
+.page-home,
+.page-events {
+  padding-top: 0;
+}
+
+.page-home .site-header,
+.page-events .site-header {
+  background-color: transparent;
+  border-bottom-color: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.page-home .site-header.is-scrolled,
+.page-events .site-header.is-scrolled {
+  background-color: rgba(var(--color-ink), 0.78);
+  border-bottom-color: var(--color-border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* 企画一覧ページ: 見出しがヘッダーに隠れないよう上余白 */
+.page-events .events-stage--list > .events-stage-heading {
+  padding-top: calc(var(--header-offset, 5rem) + var(--spacing-md));
+}
+
+/* ----------------------------------------
+   Hero（ファーストビュー専用・仮実装）
+   ・ブランド / キャッチ枠 / メタ / CTA のみ
+   ・キーアートはフルブリード
    ---------------------------------------- */
 .hero {
-  text-align: center; /* Topic など見出し・本文を中央揃え */
+  position: relative;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+.hero-stage {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  width: 100%;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-background);
+}
+
+.hero-stage > .parallax-scene {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+/* 可読性用の薄い暗幕（中央テキスト帯） */
+.hero-stage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse 70% 55% at 50% 48%,
+      rgba(var(--color-ink), 0.42) 0%,
+      rgba(var(--color-ink), 0.14) 55%,
+      rgba(var(--color-ink), 0.32) 100%
+    ),
+    linear-gradient(
+      to bottom,
+      rgba(var(--color-ink), 0.28) 0%,
+      transparent 28%,
+      transparent 62%,
+      rgba(var(--color-ink), 0.4) 100%
+    );
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  width: min(100% - 2.5rem, 40rem);
+  margin-inline: auto;
+  padding-block: calc(var(--header-offset, 5rem) + 2rem) 5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.hero-brand {
+  margin: 0;
+  max-width: 18em;
+  font-family: "Stick", "Noto Sans JP", sans-serif;
+  font-size: clamp(1.75rem, 5.2vw, 3.25rem);
+  font-weight: 400;
+  line-height: 1.25;
+  letter-spacing: 0.06em;
+  color: #f4f1fa;
+  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.45);
+}
+
+.hero-catch {
+  margin: 0;
+  font-size: clamp(1rem, 2.4vw, 1.25rem);
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  color: rgba(244, 241, 250, 0.88);
+}
+
+.hero-meta {
+  margin: 0;
+  font-size: 0.875rem;
+  letter-spacing: 0.08em;
+  color: #f4f1fa;
 }
 
 
@@ -394,7 +507,101 @@ a:hover {
   isolation: isolate;
   overflow: hidden;
   width: 100%;
-  background-color: #1a1430; /* 青紫テーマの下地 */
+  background-color: var(--color-panel); /* 青紫テーマの下地 */
+}
+
+/* トップ第二セクション: 夜空グラデ＋星 Canvas */
+.events-stage--panel {
+  background-color: #14122a;
+  background-image: var(--ambient-gradient-image);
+  background-size: 280% 280%;
+  background-repeat: no-repeat;
+  animation: ambient-gradient-flow var(--ambient-duration) ease infinite;
+  padding-bottom: var(--spacing-md);
+}
+
+/* 柔らかい光のレイヤー（グラデの上・星の下） */
+.events-stage--panel::after {
+  content: "";
+  position: absolute;
+  inset: -4%;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 45% at 20% 30%, rgba(37, 99, 235, 0.16), transparent 70%),
+    radial-gradient(ellipse 50% 40% at 78% 60%, rgba(6, 182, 212, 0.12), transparent 70%),
+    radial-gradient(ellipse 55% 45% at 50% 85%, rgba(139, 92, 246, 0.14), transparent 70%);
+  opacity: 0.9;
+  animation: night-soft-light 22s ease-in-out infinite;
+}
+
+@keyframes night-soft-light {
+  0%,
+  100% {
+    opacity: 0.82;
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    opacity: 1;
+    transform: translate3d(1.2%, -0.8%, 0);
+  }
+}
+
+.night-sky {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  display: block;
+}
+
+@keyframes ambient-gradient-flow {
+  0% {
+    background-position: 0% 40%;
+  }
+  50% {
+    background-position: 100% 60%;
+  }
+  100% {
+    background-position: 0% 40%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .events-stage--panel {
+    animation: none;
+    background-position: 40% 50%;
+  }
+
+  .events-stage--panel::after {
+    animation: none;
+    opacity: 0.9;
+    transform: none;
+  }
+}
+
+.events-stage--panel .events-stage-heading h2 {
+  color: var(--color-text);
+}
+
+.events-more {
+  position: relative;
+  z-index: 3;
+  margin: 0;
+  padding: var(--spacing-md) var(--spacing-sm) var(--spacing-lg);
+  text-align: center;
+}
+
+.events-more a {
+  color: rgba(244, 241, 250, 0.88);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.events-more a:hover {
+  color: #5eead4;
 }
 
 /*
@@ -549,7 +756,7 @@ a:hover {
   will-change: transform;
 }
 
-/* 半透明オーバーレイ（全体・可読性） */
+/* 半透明オーバーレイ（全体・可読性・暗色） */
 .events-stage::before {
   content: "";
   position: absolute;
@@ -558,13 +765,33 @@ a:hover {
   pointer-events: none;
   background: linear-gradient(
     160deg,
-    rgba(255, 255, 255, 0.28) 0%,
-    rgba(148, 163, 184, 0.18) 45%,
-    rgba(71, 85, 105, 0.22) 100%
+    rgba(var(--color-ink), 0.22) 0%,
+    rgba(var(--color-ink), 0.08) 45%,
+    rgba(var(--color-ink), 0.3) 100%
   );
 }
 
-.events-stage > *:not(.parallax-scene) {
+/* 企画一覧ページ: 背景を少し暗くし文字の視認性を確保 */
+.events-stage--list::before {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(var(--color-ink), 0.48) 0%,
+      rgba(var(--color-ink), 0.38) 40%,
+      rgba(var(--color-ink), 0.55) 100%
+    ),
+    radial-gradient(
+      ellipse 70% 50% at 50% 35%,
+      rgba(18, 16, 28, 0.2) 0%,
+      rgba(18, 16, 28, 0.45) 100%
+    );
+}
+
+.events-stage--panel::before {
+  display: none;
+}
+
+.events-stage > *:not(.parallax-scene):not(.night-sky) {
   position: relative;
   z-index: 3;
 }
@@ -580,12 +807,7 @@ a:hover {
   line-height: 1.2;
   font-family: "Stick", "Noto Sans JP", sans-serif;
   color: var(--color-text);
-  /* 文字のまわりを白で縁取り */
-  -webkit-text-stroke: 4px #ffffff;
-  paint-order: stroke fill;
-  text-shadow:
-    0 0 2px #ffffff,
-    0 1px 2px rgba(255, 255, 255, 0.85);
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.35);
 }
 
 .event-list {
@@ -608,7 +830,8 @@ a:hover {
 .events-stage > .container > p {
   margin: 0 0 var(--spacing-md);
   text-align: center;
-  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.85);
+  color: var(--color-muted);
+  text-shadow: none;
 }
 
 /* ----------------------------------------
@@ -647,15 +870,16 @@ a:hover {
   width: clamp(36px, 7vw, 56px);
   height: clamp(64px, 14vw, 96px);
   padding: 0;
-  border: none;
+  border: 1px solid var(--color-border);
   cursor: pointer;
   transform: translateY(-50%);
-  background-color: rgba(255, 255, 255, 0.88);
-  background-image: var(--ambient-gradient-image);
-  background-size: 280% 280%;
-  background-position: 40% 50%;
+  background-color: rgba(var(--color-ink), 0.52);
+  background-image: var(--accent-gradient-image);
+  background-size: 100% 100%;
+  background-position: center;
   background-repeat: no-repeat;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.22);
+  background-blend-mode: soft-light;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
   transition: transform 0.2s ease, filter 0.2s ease, opacity 0.2s ease;
 }
 
@@ -757,24 +981,47 @@ a:hover {
 
 @media (max-width: 767px) {
   /*
-    スマホ: 動くレイヤー背景を廃止し、シンプルな教室写真をカバー表示
+    スマホ: 動くレイヤー背景を廃止し、キーアート静止画をカバー表示
   */
+  .hero-stage {
+    background-color: var(--color-background);
+    background-image: url("../images/nippori_1.webp");
+    background-size: cover;
+    background-position: center 42%;
+    background-repeat: no-repeat;
+  }
+
   .events-stage {
-    background-color: #1a1430;
+    background-color: var(--color-panel);
     background-image: url("../images/nippori_1.webp");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
   }
 
+  .events-stage--panel {
+    background-color: #14122a;
+    background-image: var(--ambient-gradient-image);
+    background-size: 280% 280%;
+    background-repeat: no-repeat;
+    animation: ambient-gradient-flow var(--ambient-duration) ease infinite;
+  }
+
   /* 企画一覧ページ: 余白を減らすため少し拡大してカバー */
   .events-stage--list {
+    background-image: url("../images/nippori_1.webp");
     background-size: 128%;
     background-position: center 42%;
+    background-repeat: no-repeat;
   }
 
   .parallax-scene {
     display: none !important;
+  }
+
+  .hero-content {
+    gap: 1rem;
+    padding-block: calc(var(--header-offset, 5rem) + 1.5rem) 4rem;
   }
 
   /* 企画一覧ページ: 2列は窮屈なので1列に */
@@ -884,6 +1131,8 @@ a:hover {
   object-fit: cover;
   border-radius: 16px;
   margin: 0;
+  border: 1px solid var(--color-border);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
 }
 
 .event-detail-body {
@@ -912,11 +1161,13 @@ a:hover {
   overflow: hidden;
   padding: 0;
   border: 1px solid var(--color-border);
-  border-radius: 16px; /* 角を丸く */
+  border-radius: 16px;
   min-height: 220px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start; /* 文字は上から */
+  justify-content: flex-start;
+  background-color: var(--color-surface);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
 }
 
 /* カード全面の画像 */
@@ -1000,31 +1251,37 @@ a:hover {
 /* 画面が狭くても表を横スクロールできるようにする */
 .table-wrap {
   overflow-x: auto;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-surface);
 }
 
 .timetable-table {
   width: 100%;
-  border-collapse: collapse; /* セルの枠線を重ねてきれいに見せる */
-  min-width: 480px; /* 狭い画面でも列がつぶれにくくする */
+  border-collapse: collapse;
+  min-width: 480px;
 }
 
 .timetable-table th,
 .timetable-table td {
   padding: var(--spacing-xs) var(--spacing-sm);
   border: 1px solid var(--color-border);
-  text-align: left;      /* 左右: 左寄せ（center / right に変更可） */
-  vertical-align: top;   /* 上下: 上寄せ（middle などに変更可） */
+  text-align: left;
+  vertical-align: top;
+  background-color: transparent;
 }
 
 .timetable-table th {
-  background-color: #ffffff;
+  background-color: var(--color-surface-strong);
   font-weight: 600;
+  color: var(--color-text);
 }
 
 
 /* ----------------------------------------
-   Access
-   ・青・水色・紫のアンビエント・グラデーション背景
+   Access / FAQ（暗色ガラス・同世界）
+   ・Access: 静かな単色＋弱い光（実用・安心）
+   ・企画一覧の動的グラデと差別化
    ---------------------------------------- */
 .access {
   position: relative;
@@ -1032,51 +1289,35 @@ a:hover {
   overflow: hidden;
   text-align: center;
   font-family: "Noto Sans JP", sans-serif;
-
-  background-color: var(--grad-soft-white);
-  background-image: var(--ambient-gradient-image);
-  background-size: 280% 280%;
-  background-repeat: no-repeat;
-  animation: ambient-gradient-flow var(--ambient-duration) ease infinite;
+  background-color: #3a3558;
+  background-image:
+    radial-gradient(
+      ellipse 75% 55% at 50% 0%,
+      rgba(167, 139, 250, 0.28) 0%,
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 50% 40% at 80% 80%,
+      rgba(6, 182, 212, 0.14) 0%,
+      transparent 65%
+    );
 }
 
-/* 文字・地図の視認性用の薄い白ベール */
-.access::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background: linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0.22),
-    rgba(255, 255, 255, 0.1) 40%,
-    rgba(255, 255, 255, 0.22)
-  );
+.faq {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  text-align: center;
+  font-family: "Noto Sans JP", sans-serif;
+  background-color: var(--color-background);
+  background-image:
+    radial-gradient(ellipse 70% 50% at 50% 0%, rgba(76, 29, 149, 0.16), transparent 70%);
 }
 
-.access > * {
+.access > *,
+.faq > * {
   position: relative;
   z-index: 1;
-}
-
-@keyframes ambient-gradient-flow {
-  0% {
-    background-position: 0% 40%;
-  }
-  50% {
-    background-position: 100% 60%;
-  }
-  100% {
-    background-position: 0% 40%;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .access {
-    animation: none;
-    background-position: 40% 50%;
-  }
 }
 
 .access .access-name {
@@ -1100,6 +1341,8 @@ a:hover {
   overflow: hidden;
   border-radius: 12px;
   border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
 }
 
 .access-map iframe {
@@ -1111,15 +1354,13 @@ a:hover {
 
 /* ----------------------------------------
    Footer
-   -----------------------------------------
-   文字を中央にしたい例:
-   .site-footer { text-align: center; }
    ---------------------------------------- */
 .site-footer {
   padding-block: var(--spacing-md);
   border-top: 1px solid var(--color-border);
   font-size: 0.875rem;
   color: var(--color-muted);
+  background-color: var(--color-background);
 }
 
 .site-footer p {

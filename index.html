@@ -3,36 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>文化祭 Webサイト</title>
-  <!-- フォント（Google Fonts） -->
+  <title>日暮里キャンパスフェスティバル</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Stick&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet">
-  <!-- スタイルシート -->
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body class="page-home">
 
   <!-- ========================================
-       Header
-       サイト名・メインナビ
+       Header（ヒーロー上に重ねる・仮）
        ======================================== -->
   <header class="site-header" id="header">
     <div class="container header-inner">
-      <!-- サイト名（左上） -->
-      <h1 class="site-title">日暮里キャンパスフェスティバル</h1>
+      <a class="site-title" href="index.html">日暮里キャンパスフェスティバル</a>
 
-      <!--
-        【ナビの書き方】
-        ・下の <li> をコピーするとメニューを増やせます
-        ・href には開きたいページのファイル名を書きます
-        ・例: href="pages/events.html" → 企画一覧ページへ移動
-      -->
       <nav class="site-nav" aria-label="メインメニュー">
         <ul class="nav-list">
           <li>
-            <a href="index.html">
+            <a href="index.html" aria-current="page">
               <span class="material-symbols-outlined" aria-hidden="true">home</span>
               トップ
             </a>
@@ -49,12 +39,6 @@
               タイムスケジュール
             </a>
           </li>
-          <!-- メニューを増やす例（コメントを外して使ってください）
-          <li><a href="#news">お知らせ</a></li>
-          <li><a href="#about">概要</a></li>
-          <li><a href="#access">アクセス</a></li>
-          <li><a href="#faq">FAQ</a></li>
-          -->
         </ul>
       </nav>
     </div>
@@ -63,151 +47,160 @@
   <main>
 
     <!-- ========================================
-         Events（企画一覧）
-         ・企画カードをコピーして増やすことができます
-         ・全一覧は pages/events.html へ
+         Hero（ファーストビュー専用・仮実装）
+         ・ブランド / キャッチ枠 / 開催情報枠 / CTA のみ
+         ・文言・写真は後から差し替え可能
          ======================================== -->
-    <section class="section events" id="events" aria-labelledby="events-heading">
-      <!--
-        企画一覧見出し＋カルーセルを一体の舞台（レイヤーパララックス背景）
-      -->
-      <div class="events-stage">
-        <!-- PC: 分割レイヤーの動く背景 / スマホ: CSS で nippori_1.webp の静止画 -->
+    <section class="hero" id="top" aria-labelledby="hero-brand">
+      <div class="hero-stage">
+        <!-- PC: class_all レイヤー / スマホ: nippori_1 静止画（CSS） -->
         <div class="parallax-scene" data-parallax-scene></div>
 
-        <div class="events-stage-heading">
-          <h2 id="events-heading">企画一覧</h2>
-        </div>
+        <div class="hero-content">
+          <h1 id="hero-brand" class="hero-brand">ロゴ募集中！</h1>
 
-        <!--
-          【イベント欄の書き方】
-          1. 下の「企画カード」1つ分（<li>...</li>）をコピーする
-          2. </ul> の手前に貼り付ける
-          3. 企画名・場所などを書き換える
+          <!-- 仮キャッチ（学校側で差し替え） -->
+          <p class="hero-catch">キャッチコピー</p>
 
-          ※ トップでは円型 3D カルーセル表示（仮実装）
-        -->
-        <div class="event-carousel" data-event-carousel>
-          <button type="button" class="carousel-nav carousel-nav--prev" data-carousel-prev aria-label="前の企画"></button>
-        <ul class="event-list">
-
-          <li>
-            <a class="event-card-link" href="pages/events/kaikaisiki.html"><article class="event-card">
-              <img class="event-card-image" src="images/kaikaisiki.jpg" alt="" aria-hidden="true">
-              <div class="event-card-body">
-                <h3 class="event-name">開会式</h3>
-                <p class="event-meta">
-                  <span class="event-place">大教室</span>
-                </p>
-              </div>
-            </article></a>
-          </li>
-
-          <li>
-            <a class="event-card-link" href="pages/events/heikaisiki.html"><article class="event-card">
-              <img class="event-card-image" src="images/heikaisiki.jpg" alt="" aria-hidden="true">
-              <div class="event-card-body">
-                <h3 class="event-name">閉会式</h3>
-                <p class="event-meta">
-                  <span class="event-place">大教室</span>
-                </p>
-              </div>
-            </article></a>
-          </li>
-
-          <li>
-            <a class="event-card-link" href="pages/events/satueisupotto.html"><article class="event-card">
-              <img class="event-card-image" src="images/satueisupotto.jpg" alt="" aria-hidden="true">
-              <div class="event-card-body">
-                <h3 class="event-name">撮影スポット</h3>
-                <p class="event-meta">
-                  <span class="event-place">未定</span>
-                </p>
-              </div>
-            </article></a>
-          </li>
-
-          <li>
-            <a class="event-card-link" href="pages/events/kahoot.html"><article class="event-card">
-              <img class="event-card-image" src="images/kahoot.jpg" alt="" aria-hidden="true">
-              <div class="event-card-body">
-                <h3 class="event-name">Kahoot!</h3>
-                <p class="event-meta">
-                  <span class="event-place">大教室</span>
-                </p>
-              </div>
-            </article></a>
-          </li>
-
-          <li>
-            <a class="event-card-link" href="pages/events/bingo.html"><article class="event-card">
-              <img class="event-card-image" src="images/BINGO.jpg" alt="" aria-hidden="true">
-              <div class="event-card-body">
-                <h3 class="event-name">BINGO</h3>
-                <p class="event-meta">
-                  <span class="event-place">大教室</span>
-                </p>
-              </div>
-            </article></a>
-          </li>
-
-          <li>
-            <a class="event-card-link" href="pages/events/game.html"><article class="event-card">
-              <img class="event-card-image" src="images/game.jpg" alt="" aria-hidden="true">
-              <div class="event-card-body">
-                <h3 class="event-name">ゲーム大会</h3>
-                <p class="event-meta">
-                  <span class="event-place">大教室</span>
-                </p>
-              </div>
-            </article></a>
-          </li>
-
-          <li>
-            <a class="event-card-link" href="pages/events/vr.html"><article class="event-card">
-              <img class="event-card-image" src="images/VR.jpg" alt="" aria-hidden="true">
-              <div class="event-card-body">
-                <h3 class="event-name">VR</h3>
-                <p class="event-meta">
-                  <span class="event-place">大教室</span>
-                </p>
-              </div>
-            </article></a>
-          </li>
-
-          <li>
-            <a class="event-card-link" href="pages/events/food_3.html"><article class="event-card">
-              <img class="event-card-image" src="images/food_3.jpg" alt="" aria-hidden="true">
-              <div class="event-card-body">
-                <h3 class="event-name">飲食（週3）</h3>
-                <p class="event-meta">
-                  <span class="event-place">中教室</span>
-                </p>
-              </div>
-            </article></a>
-          </li>
-
-          <li>
-            <a class="event-card-link" href="pages/events/food_1.html"><article class="event-card">
-              <img class="event-card-image" src="images/food_1.jpg" alt="" aria-hidden="true">
-              <div class="event-card-body">
-                <h3 class="event-name">飲食（週1）</h3>
-                <p class="event-meta">
-                  <span class="event-place">中教室</span>
-                </p>
-              </div>
-            </article></a>
-          </li>
-
-        </ul>
-          <button type="button" class="carousel-nav carousel-nav--next" data-carousel-next aria-label="次の企画"></button>
+          <!-- 仮メタ（開催日・会場が決まり次第差し替え） -->
+          <p class="hero-meta">9/19(土) 11:00〜16:00</p>
         </div>
       </div>
     </section>
 
     <!-- ========================================
+         Events（第二セクション・カルーセル）
+         ======================================== -->
+    <section class="section events" id="events" aria-labelledby="events-heading">
+      <div class="events-stage events-stage--panel" data-night-sky>
+        <div class="events-stage-heading">
+          <h2 id="events-heading">企画一覧</h2>
+        </div>
+
+        <div class="event-carousel" data-event-carousel>
+          <button type="button" class="carousel-nav carousel-nav--prev" data-carousel-prev aria-label="前の企画"></button>
+          <ul class="event-list">
+
+            <li>
+              <a class="event-card-link" href="pages/events/kaikaisiki.html"><article class="event-card">
+                <img class="event-card-image" src="images/kaikaisiki.jpg" alt="" aria-hidden="true">
+                <div class="event-card-body">
+                  <h3 class="event-name">開会式</h3>
+                  <p class="event-meta">
+                    <span class="event-place">大教室</span>
+                  </p>
+                </div>
+              </article></a>
+            </li>
+
+            <li>
+              <a class="event-card-link" href="pages/events/heikaisiki.html"><article class="event-card">
+                <img class="event-card-image" src="images/heikaisiki.jpg" alt="" aria-hidden="true">
+                <div class="event-card-body">
+                  <h3 class="event-name">閉会式</h3>
+                  <p class="event-meta">
+                    <span class="event-place">大教室</span>
+                  </p>
+                </div>
+              </article></a>
+            </li>
+
+            <li>
+              <a class="event-card-link" href="pages/events/satueisupotto.html"><article class="event-card">
+                <img class="event-card-image" src="images/satueisupotto.jpg" alt="" aria-hidden="true">
+                <div class="event-card-body">
+                  <h3 class="event-name">撮影スポット</h3>
+                  <p class="event-meta">
+                    <span class="event-place">未定</span>
+                  </p>
+                </div>
+              </article></a>
+            </li>
+
+            <li>
+              <a class="event-card-link" href="pages/events/kahoot.html"><article class="event-card">
+                <img class="event-card-image" src="images/kahoot.jpg" alt="" aria-hidden="true">
+                <div class="event-card-body">
+                  <h3 class="event-name">Kahoot!</h3>
+                  <p class="event-meta">
+                    <span class="event-place">大教室</span>
+                  </p>
+                </div>
+              </article></a>
+            </li>
+
+            <li>
+              <a class="event-card-link" href="pages/events/bingo.html"><article class="event-card">
+                <img class="event-card-image" src="images/BINGO.jpg" alt="" aria-hidden="true">
+                <div class="event-card-body">
+                  <h3 class="event-name">BINGO</h3>
+                  <p class="event-meta">
+                    <span class="event-place">大教室</span>
+                  </p>
+                </div>
+              </article></a>
+            </li>
+
+            <li>
+              <a class="event-card-link" href="pages/events/game.html"><article class="event-card">
+                <img class="event-card-image" src="images/game.jpg" alt="" aria-hidden="true">
+                <div class="event-card-body">
+                  <h3 class="event-name">ゲーム大会</h3>
+                  <p class="event-meta">
+                    <span class="event-place">大教室</span>
+                  </p>
+                </div>
+              </article></a>
+            </li>
+
+            <li>
+              <a class="event-card-link" href="pages/events/vr.html"><article class="event-card">
+                <img class="event-card-image" src="images/VR.jpg" alt="" aria-hidden="true">
+                <div class="event-card-body">
+                  <h3 class="event-name">VR</h3>
+                  <p class="event-meta">
+                    <span class="event-place">大教室</span>
+                  </p>
+                </div>
+              </article></a>
+            </li>
+
+            <li>
+              <a class="event-card-link" href="pages/events/food_3.html"><article class="event-card">
+                <img class="event-card-image" src="images/food_3.jpg" alt="" aria-hidden="true">
+                <div class="event-card-body">
+                  <h3 class="event-name">飲食（週3）</h3>
+                  <p class="event-meta">
+                    <span class="event-place">中教室</span>
+                  </p>
+                </div>
+              </article></a>
+            </li>
+
+            <li>
+              <a class="event-card-link" href="pages/events/food_1.html"><article class="event-card">
+                <img class="event-card-image" src="images/food_1.jpg" alt="" aria-hidden="true">
+                <div class="event-card-body">
+                  <h3 class="event-name">飲食（週1）</h3>
+                  <p class="event-meta">
+                    <span class="event-place">中教室</span>
+                  </p>
+                </div>
+              </article></a>
+            </li>
+
+          </ul>
+          <button type="button" class="carousel-nav carousel-nav--next" data-carousel-next aria-label="次の企画"></button>
+        </div>
+
+        <p class="events-more">
+          <a href="pages/events.html">すべての企画を見る</a>
+        </p>
+      </div>
+    </section>
+
+    <!-- ========================================
          Access
-         会場アクセス・地図
          ======================================== -->
     <section class="section access" id="access" aria-labelledby="access-heading">
       <div class="container">
@@ -233,7 +226,6 @@
 
     <!-- ========================================
          FAQ
-         よくある質問用
          ======================================== -->
     <section class="section faq" id="faq" aria-labelledby="faq-heading">
       <div class="container">
@@ -244,17 +236,12 @@
 
   </main>
 
-  <!-- ========================================
-       Footer
-       コピーライト・リンクなど共通フッター
-       ======================================== -->
   <footer class="site-footer" id="footer">
     <div class="container">
-      <!-- フッターリンクは今後追加予定 -->
     </div>
   </footer>
 
-  <!-- JavaScript -->
+  <script src="js/starfield.js"></script>
   <script src="js/parallax-scene.js"></script>
   <script src="js/script.js"></script>
 </body>

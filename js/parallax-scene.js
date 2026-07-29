@@ -155,7 +155,9 @@ class AnimationEngine {
   onVisibilityChange() {
     this.pageVisible = !document.hidden;
     for (const scene of this.scenes) {
-      scene.updateCompositing(this.pageVisible);
+      if (typeof scene.updateCompositing === "function") {
+        scene.updateCompositing(this.pageVisible);
+      }
     }
     if (!this.pageVisible && this.frameId) {
       cancelAnimationFrame(this.frameId);
@@ -186,6 +188,15 @@ class AnimationEngine {
     if (this.hasWork()) this.requestFrame();
   }
 }
+
+/** ページ共通のアニメーションエンジン（rAF は常に1本） */
+window.CampusAnim = window.CampusAnim || {
+  _engine: null,
+  getEngine() {
+    if (!this._engine) this._engine = new AnimationEngine();
+    return this._engine;
+  },
+};
 
 class ParallaxScene {
   constructor(root, engine, layers = SCENE_LAYERS, config = PARALLAX_CONFIG) {
@@ -384,10 +395,8 @@ class ParallaxScene {
 }
 
 function setupParallaxScenes() {
+  const engine = window.CampusAnim.getEngine();
   const roots = Array.from(document.querySelectorAll("[data-parallax-scene]"));
-  if (roots.length === 0) return;
-
-  const engine = new AnimationEngine();
   const mobileQuery = window.matchMedia("(max-width: 767px)");
   const scenes = new Map();
 
@@ -410,12 +419,23 @@ function setupParallaxScenes() {
     }
   }
 
-  syncScenes();
-  mobileQuery.addEventListener("change", syncScenes);
+  if (roots.length > 0) {
+    syncScenes();
+    mobileQuery.addEventListener("change", syncScenes);
+  }
+
+  // 企画一覧の夜空（同一 engine / 同一 rAF）
+  if (window.CampusStarfield?.setupNightSkies) {
+    window.CampusStarfield.setupNightSkies(engine);
+  }
+}
+
+function bootCampusMotion() {
+  setupParallaxScenes();
 }
 
 if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", setupParallaxScenes, { once: true });
+  document.addEventListener("DOMContentLoaded", bootCampusMotion, { once: true });
 } else {
-  setupParallaxScenes();
+  bootCampusMotion();
 }
