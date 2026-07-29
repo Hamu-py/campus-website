@@ -102,6 +102,8 @@ body {
   background-color: #ffffff;
   min-height: 100vh;
   overflow-x: clip; /* 横スクロール防止（3Dカルーセルのはみ出し対策） */
+  /* 固定ヘッダー分の上余白（JS で実測値を入れる） */
+  padding-top: var(--header-offset, 5rem);
 }
 
 html {
@@ -192,19 +194,34 @@ a:hover {
    ・flex-wrap: wrap …… 画面が狭いとき折り返す
    ---------------------------------------- */
 .site-header {
-  /* 枠に隠れないよう上へ余白、背景も下へ伸ばす */
-  padding-top: 4mm;
-  padding-left: 4mm;
-  padding-right: 4mm;
-  padding-bottom: calc(var(--spacing-sm) + 6mm);
+  /* 縦スクロールしても常に上部に表示 */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  padding-block: 1.3rem;
+  padding-inline: 1rem;
   border-bottom: 1px solid var(--color-border);
   background-color: #ffffff;
   font-family: "Noto Sans JP", sans-serif;
+  transition: background-color 0.25s ease, border-bottom-color 0.25s ease, backdrop-filter 0.25s ease;
+}
+
+/* スクロール中: 背景だけ少し透過（文字はそのまま読める） */
+.site-header.is-scrolled {
+  background-color: rgba(255, 255, 255, 0.72);
+  border-bottom-color: rgba(224, 224, 224, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 /*
   .header-inner
-  → サイト名はできるだけ左上、ナビは中央
+  → 狭い画面: 上にタイトル・下にナビ
+  → 広い画面: タイトルの右にナビを横並び
 */
 .site-header > .container.header-inner {
   /* 通常の container 中央寄せを解除して左端まで使う */
@@ -216,51 +233,56 @@ a:hover {
 
 .header-inner {
   display: flex;
-  flex-direction: column; /* 上にタイトル、下にナビ */
+  flex-direction: column; /* スマホ（狭いとき）は縦 */
   flex-wrap: wrap;
-  align-items: stretch;
+  align-items: flex-start; /* 横方向は左寄せのまま */
   justify-content: flex-start;
-  gap: var(--spacing-sm);
+  gap: 0.5rem;
   text-align: left;
+  width: 100%;
 }
 
 .site-title {
   margin: 0;
   font-size: 1.875rem; /* 元の 1.25rem の約1.5倍 */
   text-align: left;
-  align-self: flex-start; /* できるだけ左上 */
-  line-height: 1.2;
+  flex-shrink: 0;
+  line-height: 1;
+  display: flex;
+  align-items: center;
   font-family: "Stick", "Noto Sans JP", sans-serif;
 }
 
 /* サイト名（リンクなし） */
 .site-title a {
   text-decoration: none;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
 }
 
 /* 今見ているページのナビ（目印） */
 .nav-list a[aria-current="page"] {
   border-bottom-color: var(--color-text);
   font-weight: 600;
-  
 }
 
 /*
   .nav-list
   → メニュー項目を横一列に並べる。
-    間隔を広げたい → gap を大きく
-    中央にまとめたい → justify-content: center; を追加
 */
 .site-nav {
-  align-self: center; /* ナビは中央のまま */
   width: 100%;
+  display: flex;
+  align-items: center;
 }
 
 .nav-list {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center; /* トップ・企画一覧などを中央に */
-  gap: var(--spacing-md); /* メニュー同士の間隔（約2倍） */
+  justify-content: flex-start;
+  align-items: center;
+  gap: var(--spacing-sm);
   margin: 0;
   padding: 0;
   list-style: none; /* 箇条書きの点（・）を消す */
@@ -272,6 +294,8 @@ a:hover {
   gap: 0.25rem; /* アイコンと文字の間 */
   text-decoration: none;
   border-bottom: 2px solid transparent; /* ホバー用の下線スペースを確保 */
+  line-height: 1;
+  color: #696969; /* dimgray（アイコン・文字） */
 }
 
 /* Material Symbols（ナビ横のアイコン） */
@@ -279,6 +303,31 @@ a:hover {
   font-size: 1.25em;
   font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
   line-height: 1;
+}
+
+/* タブレット以上: タイトルの右にナビ（横は左寄せ、下端をタイトル文字に合わせる） */
+@media (min-width: 768px) {
+  .header-inner {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: baseline; /* タイトル文字の下（ベースライン）にナビを合わせる */
+    justify-content: flex-start; /* 横方向は元どおり左から */
+    gap: var(--spacing-md);
+  }
+
+  .site-nav {
+    width: auto;
+  }
+
+  .nav-list {
+    gap: var(--spacing-md);
+  }
+
+  .nav-list a {
+    /* 下線スペース分だけ見た目が浮くのを抑える */
+    padding-bottom: 0;
+    border-bottom-width: 2px;
+  }
 }
 
 /* マウスを乗せたときの目印（文字・アイコン・下線を水色に） */
@@ -345,75 +394,201 @@ a:hover {
 }
 
 /*
-  トップ（カルーセルあり）:
-  ヘッダー下〜写真上の白背景の中心に「企画一覧」を置く
+  トップ（見出し＋カルーセル一体）:
+  セクション上余白は舞台側で制御
 */
-.events:has(.event-carousel) {
+.events:has(.events-stage) {
   padding-top: 0;
-}
-
-.events .event-carousel {
-  margin-top: 0;
-}
-
-/* カルーセル用コンテナを画面幅いっぱいに（100vw は使わない） */
-.events > .container:has(> .event-carousel) {
-  width: 100%;
-  max-width: none;
-  margin-inline: 0;
-  padding-inline: 0;
+  padding-bottom: 0;
 }
 
 /* ----------------------------------------
-   企画一覧見出し帯
-   ・白四角の左右端に、横に伸ばした斜め三角形
-   ・色は Access と同じアンビエント・グラデーション
+   企画一覧ステージ（見出し＋カルーセル一体）
+   ・背景: 分割レイヤーのパララックス舞台
+   ・半透明オーバーレイで文字・カードの視認性を確保
    ---------------------------------------- */
-.events-heading-band {
+.events-stage {
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  padding-block: var(--spacing-md); /* 文字拡大に合わせて余白を抑制 */
-  text-align: center;
-  background-color: #ffffff;
+  width: 100%;
+  background-color: #1a1430; /* 青紫テーマの下地 */
 }
 
-.events-heading-band h2 {
-  position: relative;
-  z-index: 1;
-  margin: 0;
-  font-size: 2.25rem; /* 3rem の 0.75 倍（余白は維持） */
-  line-height: 1.2;
-  font-family: "Stick", "Noto Sans JP", sans-serif;
+/* ----------------------------------------
+   パララックス舞台（class_all レイヤー）
+   ---------------------------------------- */
+.parallax-scene {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
 }
 
-/* 左右の斜め三角形（横方向に長め） */
-.events-heading-band::before,
-.events-heading-band::after {
+.parallax-scene__world {
+  position: absolute;
+  transform-origin: center center;
+}
+
+.parallax-scene__layer {
+  position: absolute;
+  height: auto;
+  max-width: none;
+  display: block;
+  pointer-events: none;
+  user-select: none;
+  transform-origin: center center;
+  backface-visibility: hidden;
+  /* 紫縁取り（軽量・1本）※元2pxの2倍 */
+  filter: drop-shadow(0 0 4px rgba(139, 92, 246, 0.85));
+}
+
+.parallax-scene__layer.is-floating {
+  animation: parallax-layer-float var(--float-dur, 6s) ease-in-out var(--float-delay, 0s) infinite;
+}
+
+.parallax-scene__layer.is-background {
+  left: 0 !important;
+  top: 0 !important;
+  width: 100% !important;
+  height: 100%;
+  object-fit: cover;
+  filter: none;
+  animation: parallax-layer-breath var(--breath-dur, 11s) ease-in-out infinite;
+}
+
+@keyframes parallax-layer-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, calc(var(--float-amp, 18px) * -1), 0);
+  }
+}
+
+@keyframes parallax-layer-breath {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.045);
+  }
+}
+
+/* Access 同系の光（1枚だけ・負荷低め） */
+.parallax-scene__glow {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+  background: linear-gradient(
+    125deg,
+    rgba(37, 99, 235, 0.2) 0%,
+    rgba(6, 182, 212, 0.1) 40%,
+    rgba(139, 92, 246, 0.22) 100%
+  );
+  background-size: 200% 200%;
+  animation: ambient-gradient-flow 22s ease infinite;
+  mix-blend-mode: soft-light;
+  opacity: 0.75;
+}
+
+.parallax-scene.is-paused .parallax-scene__layer,
+.parallax-scene.is-paused .parallax-scene__glow,
+.parallax-scene.is-paused .parallax-scene__particle {
+  animation-play-state: paused;
+}
+
+/* ぼんやりパーティクル（少量・CSS のみ） */
+.parallax-scene__particles {
+  position: absolute;
+  inset: 0;
+  z-index: 21;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.parallax-scene__particle {
+  position: absolute;
+  left: var(--p-left, 50%);
+  bottom: -8%;
+  width: var(--p-size, 10px);
+  height: var(--p-size, 10px);
+  margin-left: calc(var(--p-size, 10px) / -2);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(186, 230, 253, 0.9) 0%,
+    rgba(196, 181, 253, 0.45) 45%,
+    rgba(139, 92, 246, 0) 72%
+  );
+  opacity: var(--p-opacity, 0.28);
+  filter: blur(1.5px);
+  animation: parallax-particle-rise var(--p-dur, 18s) linear var(--p-delay, 0s) infinite;
+  will-change: transform, opacity;
+}
+
+@keyframes parallax-particle-rise {
+  0% {
+    transform: translate3d(0, 0, 0) scale(0.7);
+    opacity: 0;
+  }
+  12% {
+    opacity: var(--p-opacity, 0.28);
+  }
+  70% {
+    opacity: var(--p-opacity, 0.28);
+  }
+  100% {
+    transform: translate3d(var(--p-drift, 10px), -110vh, 0) scale(1.15);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .parallax-scene__layer.is-floating,
+  .parallax-scene__layer.is-background,
+  .parallax-scene__glow,
+  .parallax-scene__particle {
+    animation: none !important;
+  }
+}
+
+/* 半透明オーバーレイ（全体・可読性） */
+.events-stage::before {
   content: "";
   position: absolute;
-  top: 0;
-  bottom: 0;
-  width: min(52vw, 460px); /* 横に伸ばした三角形の幅 */
-  z-index: 0;
+  inset: 0;
+  z-index: 2;
   pointer-events: none;
-  background-color: var(--grad-soft-white);
-  background-image: var(--ambient-gradient-image);
-  background-size: 280% 280%;
-  background-repeat: no-repeat;
-  animation: ambient-gradient-flow var(--ambient-duration) ease infinite;
+  background: linear-gradient(
+    160deg,
+    rgba(255, 255, 255, 0.28) 0%,
+    rgba(148, 163, 184, 0.18) 45%,
+    rgba(71, 85, 105, 0.22) 100%
+  );
 }
 
-/* 左: 上辺が長く、右下へ斜めに落ちる三角形 */
-.events-heading-band::before {
-  left: 0;
-  clip-path: polygon(0 0, 100% 0, 0 100%);
+.events-stage > *:not(.parallax-scene) {
+  position: relative;
+  z-index: 3;
 }
 
-/* 右: 左右対称 */
-.events-heading-band::after {
-  right: 0;
-  clip-path: polygon(100% 0, 0 0, 100% 100%);
+.events-stage-heading {
+  padding-block: var(--spacing-md);
+  text-align: center;
+}
+
+.events-stage-heading h2 {
+  margin: 0;
+  font-size: 2.25rem;
+  line-height: 1.2;
+  font-family: "Stick", "Noto Sans JP", sans-serif;
+  color: var(--color-text);
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.7);
 }
 
 .event-list {
@@ -434,12 +609,11 @@ a:hover {
    ・正面の後ろを中心にした円型 3D 配置
    ・7秒に1回、円を回転して次の企画を正面へ
    ・正面カードは is-active で拡大
-   ・背景は images/class.jpg
+   ・背景は親 .events-stage のレイヤー舞台を使用
    ---------------------------------------- */
 .event-carousel {
   --carousel-card: 330px; /* 正方形を1.5倍（元220px） */
   position: relative;
-  /* 親を全幅化したうえで 100% にする（100vw だとスクロールバー分はみ出す） */
   width: 100%;
   max-width: 100%;
   height: min(600px, 95vw);
@@ -452,36 +626,62 @@ a:hover {
   isolation: isolate;
   touch-action: pan-y;
   user-select: none;
-
-  /* カルーセル領域の背景写真 */
-  background-color: var(--grad-soft-white);
-  background-image: url("../images/class.jpg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  /* 背景は .events-stage に統一したため、ここでは透明 */
+  background: transparent;
 }
 
-/*
-  薄いグレー系グラデーション（写真の上）
-  ・少しだけ落ち着かせつつ、カードの視認性も確保
-*/
-.event-carousel::before {
-  content: "";
+/* ----------------------------------------
+   カルーセル左右ナビ（外側向きの三角形ボタン）
+   ---------------------------------------- */
+.carousel-nav {
   position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background: linear-gradient(
-    160deg,
-    rgba(100, 116, 139, 0.22) 0%,
-    rgba(148, 163, 184, 0.12) 40%,
-    rgba(71, 85, 105, 0.2) 100%
-  );
+  top: 50%;
+  z-index: 5;
+  width: clamp(36px, 7vw, 56px);
+  height: clamp(64px, 14vw, 96px);
+  padding: 0;
+  border: none;
+  cursor: pointer;
+  transform: translateY(-50%);
+  background-color: rgba(255, 255, 255, 0.88);
+  background-image: var(--ambient-gradient-image);
+  background-size: 280% 280%;
+  background-repeat: no-repeat;
+  animation: ambient-gradient-flow var(--ambient-duration) ease infinite;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.22);
+  transition: transform 0.2s ease, filter 0.2s ease, opacity 0.2s ease;
 }
 
-.event-carousel > * {
-  position: relative;
-  z-index: 1;
+/* 左：外側（左向き）◀ */
+.carousel-nav--prev {
+  left: clamp(0.5rem, 2.5vw, 1.5rem);
+  clip-path: polygon(100% 0, 0 50%, 100% 100%);
+}
+
+/* 右：外側（右向き）▶ */
+.carousel-nav--next {
+  right: clamp(0.5rem, 2.5vw, 1.5rem);
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+
+.carousel-nav:hover {
+  filter: brightness(1.05);
+}
+
+.carousel-nav:active {
+  transform: translateY(-50%) scale(0.94);
+}
+
+.carousel-nav:focus-visible {
+  outline: 3px solid var(--grad-blue);
+  outline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carousel-nav {
+    animation: none;
+    background-position: 40% 50%;
+  }
 }
 
 .event-carousel .event-list {
@@ -550,6 +750,11 @@ a:hover {
     0 8px 16px rgba(0, 0, 0, 0.22),
     0 24px 56px rgba(0, 0, 0, 0.4),
     0 0 0 1px rgba(0, 0, 0, 0.1);
+}
+
+/* 正面カードにホバー中だけ少し上へ */
+.event-carousel .event-card-link:hover .event-card.is-active {
+  transform: scale(1.28) translateY(-14px);
 }
 
 .event-carousel .event-meta {
@@ -805,9 +1010,7 @@ a:hover {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .access,
-  .events-heading-band::before,
-  .events-heading-band::after {
+  .access {
     animation: none;
     background-position: 40% 50%;
   }
@@ -892,7 +1095,7 @@ a:hover {
     font-size: 1.75rem;
   }
 
-  .events-heading-band h2 {
+  .events-stage-heading h2 {
     font-size: 2.625rem; /* 3.5rem の 0.75 倍（余白は維持） */
   }
 }
