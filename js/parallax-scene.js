@@ -273,7 +273,35 @@ class ParallaxScene {
 function setupParallaxScene() {
   const root = document.querySelector("[data-parallax-scene]");
   if (!root) return;
-  new ParallaxScene(root).init();
+
+  const mq = window.matchMedia("(max-width: 767px)");
+  let scene = null;
+
+  function sync() {
+    // スマホでは動くレイヤー背景を使わず、CSS の静止画（nippori_1）に任せる
+    if (mq.matches) {
+      if (scene) {
+        scene.destroy();
+        scene = null;
+      }
+      root.replaceChildren();
+      root.setAttribute("hidden", "");
+      return;
+    }
+
+    root.removeAttribute("hidden");
+    if (!scene) {
+      scene = new ParallaxScene(root);
+      scene.init();
+    }
+  }
+
+  sync();
+  if (typeof mq.addEventListener === "function") {
+    mq.addEventListener("change", sync);
+  } else {
+    mq.addListener(sync);
+  }
 }
 
 if (document.readyState === "loading") {

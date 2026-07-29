@@ -762,6 +762,21 @@ a:hover {
 }
 
 @media (max-width: 767px) {
+  /*
+    スマホ: 動くレイヤー背景を廃止し、シンプルな教室写真をカバー表示
+  */
+  .events-stage {
+    background-color: #1a1430;
+    background-image: url("../images/nippori_1.webp");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .parallax-scene {
+    display: none !important;
+  }
+
   /* 企画一覧ページ: 2列は窮屈なので1列に */
   .events > .container > .event-list {
     grid-template-columns: 1fr;
@@ -806,11 +821,6 @@ a:hover {
 
   .carousel-nav--next {
     right: 0.35rem;
-  }
-
-  /* スマホでは縁取りを少し抑え、にじみを防ぐ */
-  .parallax-scene__layer {
-    filter: drop-shadow(0 0 2px rgba(139, 92, 246, 0.75));
   }
 
   .site-title {
