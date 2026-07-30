@@ -6,7 +6,6 @@
   <title>日暮里キャンパスフェスティバル</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Stick&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
@@ -57,7 +56,7 @@
         <div class="parallax-scene" data-parallax-scene></div>
 
         <div class="hero-content">
-          <h1 id="hero-brand" class="hero-brand">ロゴ募集中！</h1>
+          <h1 id="hero-brand" class="hero-brand">日暮里キャンパス<br>フェスティバル</h1>
 
           <!-- 仮キャッチ（学校側で差し替え） -->
           <p class="hero-catch">キャッチコピー</p>
@@ -69,10 +68,10 @@
     </section>
 
     <!-- ========================================
-         Events（第二セクション・カルーセル）
+         Events〜Footer（夜空背景をページ下端まで共有）
          ======================================== -->
-    <section class="section events" id="events" aria-labelledby="events-heading">
-      <div class="events-stage events-stage--panel" data-night-sky>
+    <div class="events-stage events-stage--panel" data-night-sky>
+      <section class="section events" id="events" aria-labelledby="events-heading">
         <div class="events-stage-heading">
           <h2 id="events-heading">企画一覧</h2>
         </div>
@@ -196,50 +195,73 @@
         <p class="events-more">
           <a href="pages/events.html">すべての企画を見る</a>
         </p>
-      </div>
-    </section>
+      </section>
 
-    <!-- ========================================
-         Access
-         ======================================== -->
-    <section class="section access" id="access" aria-labelledby="access-heading">
-      <div class="container">
-        <h2 id="access-heading">Access</h2>
-        <p class="access-name">N高等学校 日暮里キャンパス</p>
-        <p class="access-address">〒113-0022 東京都文京区千駄木3丁目43-3 ATK千駄木ビル 2階</p>
-        <p class="access-transit">千駄木駅 徒歩4分・西日暮里駅 徒歩7分・日暮里駅 徒歩8分</p>
+      <!-- Access -->
+      <section class="section access" id="access" aria-labelledby="access-heading">
+        <div class="container">
+          <h2 id="access-heading">Access</h2>
+          <p class="access-name">N高等学校 日暮里キャンパス</p>
+          <p class="access-address">〒113-0022 東京都文京区千駄木3丁目43-3 ATK千駄木ビル 2階</p>
+          <p class="access-transit">千駄木駅 徒歩4分・西日暮里駅 徒歩7分・日暮里駅 徒歩8分</p>
 
-        <div class="access-map">
-          <iframe
-            src="https://www.google.com/maps?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%96%87%E4%BA%AC%E5%8C%BA%E5%8D%83%E9%A7%9D%E6%9C%A83%E4%B8%8143-3+ATK%E5%8D%83%E9%A7%9D%E6%9C%A8%E3%83%93%E3%83%AB&hl=ja&z=16&output=embed"
-            width="100%"
-            height="360"
-            style="border:0;"
-            allowfullscreen=""
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-            title="N高等学校 日暮里キャンパスの地図"
-          ></iframe>
+          <div class="access-map">
+            <iframe
+              src="https://www.google.com/maps?q=%E6%9D%B1%E4%BA%AC%E9%83%BD%E6%96%87%E4%BA%AC%E5%8C%BA%E5%8D%83%E9%A7%9D%E6%9C%A83%E4%B8%8143-3+ATK%E5%8D%83%E9%A7%9D%E6%9C%A8%E3%83%93%E3%83%AB&hl=ja&z=16&output=embed"
+              width="100%"
+              height="360"
+              style="border:0;"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              title="N高等学校 日暮里キャンパスの地図"
+            ></iframe>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- ========================================
-         FAQ
-         ======================================== -->
-    <section class="section faq" id="faq" aria-labelledby="faq-heading">
-      <div class="container">
-        <h2 id="faq-heading">FAQ</h2>
-        <p>来場者からのよくある質問と回答をまとめる予定です。開閉式のアコーディオンなども検討します。</p>
-      </div>
-    </section>
+      <!-- FAQ -->
+      <section class="section faq" id="faq" aria-labelledby="faq-heading">
+        <div class="container">
+          <h2 id="faq-heading">FAQ</h2>
+          <p class="faq-lead">仮です</p>
+
+          <div class="faq-list">
+            <details class="faq-item">
+              <summary>入場料はかかりますか？</summary>
+              <p>いいえ、入場無料の予定です。（仮回答）</p>
+            </details>
+
+            <details class="faq-item">
+              <summary>予約は必要ですか？</summary>
+              <p>事前予約は不要の予定です。混雑時はお待ちいただく場合があります。（仮回答）</p>
+            </details>
+
+            <details class="faq-item">
+              <summary>駐車場はありますか？</summary>
+              <p>近隣の公共交通機関のご利用をお願いします。詳細はAccessをご確認ください。（仮回答）</p>
+            </details>
+
+            <details class="faq-item">
+              <summary>雨天の場合はどうなりますか？</summary>
+              <p>会場は屋内中心のため、基本的に予定どおり開催します。変更がある場合はお知らせします。（仮回答）</p>
+            </details>
+
+            <details class="faq-item">
+              <summary>飲食はできますか？</summary>
+              <p>会場内の飲食コーナーをご利用いただけます。持ち込みの可否は後日案内します。（仮回答）</p>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <footer class="site-footer" id="footer">
+        <div class="container">
+        </div>
+      </footer>
+    </div>
 
   </main>
-
-  <footer class="site-footer" id="footer">
-    <div class="container">
-    </div>
-  </footer>
 
   <script src="js/starfield.js"></script>
   <script src="js/parallax-scene.js"></script>

@@ -1,0 +1,4 @@
+.venv
+
+# extracted intermediates
+fonts/*.ttf

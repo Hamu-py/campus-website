@@ -12,18 +12,17 @@
   <!-- フォント（Google Fonts） -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Stick&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css">
 </head>
-<body>
+<body class="page-night">
 
   <!-- ========================================
        Header（各ページ共通のナビ）
        ======================================== -->
   <header class="site-header" id="header">
     <div class="container header-inner">
-      <h1 class="site-title"><a href="../index.html">日暮里キャンパスフェスティバル</a></h1>
+      <a class="site-title" href="../index.html">日暮里キャンパスフェスティバル</a>
 
       <!--
         【ナビの書き方】
@@ -56,112 +55,231 @@
   </header>
 
   <main>
+    <div class="events-stage events-stage--panel" data-night-sky>
 
     <!-- ========================================
          タイムスケジュールページ
          このページの内容を編集すれば時間表が更新されます
          ======================================== -->
     <section class="section timetable" id="timetable" aria-labelledby="timetable-heading">
-      <div class="container">
+      <div class="container container--wide">
         <h2 id="timetable-heading">タイムスケジュール</h2>
-        <p>当日の主なスケジュールです。時間は変更になる場合があります。</p>
+        <p>仮のタイムスケジュールです。時間・内容は変更になる場合があります。</p>
 
-        <!--
-          ========================================
-          【タイムスケジュールの書き方（ここを編集）】
-          ========================================
-          1. 下の表の「1行分」（<tr>...</tr>）をコピーする
-          2. </tbody> の手前に貼り付ける
-          3. <td> の中の文字だけ書き換える
-
-          列の意味（左から）:
-          ・時間 …… 例: 10:00〜10:30
-          ・内容 …… 例: オープニング / ○○部ライブ
-          ・場所 …… 例: 体育館ステージ
-
-          日付が2日ある場合の例:
-          ・見出し（h3）を「1日目」「2日目」にして
-          ・表を2つ並べると分かりやすいです（下にコメント例あり）
-
-          ヒント:
-          ・サンプル行は消してOKです
-          ・時間は 10:00 のように書いても、午前10時 でもOKです
-          ========================================
-        -->
-
-        <!-- 日付見出し（1日だけの場合はそのままでOK。2日あるなら下のコメント例を参考に） -->
-        <h3 class="timetable-day">開催日（例: 10月10日）</h3>
+        <h3 class="timetable-day">9/19（土）</h3>
 
         <div class="table-wrap">
-          <table class="timetable-table">
+          <table class="timetable-table timetable-table--places">
             <thead>
               <tr>
                 <th scope="col">時間</th>
-                <th scope="col">内容</th>
-                <th scope="col">場所</th>
+                <th scope="col">メイン教室<br><span class="timetable-place-sub">ステージ</span></th>
+                <th scope="col">中教室<br><span class="timetable-place-sub">飲食</span></th>
+                <th scope="col">中教室<br><span class="timetable-place-sub">週1</span></th>
+                <th scope="col">小教室</th>
+                <th scope="col">受付<br><span class="timetable-place-sub">カウンター</span></th>
+                <th scope="col">メイン<br><span class="timetable-place-sub">卓球エリア</span></th>
+                <th scope="col">中等部教室</th>
               </tr>
             </thead>
             <tbody>
-
-              <!-- ▼ 1行分（この塊をコピーして増やしてください） -->
               <tr>
-                <td>10:00〜10:30</td>
-                <td>オープニング</td>
-                <td>体育館</td>
-              </tr>
-              <!-- ▲ 1行ここまで -->
-
-              <!-- ▼ サンプル行（不要ならこの <tr>...</tr> ごと消してください） -->
-              <tr>
-                <td>11:00〜11:40</td>
-                <td>例）合唱部コンサート</td>
-                <td>体育館</td>
+                <th scope="row">09:00</th>
+                <td>CP開場（生徒）</td>
+                <td>CP開場（生徒）</td>
+                <td>CP開場（生徒）</td>
+                <td>余った机の置き場／荷物置き場</td>
+                <td>CP開場（生徒）</td>
+                <td>CP開場（生徒）</td>
+                <td>CP開場（生徒）</td>
               </tr>
               <tr>
-                <td>13:00〜15:00</td>
-                <td>例）模擬店営業</td>
-                <td>中庭</td>
+                <th scope="row">09:30</th>
+                <td>生徒集合</td>
+                <td>生徒集合</td>
+                <td>生徒集合</td>
+                <td></td>
+                <td>生徒集合</td>
+                <td>生徒集合</td>
+                <td>生徒集合</td>
               </tr>
-              <!-- ▲ サンプル行ここまで -->
-
+              <tr>
+                <th scope="row">10:00</th>
+                <td>準備</td>
+                <td>準備</td>
+                <td>準備</td>
+                <td></td>
+                <td>準備</td>
+                <td>準備</td>
+                <td>準備</td>
+              </tr>
+              <tr>
+                <th scope="row">11:00</th>
+                <td>開場（ゲスト）</td>
+                <td>開場（ゲスト）</td>
+                <td>開場（ゲスト）</td>
+                <td></td>
+                <td>開場（ゲスト）</td>
+                <td>開場（ゲスト）</td>
+                <td>開場（ゲスト）</td>
+              </tr>
+              <tr>
+                <th scope="row">11:15</th>
+                <td>開会式（OP）</td>
+                <td>開会式（OP）</td>
+                <td>開会式（OP）</td>
+                <td></td>
+                <td>開会式（OP）</td>
+                <td>開会式（OP）</td>
+                <td>開会式（OP）</td>
+              </tr>
+              <tr>
+                <th scope="row">11:30</th>
+                <td>Kahoot!</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>来場者受付／金券交換</td>
+                <td>撮影スポット</td>
+                <td></td>
+              </tr>
+              <tr>
+                <th scope="row">12:00</th>
+                <td></td>
+                <td>食べ物企画（1時間）</td>
+                <td>飲み物企画（1時間）</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <th scope="row">12:30</th>
+                <td>ゲーム大会（1時間半）</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <th scope="row">13:00</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <th scope="row">13:30</th>
+                <td>VR体験会（1時間半）</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <th scope="row">14:00</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <th scope="row">14:30</th>
+                <td></td>
+                <td>食べ物企画（30分）</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <th scope="row">15:00</th>
+                <td>BINGO</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <th scope="row">15:30</th>
+                <td>閉会式（ED）</td>
+                <td>閉会式（ED）</td>
+                <td>閉会式（ED）</td>
+                <td></td>
+                <td>閉会式（ED）</td>
+                <td>閉会式（ED）</td>
+                <td>閉会式（ED）</td>
+              </tr>
+              <tr>
+                <th scope="row">16:00</th>
+                <td>閉場（ゲスト撤収）</td>
+                <td>閉場（ゲスト撤収）</td>
+                <td>閉場（ゲスト撤収）</td>
+                <td></td>
+                <td>閉場（ゲスト撤収）</td>
+                <td>閉場（ゲスト撤収）</td>
+                <td>閉場（ゲスト撤収）</td>
+              </tr>
+              <tr>
+                <th scope="row">16:30</th>
+                <td>片付け</td>
+                <td>片付け</td>
+                <td>片付け</td>
+                <td></td>
+                <td>片付け</td>
+                <td>片付け</td>
+                <td>片付け</td>
+              </tr>
+              <tr>
+                <th scope="row">17:00</th>
+                <td>片付け</td>
+                <td>片付け</td>
+                <td>片付け</td>
+                <td></td>
+                <td>片付け</td>
+                <td>片付け</td>
+                <td>片付け</td>
+              </tr>
+              <tr>
+                <th scope="row">17:30</th>
+                <td>生徒完全下校</td>
+                <td>生徒完全下校</td>
+                <td>生徒完全下校</td>
+                <td></td>
+                <td>生徒完全下校</td>
+                <td>生徒完全下校</td>
+                <td>生徒完全下校</td>
+              </tr>
             </tbody>
           </table>
         </div>
 
-        <!--
-          【2日目を追加する場合の例】
-          下のコメントを外して使うか、上の表ごとコピーして貼り付けてください。
-
-          <h3 class="timetable-day">2日目（例: 10月11日）</h3>
-          <div class="table-wrap">
-            <table class="timetable-table">
-              <thead>
-                <tr>
-                  <th scope="col">時間</th>
-                  <th scope="col">内容</th>
-                  <th scope="col">場所</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>10:00〜10:20</td>
-                  <td>開場・受付</td>
-                  <td>正門前</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        -->
+        <p class="timetable-note">※ 担当部署：ステージ　／　空欄は予定なし（仮）</p>
       </div>
     </section>
 
+    <footer class="site-footer" id="footer">
+      <div class="container">
+      </div>
+    </footer>
+    </div>
   </main>
 
-  <footer class="site-footer" id="footer">
-    <div class="container">
-    </div>
-  </footer>
-
+  <script src="../js/starfield.js"></script>
+  <script src="../js/parallax-scene.js"></script>
   <script src="../js/script.js"></script>
 </body>
 </html>

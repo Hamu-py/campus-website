@@ -54,17 +54,17 @@
   --grad-cyan: #06b6d4;
   --grad-violet: #8b5cf6;
   --ambient-duration: 18s;
-  /* 暗色基調の動的グラデーション（夜空用・企画一覧） */
+  /* 暗色基調の動的グラデーション（夜空用・企画一覧〜Access） */
   --ambient-gradient-image: linear-gradient(
     125deg,
-    #14122a 0%,
-    #1a2a4a 12%,
-    #243a68 24%,
-    #1a1838 38%,
-    #2a2458 52%,
-    #3a2870 66%,
-    #1e3558 80%,
-    #16122e 100%
+    #07060f 0%,
+    #0a101c 12%,
+    #0e1830 24%,
+    #0c0a1c 38%,
+    #141028 52%,
+    #1a1434 66%,
+    #0e1a2c 80%,
+    #080710 100%
   );
   /* 小さいUI用のアクセント面 */
   --accent-gradient-image: linear-gradient(
@@ -80,6 +80,28 @@
   --spacing-md: 2rem;
   --spacing-lg: 4rem;
   --content-width: 960px;
+
+  /* 源暎ラテン（ラテゴ＝タイトル／ラテミン＝本文・サブ） */
+  --font-title: "GenEi LateGo", "Hiragino Sans", "Hiragino Kaku Gothic ProN", sans-serif;
+  --font-body: "GenEi LateMin", "Hiragino Mincho ProN", "Yu Mincho", serif;
+}
+
+/* 源暎ラテゴ v2（タイトル） */
+@font-face {
+  font-family: "GenEi LateGo";
+  src: url("../fonts/GenEiLateGo_v2.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 源暎ラテミン v2（サブタイトル・本文など） */
+@font-face {
+  font-family: "GenEi LateMin";
+  src: url("../fonts/GenEiLateMin_v2.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
 
 
@@ -101,7 +123,7 @@
 
 body {
   margin: 0;
-  font-family: "Noto Sans JP", sans-serif;
+  font-family: var(--font-body);
   font-size: 16px;
   line-height: 1.6;
   color: var(--color-text);
@@ -119,6 +141,13 @@ img {
   max-width: 100%; /* 画像が画面からはみ出さないようにする */
   height: auto;
   display: block;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-title);
+  font-weight: 400;
 }
 
 a {
@@ -161,11 +190,13 @@ a:hover {
   padding-block: var(--spacing-lg); /* 上下の内側余白 */
 }
 
-/* セクション見出し */
+/* セクション見出し（タイトル＝ラテゴ） */
 .section h2 {
   margin-top: 0;
   margin-bottom: var(--spacing-sm); /* 見出しと本文の間 */
   font-size: 1.5rem;
+  font-family: var(--font-title);
+  font-weight: 400;
   /* 中央寄せしたい場合の例（必要なら下のコメントを外す）:
   text-align: center;
   */
@@ -212,7 +243,7 @@ a:hover {
   background-color: rgba(var(--color-ink), 0.52);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  font-family: "Noto Sans JP", sans-serif;
+  font-family: var(--font-body);
   color: var(--color-text);
   transition: background-color 0.25s ease, border-bottom-color 0.25s ease;
 }
@@ -255,7 +286,7 @@ a:hover {
   line-height: 1;
   display: flex;
   align-items: center;
-  font-family: "Stick", "Noto Sans JP", sans-serif;
+  font-family: var(--font-title);
   text-decoration: none;
   color: inherit;
 }
@@ -346,12 +377,14 @@ a:hover {
    ・ヘッダーを背景に重ねる（初期は透明、スクロールでガラス）
    ---------------------------------------- */
 .page-home,
-.page-events {
+.page-events,
+.page-night {
   padding-top: 0;
 }
 
 .page-home .site-header,
-.page-events .site-header {
+.page-events .site-header,
+.page-night .site-header {
   background-color: transparent;
   border-bottom-color: transparent;
   backdrop-filter: none;
@@ -359,14 +392,26 @@ a:hover {
 }
 
 .page-home .site-header.is-scrolled,
-.page-events .site-header.is-scrolled {
+.page-events .site-header.is-scrolled,
+.page-night .site-header.is-scrolled {
   background-color: rgba(var(--color-ink), 0.78);
   border-bottom-color: var(--color-border);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }
 
-/* 企画一覧ページ: 見出しがヘッダーに隠れないよう上余白 */
+/* 企画一覧ページ: トップのヒーロー同様、キーアートをフルスクリーンに */
+.page-events .section.events {
+  padding: 0;
+  margin: 0;
+}
+
+.page-events .events-stage--list {
+  min-height: 100svh;
+  padding-bottom: var(--spacing-lg);
+}
+
+/* 見出しがヘッダーに隠れないよう上余白（ヒーローと同じ考え方） */
 .page-events .events-stage--list > .events-stage-heading {
   padding-top: calc(var(--header-offset, 5rem) + var(--spacing-md));
 }
@@ -440,7 +485,7 @@ a:hover {
 .hero-brand {
   margin: 0;
   max-width: 18em;
-  font-family: "Stick", "Noto Sans JP", sans-serif;
+  font-family: var(--font-title);
   font-size: clamp(1.75rem, 5.2vw, 3.25rem);
   font-weight: 400;
   line-height: 1.25;
@@ -451,6 +496,7 @@ a:hover {
 
 .hero-catch {
   margin: 0;
+  font-family: var(--font-body);
   font-size: clamp(1rem, 2.4vw, 1.25rem);
   font-weight: 400;
   letter-spacing: 0.12em;
@@ -459,6 +505,7 @@ a:hover {
 
 .hero-meta {
   margin: 0;
+  font-family: var(--font-body);
   font-size: 0.875rem;
   letter-spacing: 0.08em;
   color: #f4f1fa;
@@ -489,10 +536,9 @@ a:hover {
 }
 
 /*
-  トップ（見出し＋カルーセル一体）:
-  セクション上余白は舞台側で制御
+  トップ: 夜空パネル内の企画セクションは余白を舞台側で制御
 */
-.events:has(.events-stage) {
+.events-stage--panel > .events {
   padding-top: 0;
   padding-bottom: 0;
 }
@@ -510,14 +556,39 @@ a:hover {
   background-color: var(--color-panel); /* 青紫テーマの下地 */
 }
 
-/* トップ第二セクション: 夜空グラデ＋星 Canvas */
+/* トップ第二セクション〜末尾: 夜空グラデ＋星 Canvas */
 .events-stage--panel {
-  background-color: #14122a;
+  background-color: #07060f;
   background-image: var(--ambient-gradient-image);
   background-size: 280% 280%;
   background-repeat: no-repeat;
   animation: ambient-gradient-flow var(--ambient-duration) ease infinite;
-  padding-bottom: var(--spacing-md);
+  padding-bottom: 0;
+}
+
+/* パネル内の下層セクションは背景を透かして夜空を見せる */
+.events-stage--panel > .access,
+.events-stage--panel > .faq,
+.events-stage--panel > .site-footer,
+.events-stage--panel > .event-detail,
+.events-stage--panel > .timetable {
+  background-color: transparent;
+  background-image: none;
+  isolation: auto;
+  overflow: visible;
+}
+
+.events-stage--panel > .site-footer {
+  border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+/* 企画詳細・時間割: 夜空パネルをフル高さ＋ヘッダー分の上余白 */
+.page-night .events-stage--panel {
+  min-height: 100svh;
+}
+
+.page-night .events-stage--panel > .section {
+  padding-top: calc(var(--header-offset, 5rem) + var(--spacing-md));
 }
 
 /* 柔らかい光のレイヤー（グラデの上・星の下） */
@@ -528,10 +599,10 @@ a:hover {
   z-index: 1;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 60% 45% at 20% 30%, rgba(37, 99, 235, 0.16), transparent 70%),
-    radial-gradient(ellipse 50% 40% at 78% 60%, rgba(6, 182, 212, 0.12), transparent 70%),
-    radial-gradient(ellipse 55% 45% at 50% 85%, rgba(139, 92, 246, 0.14), transparent 70%);
-  opacity: 0.9;
+    radial-gradient(ellipse 60% 45% at 20% 30%, rgba(37, 99, 235, 0.06), transparent 70%),
+    radial-gradient(ellipse 50% 40% at 78% 60%, rgba(6, 182, 212, 0.04), transparent 70%),
+    radial-gradient(ellipse 55% 45% at 50% 85%, rgba(139, 92, 246, 0.05), transparent 70%);
+  opacity: 0.75;
   animation: night-soft-light 22s ease-in-out infinite;
 }
 
@@ -805,7 +876,7 @@ a:hover {
   margin: 0;
   font-size: 2.25rem;
   line-height: 1.2;
-  font-family: "Stick", "Noto Sans JP", sans-serif;
+  font-family: var(--font-title);
   color: var(--color-text);
   text-shadow: 0 2px 16px rgba(0, 0, 0, 0.35);
 }
@@ -1000,7 +1071,7 @@ a:hover {
   }
 
   .events-stage--panel {
-    background-color: #14122a;
+    background-color: #07060f;
     background-image: var(--ambient-gradient-image);
     background-size: 280% 280%;
     background-repeat: no-repeat;
@@ -1009,10 +1080,17 @@ a:hover {
 
   /* 企画一覧ページ: 余白を減らすため少し拡大してカバー */
   .events-stage--list {
+    background-color: #12101c;
     background-image: url("../images/nippori_1.webp");
-    background-size: 128%;
-    background-position: center 42%;
+    background-size: cover;
+    background-position: center;
     background-repeat: no-repeat;
+  }
+
+  .page-events .events-stage--list {
+    min-height: 100svh;
+    background-size: cover;
+    background-position: center;
   }
 
   .parallax-scene {
@@ -1208,6 +1286,8 @@ a:hover {
 .event-name {
   margin: 0 0 var(--spacing-xs);
   font-size: 1.6875rem; /* 元の1.5倍 */
+  font-family: var(--font-title);
+  font-weight: 400;
   color: inherit;
 }
 
@@ -1246,6 +1326,8 @@ a:hover {
 .timetable-day {
   margin: var(--spacing-md) 0 var(--spacing-sm);
   font-size: 1.125rem;
+  font-family: var(--font-title);
+  font-weight: 400;
 }
 
 /* 画面が狭くても表を横スクロールできるようにする */
@@ -1277,6 +1359,47 @@ a:hover {
   color: var(--color-text);
 }
 
+.container--wide {
+  width: min(100% - 2rem, 1100px);
+  margin-inline: auto;
+}
+
+.timetable-table--places {
+  min-width: 920px;
+  font-size: 0.8125rem;
+}
+
+.timetable-table--places thead th {
+  text-align: center;
+  vertical-align: bottom;
+  line-height: 1.35;
+}
+
+.timetable-place-sub {
+  display: inline-block;
+  margin-top: 0.15rem;
+  font-size: 0.75em;
+  font-weight: 400;
+  color: var(--color-muted);
+}
+
+.timetable-table--places th[scope="row"] {
+  white-space: nowrap;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.timetable-table--places td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.timetable-note {
+  margin-top: var(--spacing-sm);
+  font-size: 0.875rem;
+  color: var(--color-muted);
+}
+
 
 /* ----------------------------------------
    Access / FAQ（暗色ガラス・同世界）
@@ -1288,7 +1411,7 @@ a:hover {
   isolation: isolate;
   overflow: hidden;
   text-align: center;
-  font-family: "Noto Sans JP", sans-serif;
+  font-family: var(--font-body);
   background-color: #3a3558;
   background-image:
     radial-gradient(
@@ -1308,7 +1431,7 @@ a:hover {
   isolation: isolate;
   overflow: hidden;
   text-align: center;
-  font-family: "Noto Sans JP", sans-serif;
+  font-family: var(--font-body);
   background-color: var(--color-background);
   background-image:
     radial-gradient(ellipse 70% 50% at 50% 0%, rgba(76, 29, 149, 0.16), transparent 70%);
@@ -1318,6 +1441,55 @@ a:hover {
 .faq > * {
   position: relative;
   z-index: 1;
+}
+
+.faq-lead {
+  margin: 0 0 var(--spacing-md);
+}
+
+.faq-list {
+  margin: 0 auto;
+  max-width: 40rem;
+  text-align: left;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.faq-item {
+  margin: 0;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background-color: var(--color-surface);
+  overflow: hidden;
+}
+
+.faq-item summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 0.9rem 1.1rem;
+  font-family: var(--font-title);
+  font-weight: 400;
+  color: var(--color-text);
+}
+
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-item summary::after {
+  content: "+";
+  float: right;
+  color: var(--color-muted);
+}
+
+.faq-item[open] summary::after {
+  content: "−";
+}
+
+.faq-item p {
+  margin: 0;
+  padding: 0 1.1rem 1rem;
+  color: var(--color-muted);
 }
 
 .access .access-name {
