@@ -7,10 +7,10 @@
  */
 
 const STARFIELD_CONFIG = {
-  /** 星の総数 */
-  count: 128,
+  /** 星の総数（スマホは軽量化） */
+  count: window.matchMedia("(max-width: 767px)").matches ? 72 : 128,
   /** ゆっくり漂う星の数 */
-  driftCount: 16,
+  driftCount: window.matchMedia("(max-width: 767px)").matches ? 8 : 16,
   /** マウスパララックス最大変位（px） */
   parallaxMax: 2,
   /** パララックス追従の滑らかさ（大きいほど遅い） */
@@ -75,7 +75,10 @@ class NightSkyScene {
       this.pointerY = ((event.clientY - rect.top) / rect.height) * 2 - 1;
     };
 
-    this.panel.addEventListener("pointermove", this.onPointerMove, { passive: true });
+    // タッチ端末ではポインタパララックスを付けない（誤作動・負荷を避ける）
+    if (window.matchMedia("(pointer: fine)").matches) {
+      this.panel.addEventListener("pointermove", this.onPointerMove, { passive: true });
+    }
 
     this.resizeObserver = new ResizeObserver(() => {
       this.layoutDirty = true;
@@ -117,7 +120,8 @@ class NightSkyScene {
     const rect = this.panel.getBoundingClientRect();
     const width = Math.max(1, Math.floor(rect.width));
     const height = Math.max(1, Math.floor(rect.height));
-    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    const isMobile = window.matchMedia("(max-width: 767px)").matches;
+    const dpr = Math.min(window.devicePixelRatio || 1, isMobile ? 1.25 : 1.5);
 
     if (width === this.width && height === this.height && this.stars.length) {
       return;
@@ -206,7 +210,9 @@ class NightSkyScene {
   }
 
   destroy() {
-    this.panel.removeEventListener("pointermove", this.onPointerMove);
+    if (window.matchMedia("(pointer: fine)").matches) {
+      this.panel.removeEventListener("pointermove", this.onPointerMove);
+    }
     this.resizeObserver.disconnect();
     this.intersectionObserver.disconnect();
     this.engine.remove(this);

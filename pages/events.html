@@ -10,13 +10,12 @@
     CSS や JS、トップページへのリンクは「ひとつ上」を指す ../ を付けます。
     例: ../css/style.css  →  フォルダを1つ上がって css/style.css を読む
   -->
-  <!-- フォント（Google Fonts） -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css">
 </head>
-<body class="page-events">
+<body class="page-night">
 
   <!-- ========================================
        Header（トップと同じ・背景に重ねる）
@@ -54,14 +53,11 @@
 
     <!-- ========================================
          企画一覧ページ
-         ・背景: class_all（PCはアニメーション / スマホは nippori_1）
-         ・このページの内容を編集すれば一覧が更新されます
+         ・背景: タイムスケジュールと同じ夜空
+         ・カード配置は従来どおり（見出し＋2列グリッド）
          ======================================== -->
     <section class="section events" id="events" aria-labelledby="events-heading">
-      <div class="events-stage events-stage--list">
-        <!-- data-asset-base="../" … pages/ から images/ を参照するため -->
-        <div class="parallax-scene" data-parallax-scene data-asset-base="../"></div>
-
+      <div class="events-stage events-stage--panel" data-night-sky>
         <div class="events-stage-heading">
           <h2 id="events-heading">企画一覧</h2>
         </div>
@@ -173,16 +169,17 @@
 
           </ul>
         </div>
+
+        <footer class="site-footer" id="footer">
+          <div class="container">
+          </div>
+        </footer>
       </div>
     </section>
 
   </main>
 
-  <footer class="site-footer" id="footer">
-    <div class="container">
-    </div>
-  </footer>
-
+  <script src="../js/starfield.js"></script>
   <script src="../js/parallax-scene.js"></script>
   <script src="../js/script.js"></script>
 </body>

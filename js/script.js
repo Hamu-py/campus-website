@@ -193,6 +193,12 @@ function setupEventCarousel() {
   // リサイズ時も半径を再計算（角度はそのまま）
   window.addEventListener("resize", () => layout(false));
 
+  // タブ非表示中は自動送りを止めて安定性を確保
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) stopAuto();
+    else startAuto();
+  });
+
   layout(false);
   startAuto();
 }

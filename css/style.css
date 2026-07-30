@@ -269,20 +269,22 @@ a:hover {
 
 .header-inner {
   display: flex;
-  flex-direction: column; /* スマホ（狭いとき）は縦 */
-  flex-wrap: wrap;
-  align-items: flex-start; /* 横方向は左寄せのまま */
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: baseline;
   justify-content: flex-start;
-  gap: 0.5rem;
+  gap: 0.75rem;
   text-align: left;
   width: 100%;
+  min-width: 0;
 }
 
 .site-title {
   margin: 0;
   font-size: 1.875rem; /* 元の 1.25rem の約1.5倍 */
   text-align: left;
-  flex-shrink: 0;
+  flex-shrink: 1;
+  min-width: 0;
   line-height: 1;
   display: flex;
   align-items: center;
@@ -307,14 +309,15 @@ a:hover {
   → メニュー項目を横一列に並べる。
 */
 .site-nav {
-  width: 100%;
+  width: auto;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
 }
 
 .nav-list {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   justify-content: flex-start;
   align-items: center;
   gap: var(--spacing-sm);
@@ -331,6 +334,8 @@ a:hover {
   border-bottom: 2px solid transparent;
   line-height: 1;
   color: rgba(244, 241, 250, 0.82);
+  padding-bottom: 0;
+  white-space: nowrap;
 }
 
 /* Material Symbols（ナビ横のアイコン） */
@@ -340,18 +345,10 @@ a:hover {
   line-height: 1;
 }
 
-/* タブレット以上: タイトルの右にナビ（横は左寄せ、下端をタイトル文字に合わせる） */
+/* タブレット以上: 余白をPC基準に */
 @media (min-width: 768px) {
   .header-inner {
-    flex-direction: row;
-    flex-wrap: nowrap;
-    align-items: baseline; /* タイトル文字の下（ベースライン）にナビを合わせる */
-    justify-content: flex-start; /* 横方向は元どおり左から */
     gap: var(--spacing-md);
-  }
-
-  .site-nav {
-    width: auto;
   }
 
   .nav-list {
@@ -359,8 +356,6 @@ a:hover {
   }
 
   .nav-list a {
-    /* 下線スペース分だけ見た目が浮くのを抑える */
-    padding-bottom: 0;
     border-bottom-width: 2px;
   }
 }
@@ -571,7 +566,8 @@ a:hover {
 .events-stage--panel > .faq,
 .events-stage--panel > .site-footer,
 .events-stage--panel > .event-detail,
-.events-stage--panel > .timetable {
+.events-stage--panel > .timetable,
+.events-stage--panel > .events {
   background-color: transparent;
   background-image: none;
   isolation: auto;
@@ -582,12 +578,22 @@ a:hover {
   border-top-color: rgba(255, 255, 255, 0.1);
 }
 
-/* 企画詳細・時間割: 夜空パネルをフル高さ＋ヘッダー分の上余白 */
+/* 企画詳細・時間割・企画一覧: 夜空パネルをフル高さ＋ヘッダー分の上余白 */
 .page-night .events-stage--panel {
   min-height: 100svh;
 }
 
 .page-night .events-stage--panel > .section {
+  padding-top: calc(var(--header-offset, 5rem) + var(--spacing-md));
+}
+
+/* 企画一覧ページ: section 余白を消し、見出しでヘッダー分を確保（カード2列UI維持） */
+.page-night .section.events:has(.events-stage--panel) {
+  padding: 0;
+  margin: 0;
+}
+
+.page-night .events-stage--panel > .events-stage-heading {
   padding-top: calc(var(--header-offset, 5rem) + var(--spacing-md));
 }
 
@@ -1052,33 +1058,56 @@ a:hover {
 
 @media (max-width: 767px) {
   /*
-    スマホ: 動くレイヤー背景を廃止し、キーアート静止画をカバー表示
+    スマホ: PCレイアウトを維持しつつ、負荷の高い動くレイヤーだけ静止画に
   */
-  .hero-stage {
-    background-color: var(--color-background);
-    background-image: url("../images/nippori_1.webp");
-    background-size: cover;
-    background-position: center 42%;
-    background-repeat: no-repeat;
+  .site-header {
+    padding-block: 0.7rem;
+    padding-inline: 0.65rem;
   }
 
-  .events-stage {
-    background-color: var(--color-panel);
+  .header-inner {
+    gap: 0.45rem;
+  }
+
+  .site-title {
+    font-size: clamp(0.78rem, 3.2vw, 1rem);
+    line-height: 1.2;
+  }
+
+  .nav-list {
+    gap: 0.4rem;
+  }
+
+  .nav-list a {
+    font-size: 0.7rem;
+    gap: 0.12rem;
+  }
+
+  .nav-list .material-symbols-outlined {
+    font-size: 1em;
+  }
+
+  .hero-stage {
+    background-color: var(--color-background);
     background-image: url("../images/nippori_1.webp");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
   }
 
+  .events-stage {
+    background-color: var(--color-panel);
+  }
+
   .events-stage--panel {
     background-color: #07060f;
     background-image: var(--ambient-gradient-image);
-    background-size: 280% 280%;
+    background-size: 240% 240%;
     background-repeat: no-repeat;
-    animation: ambient-gradient-flow var(--ambient-duration) ease infinite;
+    animation: ambient-gradient-flow calc(var(--ambient-duration) * 1.35) ease infinite;
   }
 
-  /* 企画一覧ページ: 余白を減らすため少し拡大してカバー */
+  /* 企画一覧ページ用の旧リスト背景指定は残すが、現行は panel を優先 */
   .events-stage--list {
     background-color: #12101c;
     background-image: url("../images/nippori_1.webp");
@@ -1087,38 +1116,65 @@ a:hover {
     background-repeat: no-repeat;
   }
 
-  .page-events .events-stage--list {
-    min-height: 100svh;
-    background-size: cover;
-    background-position: center;
-  }
-
   .parallax-scene {
     display: none !important;
   }
 
   .hero-content {
-    gap: 1rem;
-    padding-block: calc(var(--header-offset, 5rem) + 1.5rem) 4rem;
+    gap: 0.85rem;
+    width: min(100% - 1.5rem, 40rem);
+    padding-block: calc(var(--header-offset, 4rem) + 1.25rem) 3.5rem;
   }
 
-  /* 企画一覧ページ: 2列は窮屈なので1列に */
+  .hero-brand {
+    font-size: clamp(1.45rem, 7vw, 2.25rem);
+  }
+
+  .hero-catch {
+    font-size: clamp(0.9rem, 3.6vw, 1.05rem);
+  }
+
+  /* PCと同じ2列を維持（カードだけ少しコンパクトに） */
   .events-stage > .container > .event-list {
-    grid-template-columns: 1fr;
-    gap: var(--spacing-md);
+    grid-template-columns: 1fr 1fr;
+    gap: 0.65rem;
   }
 
-  .events-stage-heading {
-    padding-block: 0.75rem;
+  .events-stage > .container {
+    width: min(100% - 1.25rem, var(--content-width));
+    padding-bottom: var(--spacing-md);
+  }
+
+  .events-stage > .container > p {
+    font-size: 0.9rem;
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .page-night .events-stage--panel > .events-stage-heading {
+    padding-top: calc(var(--header-offset, 4rem) + var(--spacing-sm));
   }
 
   .events-stage-heading h2 {
     font-size: 1.5rem;
   }
 
+  .event-card {
+    min-height: 0;
+    aspect-ratio: 1 / 1;
+    border-radius: 12px;
+  }
+
+  .event-name {
+    font-size: 1.05rem;
+  }
+
+  .event-meta {
+    font-size: 0.85rem;
+  }
+
   .event-carousel {
-    --carousel-card: 168px;
-    height: min(360px, 92vw);
+    --carousel-card: clamp(140px, 42vw, 180px);
+    height: min(340px, 88vw);
     perspective: 900px;
     perspective-origin: 50% 42%;
   }
@@ -1132,7 +1188,7 @@ a:hover {
   }
 
   .event-carousel .event-card-link:hover .event-card.is-active {
-    transform: scale(1.1) translateY(-6px);
+    transform: scale(1.1) translateY(-4px);
   }
 
   .carousel-nav {
@@ -1141,28 +1197,84 @@ a:hover {
   }
 
   .carousel-nav--prev {
-    left: 0.35rem;
+    left: 0.25rem;
   }
 
   .carousel-nav--next {
-    right: 0.35rem;
+    right: 0.25rem;
   }
 
-  .site-title {
-    font-size: clamp(1.05rem, 4.6vw, 1.25rem);
-    line-height: 1.25;
+  .access-map iframe {
+    height: 280px;
   }
 
-  .nav-list {
-    gap: 0.55rem;
+  .table-wrap {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
   }
 
-  .nav-list a {
-    font-size: 0.8125rem;
+  .timetable-table--places {
+    min-width: 760px;
+    font-size: 0.72rem;
   }
 
-  .nav-list .material-symbols-outlined {
-    font-size: 1.1em;
+  .timetable-table--places th[scope="row"] {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    background-color: rgba(var(--color-ink), 0.92);
+  }
+
+  .timetable-table--places thead th:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 2;
+  }
+
+  .faq-list {
+    max-width: none;
+  }
+
+  .faq-item summary {
+    padding: 0.85rem 0.95rem;
+    font-size: 0.95rem;
+  }
+
+  .faq-item p {
+    padding: 0 0.95rem 0.9rem;
+    font-size: 0.9rem;
+  }
+
+  .container--wide {
+    width: min(100% - 1.25rem, 1100px);
+  }
+
+  .section {
+    padding-block: var(--spacing-md);
+  }
+
+  .page-night .events-stage--panel > .section {
+    padding-top: calc(var(--header-offset, 4rem) + var(--spacing-sm));
+    padding-bottom: var(--spacing-md);
+  }
+
+  /* 夜空の柔らかい光はスマホでは静止（負荷軽減・安定性） */
+  .events-stage--panel::after {
+    animation: none;
+    opacity: 0.7;
+    transform: none;
+  }
+
+  /* 極小幅のみナビ折り返し（はみ出し防止） */
+  @media (max-width: 380px) {
+    .header-inner {
+      flex-wrap: wrap;
+      align-items: flex-start;
+    }
+
+    .site-nav {
+      width: 100%;
+    }
   }
 }
 
@@ -1445,6 +1557,11 @@ a:hover {
 
 .faq-lead {
   margin: 0 0 var(--spacing-md);
+}
+
+.faq-spacer {
+  margin: 0 0 var(--spacing-md);
+  min-height: 1.5em;
 }
 
 .faq-list {
