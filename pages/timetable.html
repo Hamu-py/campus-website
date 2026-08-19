@@ -4,31 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>タイムスケジュール | 日暮里キャンパスフェスティバル</title>
-  <!--
-    【パスについて】
-    このファイルは pages/ フォルダの中にあるので、
-    CSS や JS、トップページへのリンクは「ひとつ上」を指す ../ を付けます。
-  -->
-  <!-- フォント（Google Fonts） -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=event%2Chelp%2Chome%2Cinfo%2Cschedule&display=block" rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body class="page-night">
-
-  <!-- ========================================
-       Header（各ページ共通のナビ）
-       ======================================== -->
   <header class="site-header" id="header">
     <div class="container header-inner">
       <a class="site-title" href="../index.html">日暮里キャンパスフェスティバル</a>
-
-      <!--
-        【ナビの書き方】
-        ・pages/ 内のページ同士は「ファイル名だけ」でOK（例: events.html）
-        ・トップへ戻るときは ../index.html
-      -->
       <nav class="site-nav" aria-label="メインメニュー">
         <ul class="nav-list">
           <li>
@@ -49,25 +33,29 @@
               タイムスケジュール
             </a>
           </li>
+          <li>
+            <a href="../index.html#notices">
+              <span class="material-symbols-outlined" aria-hidden="true">info</span>
+              注意事項
+            </a>
+          </li>
+          <li>
+            <a href="../index.html#faq">
+              <span class="material-symbols-outlined" aria-hidden="true">help</span>
+              FAQ
+            </a>
+          </li>
         </ul>
       </nav>
     </div>
   </header>
-
   <main>
     <div class="events-stage events-stage--panel" data-night-sky>
-
-    <!-- ========================================
-         タイムスケジュールページ
-         このページの内容を編集すれば時間表が更新されます
-         ======================================== -->
     <section class="section timetable" id="timetable" aria-labelledby="timetable-heading">
       <div class="container container--wide">
         <h2 id="timetable-heading">タイムスケジュール</h2>
         <p>仮のタイムスケジュールです。時間・内容は変更になる場合があります。</p>
-
         <h3 class="timetable-day">9/19（土）</h3>
-
         <div class="table-wrap">
           <table class="timetable-table timetable-table--places">
             <thead>
@@ -268,16 +256,12 @@
         </div>
       </div>
     </section>
-
     <footer class="site-footer" id="footer">
       <div class="container">
       </div>
     </footer>
     </div>
   </main>
-
-  <script src="../js/starfield.js"></script>
-  <script src="../js/parallax-scene.js"></script>
-  <script src="../js/script.js"></script>
+  <script src="../js/app.min.js"></script>
 </body>
 </html>

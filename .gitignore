@@ -2,3 +2,5 @@
 
 # extracted intermediates
 fonts/*.ttf
+
+.DS_Store

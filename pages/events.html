@@ -4,26 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>企画一覧 | 日暮里キャンパスフェスティバル</title>
-  <!--
-    【パスについて】
-    このファイルは pages/ フォルダの中にあるので、
-    CSS や JS、トップページへのリンクは「ひとつ上」を指す ../ を付けます。
-    例: ../css/style.css  →  フォルダを1つ上がって css/style.css を読む
-  -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=event%2Chelp%2Chome%2Cinfo%2Cschedule&display=block" rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body class="page-night">
-
-  <!-- ========================================
-       Header（トップと同じ・背景に重ねる）
-       ======================================== -->
   <header class="site-header" id="header">
     <div class="container header-inner">
       <a class="site-title" href="../index.html">日暮里キャンパスフェスティバル</a>
-
       <nav class="site-nav" aria-label="メインメニュー">
         <ul class="nav-list">
           <li>
@@ -44,143 +33,96 @@
               タイムスケジュール
             </a>
           </li>
+          <li>
+            <a href="../index.html#notices">
+              <span class="material-symbols-outlined" aria-hidden="true">info</span>
+              注意事項
+            </a>
+          </li>
+          <li>
+            <a href="../index.html#faq">
+              <span class="material-symbols-outlined" aria-hidden="true">help</span>
+              FAQ
+            </a>
+          </li>
         </ul>
       </nav>
     </div>
   </header>
-
   <main>
-
-    <!-- ========================================
-         企画一覧ページ
-         ・背景: タイムスケジュールと同じ夜空
-         ・カード配置は従来どおり（見出し＋2列グリッド）
-         ======================================== -->
     <section class="section events" id="events" aria-labelledby="events-heading">
       <div class="events-stage events-stage--panel" data-night-sky>
         <div class="events-stage-heading">
           <h2 id="events-heading">企画一覧</h2>
         </div>
-
         <div class="container">
           <p>文化祭で行われる企画の一覧です。気になる企画を探してみてください。</p>
-
-          <!--
-            ========================================
-            【企画一覧の書き方（ここを編集）】
-            ========================================
-            1. 下の「企画カード」1つ分（<li>...</li>）をコピーする
-            2. コピーしたブロックを </ul> の手前に貼り付ける
-            3. 中の文字だけ書き換える
-
-            書き換え項目の意味:
-            ・企画名 …… 例: 3年A組カフェ
-            ・カテゴリ …… 例: 模擬店 / 展示 / ステージ / 体験
-            ・場所 …… 例: 体育館 / 1年A組教室 / 中庭
-            ・紹介文 …… 1〜2行で企画の説明
-
-            ヒント:
-            ・不要な企画カードは、その <li>...</li> ごと削除してOK
-            ・サンプルのまま残しても、あとから差し替えできます
-            ========================================
-          -->
           <ul class="event-list">
-
-            <li>
-              <a class="event-card-link" href="events/kaikaisiki.html"><article class="event-card">
-                <img class="event-card-image" src="../images/kaikaisiki.jpg" alt="" aria-hidden="true">
-                <div class="event-card-body">
-                  <h3 class="event-name">開会式</h3>
-                </div>
-              </article></a>
-            </li>
-
-            <li>
-              <a class="event-card-link" href="events/heikaisiki.html"><article class="event-card">
-                <img class="event-card-image" src="../images/heikaisiki.jpg" alt="" aria-hidden="true">
-                <div class="event-card-body">
-                  <h3 class="event-name">閉会式</h3>
-                </div>
-              </article></a>
-            </li>
-
             <li>
               <a class="event-card-link" href="events/satueisupotto.html"><article class="event-card">
-                <img class="event-card-image" src="../images/satueisupotto.jpg" alt="" aria-hidden="true">
+                <img class="event-card-image" src="../images/event-placeholder.webp" alt="" aria-hidden="true" width="1024" height="898" decoding="async" fetchpriority="high">
                 <div class="event-card-body">
                   <h3 class="event-name">撮影スポット</h3>
                 </div>
               </article></a>
             </li>
-
             <li>
               <a class="event-card-link" href="events/kahoot.html"><article class="event-card">
-                <img class="event-card-image" src="../images/kahoot.jpg" alt="" aria-hidden="true">
+                <img class="event-card-image" src="../images/event-placeholder.webp" alt="" aria-hidden="true" width="1024" height="898" loading="lazy" decoding="async">
                 <div class="event-card-body">
                   <h3 class="event-name">Kahoot!</h3>
                 </div>
               </article></a>
             </li>
-
             <li>
               <a class="event-card-link" href="events/bingo.html"><article class="event-card">
-                <img class="event-card-image" src="../images/BINGO.jpg" alt="" aria-hidden="true">
+                <img class="event-card-image" src="../images/event-placeholder.webp" alt="" aria-hidden="true" width="1024" height="898" loading="lazy" decoding="async">
                 <div class="event-card-body">
                   <h3 class="event-name">BINGO</h3>
                 </div>
               </article></a>
             </li>
-
             <li>
               <a class="event-card-link" href="events/game.html"><article class="event-card">
-                <img class="event-card-image" src="../images/game.jpg" alt="" aria-hidden="true">
+                <img class="event-card-image" src="../images/event-placeholder.webp" alt="" aria-hidden="true" width="1024" height="898" loading="lazy" decoding="async">
                 <div class="event-card-body">
                   <h3 class="event-name">ゲーム大会</h3>
                 </div>
               </article></a>
             </li>
-
             <li>
               <a class="event-card-link" href="events/vr.html"><article class="event-card">
-                <img class="event-card-image" src="../images/VR.jpg" alt="" aria-hidden="true">
+                <img class="event-card-image" src="../images/event-placeholder.webp" alt="" aria-hidden="true" width="1024" height="898" loading="lazy" decoding="async">
                 <div class="event-card-body">
                   <h3 class="event-name">VR</h3>
                 </div>
               </article></a>
             </li>
-
             <li>
               <a class="event-card-link" href="events/food_3.html"><article class="event-card">
-                <img class="event-card-image" src="../images/food_3.jpg" alt="" aria-hidden="true">
+                <img class="event-card-image" src="../images/event-placeholder.webp" alt="" aria-hidden="true" width="1024" height="898" loading="lazy" decoding="async">
                 <div class="event-card-body">
                   <h3 class="event-name">飲食（週3）</h3>
                 </div>
               </article></a>
             </li>
-
             <li>
               <a class="event-card-link" href="events/food_1.html"><article class="event-card">
-                <img class="event-card-image" src="../images/food_1.jpg" alt="" aria-hidden="true">
+                <img class="event-card-image" src="../images/event-placeholder.webp" alt="" aria-hidden="true" width="1024" height="898" loading="lazy" decoding="async">
                 <div class="event-card-body">
                   <h3 class="event-name">飲食（週1）</h3>
                 </div>
               </article></a>
             </li>
-
           </ul>
         </div>
-
         <footer class="site-footer" id="footer">
           <div class="container">
           </div>
         </footer>
       </div>
     </section>
-
   </main>
-
-  <script src="../js/starfield.js"></script>
-  <script src="../js/parallax-scene.js"></script>
-  <script src="../js/script.js"></script>
+  <script src="../js/app.min.js"></script>
 </body>
 </html>
